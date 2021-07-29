@@ -73,6 +73,7 @@ public:
 	bool end_flag = false;
 	bool wait_for_shoot = false;
 	bool old_target_go_up = false;
+	bool fixed_target = false;
 
 	int i = 0;
 	int r = 0;
