@@ -766,6 +766,7 @@ void KidsizeStrategy::Trace_target_waist() {  //執行轉腰抬手function
 
     hand_up_cnt = (-(target_y_low - dirdata[13]) )/ 3 ;//抬手次數
     turn_waist_position = (-(target_x_low_ave - 160))/1*2 + turn_waist_cnt*(Archeryinfo->WaistTurnPosition);//轉腰次數
+    
     ROS_INFO("turnwaistposition:%d", turn_waist_position);
     ros_com->sendSingleMotor(9, turn_waist_position, 200); 
     DelayspinOnce(500);
