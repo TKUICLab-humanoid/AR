@@ -6,11 +6,11 @@ void KidsizeStrategy::strategyclassify(){  //濾雜訊及存取正確目標物�
         {
             for(int Blue_count = 0; Blue_count < strategy_info->color_mask_subject_cnts[Target_blue_color];Blue_count++)
             {
-                if(strategy_info->color_mask_subject[Target_red_color][Red_count].size >= 150)
+                if(strategy_info->color_mask_subject[Target_red_color][Red_count].size >= 75)
                 {
-                    if(strategy_info->color_mask_subject[Target_yellow_color][Yellow_count].size >= 2000)
+                    if(strategy_info->color_mask_subject[Target_yellow_color][Yellow_count].size >= 1000)
                     {
-                        if(strategy_info->color_mask_subject[Target_blue_color][Blue_count].size >= 4000)
+                        if(strategy_info->color_mask_subject[Target_blue_color][Blue_count].size >= 2000)
                         {
                             if(strategy_info->color_mask_subject[Target_red_color][Red_count].XMin > strategy_info->color_mask_subject[Target_yellow_color][Yellow_count].XMin)
                             {
@@ -193,7 +193,7 @@ void KidsizeStrategy::Gamestart_Initialization(){  //初始化參數
         target_y_low = 0;  //初始化最低點y值
         target_x_low_sum = 0;  //初始化最低點x平均
         target_x_high_sum = 0;  //初始化最高點x平均
-        oldstrategy_find_low_time = 5000;  //初始化舊策略找最低點花費時間
+        oldstrategy_find_low_time = 10000;  //初始化舊策略找最低點花費時間
     	Archeryinfo->Robot_state = find_target; 
     }   
 }
@@ -548,31 +548,39 @@ void KidsizeStrategy::Find_target_mode_old(){	//舊策略
 }
 void KidsizeStrategy::Trace_period(){  //舊策略找週期
     ROS_INFO("RedTarget.Y=%d",Archeryinfo->RedTarget.Y);
+    ROS_INFO("0000000000000");
     if(target_y_low < 70){
         target_y_low = 0;
         Archeryinfo->Robot_state = find_target_mode_old;
+        ROS_INFO("1111111111111");
     }
-    if((Archeryinfo->RedTarget.Y + 2) >= target_y_low)//在最低點的時候(2是誤差值)
+    if((Archeryinfo->RedTarget.Y + 20) >= target_y_low)//在最低點的時候(2是誤差值)
     {
+        ROS_INFO("2222222222222");
+        ROS_INFO("target_x_low_ave=%d", target_x_low_ave);
         if(Archeryinfo->RedTarget.X == target_x_low_ave || Archeryinfo->RedTarget.X +1 == target_x_low_ave || Archeryinfo->RedTarget.X -1 == target_x_low_ave)//判斷x值有無在最低點的x值//if(Archeryinfo->RedTarget.X+1 >= target_x_low_ave)0715
         {
+            ROS_INFO("3333333333333");
             if(!Periodflag)
             {
+                ROS_INFO("44444444444444");
                 gettimeofday(&tstart, NULL);//第一次在最低點時開始計時
                 Periodflag = true;
                 DelayspinOnce(1000);//slow speed increase //fast speed decrease //為了使轉靶可以離開上述條件
             }
             else
             {
+                ROS_INFO("5555555555");
                 gettimeofday(&tend, NULL);//第二次在最低點時停止計時
                 Periodtime  = (1000000*(tend.tv_sec - tstart.tv_sec) + (tend.tv_usec - tstart.tv_usec))/1000;//算週期
                 ROS_INFO("Period is %f",Periodtime);
                 tool->Delay(2000);
-                Archeryinfo->Robot_state=start_timer;
+                Archeryinfo->Robot_state = start_timer;
             }
-        }
+       }
+        
     }
-
+    
 }
 void KidsizeStrategy::Start_timer(ros::NodeHandle nh) {  //等待符合條件進行中斷射擊
     /*/if(Periodtime < 4300)//週期小於轉腰的時間要將週期x2
@@ -626,7 +634,7 @@ void KidsizeStrategy::Start_timer(ros::NodeHandle nh) {  //等待符合條件進
             if((Archeryinfo->RedTarget.Y +2) >= target_y_low)//到最低點時                
             {
                 if(Archeryinfo->RedTarget.X +1 == target_x_low_ave || Archeryinfo->RedTarget.X == target_x_low_ave || Archeryinfo->RedTarget.X -1 == target_x_low_ave)
-                {
+               {
                     timer_s = nh.createTimer(ros::Duration(countdown_time/1000),&KidsizeStrategy::Shooting_target,this,true,false); 
                     timer_s.start();//開始倒數計時
                     countdown_flag =true; 
