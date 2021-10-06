@@ -267,7 +267,7 @@ void KidsizeStrategy::Find_target(){  //找目標靶副函式
 
 void KidsizeStrategy::Find_target_mode() {  //找目標靶方式
     /* 新策略(找最高最低點) */
-    if(strategy_info->DIOValue.DInput == 29)  //101 指撥功能 小轉腰
+    if(strategy_info->DIOValue.Switch.D0)  //101 指撥功能 小轉腰
     {
         i++;
         y[i] = Archeryinfo->RedTarget.Y;
