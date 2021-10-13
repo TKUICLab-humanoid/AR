@@ -477,6 +477,10 @@ void KidsizeStrategy::Find_Target_y(){
             i = 20;
             tool->Delay(500);
         }
+        else
+        {
+            Archeryinfo->Robot_state = find_period;
+        }
         /* else  //如果沒有以上條件 則成功採集最高及最低點
         {
             Periodtime = 2*(abs(target_lowest_time-target_highest_time));
@@ -773,10 +777,14 @@ void KidsizeStrategy::Trace_target_waist() {  //執行轉腰抬手function
     //}
 
     hand_up_cnt = (-(target_y_low - dirdata[13]) )/ 3 ;//抬手次數
-    turn_waist_position = (-(target_x_low_ave - 160))/1*2.5 + turn_waist_cnt*(Archeryinfo->WaistTurnPosition);//轉腰次數
-    
+    turn_waist_position = (-(target_x_low_ave - 160))/1*2.5 + turn_waist_cnt*(Archeryinfo->WaistTurnPosition) - 10;//轉腰次數
+    if(turn_waist_position > 250)
+    {
+        turn_waist_position -= 30; 
+    }
+
     ROS_INFO("turnwaistposition:%d", turn_waist_position);
-    ros_com->sendSingleMotor(9, turn_waist_position, 200); 
+    ros_com->sendSingleMotor(9, turn_waist_position, 50); 
     DelayspinOnce(500);
     if (hand_up_cnt > 0)
     {
