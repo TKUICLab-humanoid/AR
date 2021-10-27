@@ -155,7 +155,7 @@ void KidsizeStrategy::Gamestart_Initialization(){  //初始化參數
             HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
             DelayspinOnce(50);
             HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
-            DelayspinOnce(1500);
+            DelayspinOnce(2000);
             prepare_flag = true;
         }
 	    HeadPosition(HeadMotorID::VerticalID,2047,120);
@@ -169,7 +169,7 @@ void KidsizeStrategy::Gamestart_Initialization(){  //初始化參數
         HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
         DelayspinOnce(50);
         HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
-        DelayspinOnce(1500);
+        DelayspinOnce(2000);
         i = 0;
         DIOSTARTAGAIN =true;  //變成true讓初始化參數迴圈不會再執行一次
     	sendbodystandflag = false;  //初始化站姿flag
