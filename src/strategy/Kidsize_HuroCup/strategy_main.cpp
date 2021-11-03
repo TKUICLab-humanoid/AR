@@ -577,7 +577,7 @@ void KidsizeStrategy::Trace_period(){  //舊策略找週期
             {
                 gettimeofday(&tstart, NULL);//第一次在最低點時開始計時
                 Periodflag = true;
-                DelayspinOnce(1000);//slow speed increase //fast speed decrease //為了使轉靶可以離開上述條件
+                DelayspinOnce(300);//slow speed increase //fast speed decrease //為了使轉靶可以離開上述條件
             }
             else
             {
@@ -593,7 +593,7 @@ void KidsizeStrategy::Trace_period(){  //舊策略找週期
     
 }
 void KidsizeStrategy::Start_timer(ros::NodeHandle nh) {  //等待符合條件進行中斷射擊
-    if(Periodtime < 4300)//週期小於轉腰的時間要將週期x2
+    if(Periodtime < 4000)//週期小於轉腰的時間要將週期x2
     {
         countdown_time = 2*Periodtime - dirdata[3];
     }
@@ -701,12 +701,12 @@ void KidsizeStrategy::Trace_target_waist() {  //執行轉腰抬手function
          if(Archeryinfo->YellowTarget.size < 2800)
          {
               ROS_INFO("third state");
-             ros_com->sendBodySector(5);
-             ros_com->sendBodySector(5);
+            //  ros_com->sendBodySector(5);
+            //  ros_com->sendBodySector(5);
          }else{
              ROS_INFO("second state");
         
-             ros_com->sendBodySector(5);
+            //  ros_com->sendBodySector(5);
          }
 
      }
@@ -714,11 +714,11 @@ void KidsizeStrategy::Trace_target_waist() {  //執行轉腰抬手function
      {   
          if(Archeryinfo->YellowTarget.size >= 2800&& Archeryinfo->YellowTarget.size < 3200){
              ROS_INFO("second state");
-             ros_com->sendBodySector(5);
+            //ros_com->sendBodySector(5);
          }else{
              ROS_INFO("third state");
-             ros_com->sendBodySector(5);
-             ros_com->sendBodySector(5);
+            //ros_com->sendBodySector(5);
+            //ros_com->sendBodySector(5);
          }
                
      }
