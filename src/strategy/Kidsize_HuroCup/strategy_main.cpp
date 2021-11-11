@@ -155,7 +155,7 @@ void KidsizeStrategy::Gamestart_Initialization(){  //初始化參數
             HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
             DelayspinOnce(50);
             HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
-            DelayspinOnce(2000);
+            DelayspinOnce(1500);
             prepare_flag = true;
         }
 	    HeadPosition(HeadMotorID::VerticalID,2047,120);
@@ -169,7 +169,7 @@ void KidsizeStrategy::Gamestart_Initialization(){  //初始化參數
         HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
         DelayspinOnce(50);
         HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
-        DelayspinOnce(2000);
+        DelayspinOnce(1500);
         i = 0;
         DIOSTARTAGAIN =true;  //變成true讓初始化參數迴圈不會再執行一次
     	sendbodystandflag = false;  //初始化站姿flag
@@ -194,7 +194,7 @@ void KidsizeStrategy::Gamestart_Initialization(){  //初始化參數
         target_x_low_sum = 0;  //初始化最低點x平均
         target_x_high_sum = 0;  //初始化最高點x平均
         target_x_low_ave = 0;
-        oldstrategy_find_low_time = 5000;  //初始化舊策略找最低點花費時間
+        oldstrategy_find_low_time = 1000;  //初始化舊策略找最低點花費時間    原為5000
     	Archeryinfo->Robot_state = find_target; 
         fixed_target = false;
     }   
@@ -577,7 +577,7 @@ void KidsizeStrategy::Trace_period(){  //舊策略找週期
             {
                 gettimeofday(&tstart, NULL);//第一次在最低點時開始計時
                 Periodflag = true;
-                DelayspinOnce(300);//slow speed increase //fast speed decrease //為了使轉靶可以離開上述條件
+                DelayspinOnce(1000);//slow speed increase //fast speed decrease //為了使轉靶可以離開上述條件
             }
             else
             {
@@ -775,12 +775,12 @@ void KidsizeStrategy::Trace_target_waist() {  //執行轉腰抬手function
 
     ROS_INFO("turnwaistposition:%d", turn_waist_position);
     if(turn_waist_position < -50){
-        turn_waist_position -= 5;
+        turn_waist_position -= 0;
         ros_com->sendSingleMotor(9, turn_waist_position, 50); 
         DelayspinOnce(500);
     }
     else if(turn_waist_position > 50){
-        turn_waist_position -= 10;
+        turn_waist_position -= 5;
         ros_com->sendSingleMotor(9, turn_waist_position, 50); 
         DelayspinOnce(500);
     }
@@ -789,13 +789,24 @@ void KidsizeStrategy::Trace_target_waist() {  //執行轉腰抬手function
         DelayspinOnce(500);
     }
     
-    if (hand_up_cnt > 0)
+    if (hand_up_cnt > 0 && hand_up_cnt <= 7)
+    {
+		ROS_INFO("UPANDWAIST");
+        ROS_INFO("hand_up_cnt = %d ",hand_up_cnt);
+        while (hand_up_cnt != 0)//抬手的次數,每抬一次減一
+        {
+            ros_com->sendBodySector(Raise_Hand);//執行36磁區
+            DelayspinOnce(150);
+            hand_up_cnt = hand_up_cnt - 1 ;
+        }
+    }
+    else if (hand_up_cnt > 7)
     {
 		ROS_INFO("UPUPUPUPUPUP");
         ROS_INFO("hand_up_cnt = %d ",hand_up_cnt);
         while (hand_up_cnt != 0)//抬手的次數,每抬一次減一
         {
-            ros_com->sendBodySector(Raise_Hand);//執行36磁區
+            ros_com->sendBodySector(Raise_Hand2);//執行36磁區
             DelayspinOnce(150);
             hand_up_cnt = hand_up_cnt - 1 ;
         }

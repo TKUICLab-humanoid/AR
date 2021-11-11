@@ -13,6 +13,7 @@
 
 #define Preparatoryaction 34
 #define Raise_Hand 36
+#define Raise_Hand2 37
 #define Shooting 35
 #define StandUp 29
 
