@@ -138,18 +138,20 @@ void KidsizeStrategy::Gamestart_Initialization(){  //初始化參數
     {   
         if(!prepare_flag)  //若在比賽前沒有執行預備動作 則在init內執行
         {
-            DelayspinOnce(1000);
+            // DelayspinOnce(1000);
+            HeadPosition(HeadMotorID::VerticalID,2100,120);  //將頭轉低30度 開策略轉回正常刻度 為了確認只播是否有撥成功
+            DelayspinOnce(50);
+            HeadPosition(HeadMotorID::VerticalID,2100,120);
+            DelayspinOnce(50);
+            HeadPosition(HeadMotorID::VerticalID,2047,120);
+            DelayspinOnce(50);
+            HeadPosition(HeadMotorID::VerticalID,2047,120);
+            DelayspinOnce(50);
             ros_com->sendBodySector(Preparatoryaction);  //call sector34
             DelayspinOnce(3000);
             ROS_INFO("PREPARE");
             read_head_position();
             Archeryinfo->Initialization_function();
-            HeadPosition(HeadMotorID::VerticalID,2077,120);  //將頭轉低30度 開策略轉回正常刻度 為了確認只播是否有撥成功
-            DelayspinOnce(50);
-            HeadPosition(HeadMotorID::VerticalID,2077,120);
-            DelayspinOnce(50);
-            HeadPosition(HeadMotorID::VerticalID,2077,120);
-            DelayspinOnce(500);
             HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
             DelayspinOnce(50);
             HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
@@ -158,12 +160,9 @@ void KidsizeStrategy::Gamestart_Initialization(){  //初始化參數
             DelayspinOnce(1500);
             prepare_flag = true;
         }
-	    HeadPosition(HeadMotorID::VerticalID,2047,120);
-        DelayspinOnce(50);
-        HeadPosition(HeadMotorID::VerticalID,2047,120);
-        DelayspinOnce(50);
-        HeadPosition(HeadMotorID::VerticalID,2047,120);
-        DelayspinOnce(500);
+	    
+        // HeadPosition(HeadMotorID::VerticalID,2047,120);
+        // DelayspinOnce(500);
         HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
         DelayspinOnce(50);
         HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
@@ -780,7 +779,12 @@ void KidsizeStrategy::Trace_target_waist() {  //執行轉腰抬手function
         DelayspinOnce(500);
     }
     else if(turn_waist_position > 50){
-        turn_waist_position -= 5;
+        turn_waist_position -= 0;
+        ros_com->sendSingleMotor(9, turn_waist_position, 50); 
+        DelayspinOnce(500);
+    }
+    else if(turn_waist_position > 230){
+        turn_waist_position -= 20;
         ros_com->sendSingleMotor(9, turn_waist_position, 50); 
         DelayspinOnce(500);
     }
