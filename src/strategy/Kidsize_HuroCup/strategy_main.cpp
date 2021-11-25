@@ -774,7 +774,7 @@ void KidsizeStrategy::Trace_target_waist() {  //執行轉腰抬手function
 
     ROS_INFO("turnwaistposition:%d", turn_waist_position);
     if(turn_waist_position < -80){
-        turn_waist_position += 10;
+        turn_waist_position += 0;
         ros_com->sendSingleMotor(9, turn_waist_position, 50); 
         DelayspinOnce(500);
     }
