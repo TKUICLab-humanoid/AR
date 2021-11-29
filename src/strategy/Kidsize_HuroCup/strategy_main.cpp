@@ -773,8 +773,8 @@ void KidsizeStrategy::Trace_target_waist() {  //執行轉腰抬手function
     turn_waist_position = (-(target_x_low_ave - 160))/1*2.5 + turn_waist_cnt*(Archeryinfo->WaistTurnPosition) - 10;//轉腰次數
 
     ROS_INFO("turnwaistposition:%d", turn_waist_position);
-    if(turn_waist_position < -80){
-        turn_waist_position += 0;
+    if(turn_waist_position < -200){
+        turn_waist_position += 15;
         ros_com->sendSingleMotor(9, turn_waist_position, 50); 
         DelayspinOnce(500);
     }
@@ -783,8 +783,8 @@ void KidsizeStrategy::Trace_target_waist() {  //執行轉腰抬手function
         ros_com->sendSingleMotor(9, turn_waist_position, 50); 
         DelayspinOnce(500);
     }
-    else if(turn_waist_position > 230){
-        turn_waist_position -= 0;
+    else if(turn_waist_position > 200){
+        turn_waist_position -= 20;
         ros_com->sendSingleMotor(9, turn_waist_position, 50); 
         DelayspinOnce(500);
     }
