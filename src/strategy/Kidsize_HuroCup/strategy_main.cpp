@@ -6,11 +6,11 @@ void KidsizeStrategy::strategyclassify(){  //濾雜訊及存取正確目標物�
         {
             for(int Blue_count = 0; Blue_count < strategy_info->color_mask_subject_cnts[Target_blue_color];Blue_count++)
             {
-                if(strategy_info->color_mask_subject[Target_red_color][Red_count].size >= 150)
+                if(strategy_info->color_mask_subject[Target_red_color][Red_count].size >= 75)
                 {
-                    if(strategy_info->color_mask_subject[Target_yellow_color][Yellow_count].size >= 2000)
+                    if(strategy_info->color_mask_subject[Target_yellow_color][Yellow_count].size >= 1000)
                     {
-                        if(strategy_info->color_mask_subject[Target_blue_color][Blue_count].size >= 4000)
+                        if(strategy_info->color_mask_subject[Target_blue_color][Blue_count].size >= 2000)
                         {
                             if(strategy_info->color_mask_subject[Target_red_color][Red_count].XMin > strategy_info->color_mask_subject[Target_yellow_color][Yellow_count].XMin)
                             {
@@ -138,38 +138,37 @@ void KidsizeStrategy::Gamestart_Initialization(){  //初始化參數
     {   
         if(!prepare_flag)  //若在比賽前沒有執行預備動作 則在init內執行
         {
-            DelayspinOnce(1000);
+            // DelayspinOnce(1000);
+            HeadPosition(HeadMotorID::VerticalID,2100,120);  //將頭轉低30度 開策略轉回正常刻度 為了確認只播是否有撥成功
+            DelayspinOnce(50);
+            HeadPosition(HeadMotorID::VerticalID,2100,120);
+            DelayspinOnce(50);
+            HeadPosition(HeadMotorID::VerticalID,2047,120);
+            DelayspinOnce(50);
+            HeadPosition(HeadMotorID::VerticalID,2047,120);
+            DelayspinOnce(50);
             ros_com->sendBodySector(Preparatoryaction);  //call sector34
-            DelayspinOnce(3000);
+            DelayspinOnce(5500);
             ROS_INFO("PREPARE");
             read_head_position();
             Archeryinfo->Initialization_function();
-            HeadPosition(HeadMotorID::VerticalID,2077,120);  //將頭轉低30度 開策略轉回正常刻度 為了確認只播是否有撥成功
-            DelayspinOnce(50);
-            HeadPosition(HeadMotorID::VerticalID,2077,120);
-            DelayspinOnce(50);
-            HeadPosition(HeadMotorID::VerticalID,2077,120);
-            DelayspinOnce(500);
             HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
             DelayspinOnce(50);
             HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
             DelayspinOnce(50);
             HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
-            DelayspinOnce(500);
+            DelayspinOnce(1500);
             prepare_flag = true;
         }
-	    HeadPosition(HeadMotorID::VerticalID,2047,120);
-        DelayspinOnce(50);
-        HeadPosition(HeadMotorID::VerticalID,2047,120);
-        DelayspinOnce(50);
-        HeadPosition(HeadMotorID::VerticalID,2047,120);
-        DelayspinOnce(500);
+	    
+        // HeadPosition(HeadMotorID::VerticalID,2047,120);
+        // DelayspinOnce(500);
         HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
         DelayspinOnce(50);
         HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
         DelayspinOnce(50);
         HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
-        DelayspinOnce(500);
+        DelayspinOnce(1500);
         i = 0;
         DIOSTARTAGAIN =true;  //變成true讓初始化參數迴圈不會再執行一次
     	sendbodystandflag = false;  //初始化站姿flag
@@ -193,8 +192,10 @@ void KidsizeStrategy::Gamestart_Initialization(){  //初始化參數
         target_y_low = 0;  //初始化最低點y值
         target_x_low_sum = 0;  //初始化最低點x平均
         target_x_high_sum = 0;  //初始化最高點x平均
-        oldstrategy_find_low_time = 30000;  //初始化舊策略找最低點花費時間
+        target_x_low_ave = 0;
+        oldstrategy_find_low_time = 1000;  //初始化舊策略找最低點花費時間    原為5000
     	Archeryinfo->Robot_state = find_target; 
+        fixed_target = false;
     }   
 }
 void KidsizeStrategy::Draw_Function(){  //在人機介面之影像畫線
@@ -222,57 +223,50 @@ void KidsizeStrategy::Find_target(){  //找目標靶副函式
         }
     }
            
-    if(!find_target_flag)  //沒找到目標靶
-    {
-        switch(Archeryinfo->HeadTurnSide)
-        {
-            case TurnRight:  //頭向右轉
-                if ((Archeryinfo->HorizontalHeadPosition - Archeryinfo->HeadTurnPosition) > Archeryinfo->NewpullHorizontalMinAngle)//HorizontalMinAngle 2745
-                {
-                    headbug_cnt++;
-                    ROS_INFO("LOOOOOOOOOOOOOOOOOOOOOK    =====     %d",headbug_cnt); //防止到點的第一瞬間沒抓到靶造成錯誤修正
-                    if(headbug_cnt>100)
-                    {
-                        ROS_INFO("Find_target_head Turn Right");
-                        HeadPosition(HeadMotorID::HorizontalID,Archeryinfo->HorizontalHeadPosition - Archeryinfo->HeadTurnPosition,120);
-                        turn_waist_cnt++;
-                        DelayspinOnce(150);
-                    }
-                }
-                else  //超過轉頭極限則換方向
-                {
-                    ROS_INFO("Turn Right ELSE");
-                    Archeryinfo->HeadTurnSide = TurnLeft;
-                }
-                break;
-            case TurnLeft:  //頭向左轉
-                if ((Archeryinfo->HorizontalHeadPosition + Archeryinfo->HeadTurnPosition) < Archeryinfo->NewpullHorizontalMaxAngle)//HorizontalMaxAngle 3400
-                {
-                    ROS_INFO("Find_target_head Turn Left");
-                    HeadPosition(HeadMotorID::HorizontalID, Archeryinfo->HorizontalHeadPosition + Archeryinfo->HeadTurnPosition,120);
-                    turn_waist_cnt--;
-                    DelayspinOnce(150);
-                }
-                else  //超過轉頭極限則換方向
-                {
-                    ROS_INFO("Turn Left ELSE");
-                    Archeryinfo->HeadTurnSide = TurnRight;
-                }
-                break;
-        }
-    }
+    // if(!find_target_flag)  //沒找到目標靶
+    // {
+    //     switch(Archeryinfo->HeadTurnSide)
+    //     {
+    //         case TurnRight:  //頭向右轉
+    //             if ((Archeryinfo->HorizontalHeadPosition - Archeryinfo->HeadTurnPosition) > Archeryinfo->NewpullHorizontalMinAngle)//HorizontalMinAngle 2745
+    //             {
+    //                 headbug_cnt++;
+    //                 ROS_INFO("LOOOOOOOOOOOOOOOOOOOOOK    =====     %d",headbug_cnt); //防止到點的第一瞬間沒抓到靶造成錯誤修正
+    //                 if(headbug_cnt>100)
+    //                 {
+    //                     ROS_INFO("Find_target_head Turn Right");
+    //                     HeadPosition(HeadMotorID::HorizontalID,Archeryinfo->HorizontalHeadPosition - Archeryinfo->HeadTurnPosition,120);
+    //                     turn_waist_cnt++;
+    //                     DelayspinOnce(150);
+    //                 }
+    //             }
+    //             else  //超過轉頭極限則換方向
+    //             {
+    //                 ROS_INFO("Turn Right ELSE");
+    //                 Archeryinfo->HeadTurnSide = TurnLeft;
+    //             }
+    //             break;
+    //         case TurnLeft:  //頭向左轉
+    //             if ((Archeryinfo->HorizontalHeadPosition + Archeryinfo->HeadTurnPosition) < Archeryinfo->NewpullHorizontalMaxAngle)//HorizontalMaxAngle 3400
+    //             {
+    //                 ROS_INFO("Find_target_head Turn Left");
+    //                 HeadPosition(HeadMotorID::HorizontalID, Archeryinfo->HorizontalHeadPosition + Archeryinfo->HeadTurnPosition,120);
+    //                 turn_waist_cnt--;
+    //                 DelayspinOnce(150);
+    //             }
+    //             else  //超過轉頭極限則換方向
+    //             {
+    //                 ROS_INFO("Turn Left ELSE");
+    //                 Archeryinfo->HeadTurnSide = TurnRight;
+    //             }
+    //             break;
+    //     }
+    // }
 }
 
 void KidsizeStrategy::Find_target_mode() {  //找目標靶方式
-    if(strategy_info->DIOValue.DInput == 29)  //101 指撥功能 小轉腰
-    {
-        target_x_low_ave = Archeryinfo->RedTarget.X;
-        target_y_low = Archeryinfo->RedTarget.Y;
-        Archeryinfo->Robot_state = Trace_waist;	
-        
-    }
-    //新策略(找最高最低點)
-    else 
+    /* 新策略(找最高最低點) */
+    if(strategy_info->DIOValue.Switch.D0)  //101 指撥功能 小轉腰
     {
         i++;
         y[i] = Archeryinfo->RedTarget.Y;
@@ -290,6 +284,16 @@ void KidsizeStrategy::Find_target_mode() {  //找目標靶方式
             Archeryinfo->Robot_state =find_Target_y;
             Archeryinfo->Find_y_state = find_target_highest;
         }
+        
+    }
+    else  /* 不動靶策略 */
+    {
+        // target_x_low_ave = Archeryinfo->RedTarget.X;
+        // target_y_low = Archeryinfo->RedTarget.Y;
+        // Archeryinfo->Robot_state = start_timer;
+        Archeryinfo->Robot_state = find_target_mode_old;
+        Periodtime = 5000;  //shooting after 5sec 
+        fixed_target = true;
     }
 }
 
@@ -352,7 +356,7 @@ void KidsizeStrategy::Find_Target_y(){
                                 target_lowest_time = get_point_time[i];
                                 xvalue_cnt = 0;
                                 target_low_flag = true;
-                                Archeryinfo->Find_y_state = find_target_highest;
+                                Archeryinfo->Find_y_state = find_target_lowest;
                                 ROS_INFO("find_target_lowest_end");
                                 tool->Delay(500);
                                 break;
@@ -472,7 +476,11 @@ void KidsizeStrategy::Find_Target_y(){
             i = 20;
             tool->Delay(500);
         }
-        else  //如果沒有以上條件 則成功採集最高及最低點
+        else
+        {
+            Archeryinfo->Robot_state = find_period;
+        }
+        /* else  //如果沒有以上條件 則成功採集最高及最低點
         {
             Periodtime = 2*(abs(target_lowest_time-target_highest_time));
             ROS_INFO("Periodtime = %f ==========================================", Periodtime);
@@ -501,6 +509,7 @@ void KidsizeStrategy::Find_Target_y(){
                 Archeryinfo->Robot_state = start_timer;
             }
         }
+        */
     }
 }
 void KidsizeStrategy::Find_target_mode_old(){	//舊策略
@@ -511,17 +520,18 @@ void KidsizeStrategy::Find_target_mode_old(){	//舊策略
     oldstrategy_timeuse = (1000000*(tend.tv_sec - tstart.tv_sec) + (tend.tv_usec - tstart.tv_usec))/1000;
     if (oldstrategy_timeuse < oldstrategy_find_low_time)//8sec
     {
-        Ycmpvalue= Archeryinfo->RedTarget.Y;  //目標靶當前y值
+        Ycmpvalue = Archeryinfo->RedTarget.Y;  //目標靶當前y值
         if (!target_low_flag)
         {
             target_y_low = Archeryinfo->RedTarget.Y;  //取第一個y值用來判斷
+            target_x_low_ave = Archeryinfo->RedTarget.X;
             target_low_flag = true;  //取到最低點後flag變true
         }
-        else if (target_low_flag)
+        else
         {                               
             if (Ycmpvalue >= target_y_low)  //與基準值做判斷
             {
-                target_y_low =Ycmpvalue;
+                target_y_low = Ycmpvalue;
                 target_x_low_ave = Archeryinfo->RedTarget.X;
                 ROS_INFO("RedTarget.XMin = %d",Archeryinfo->RedTarget.X);
                 ROS_INFO("Ycmpvalue = %d",Ycmpvalue);
@@ -538,10 +548,18 @@ void KidsizeStrategy::Find_target_mode_old(){	//舊策略
     }
     if (oldstrategy_timeuse >= oldstrategy_find_low_time)  //超過設定的時間就跳出這個副函式
     {
-        ROS_INFO("target_x_low_ave=%d", target_x_low_ave);
-        ROS_INFO("target_y_low=%d", target_y_low);
-        Archeryinfo->Robot_state = find_period;
+        if(fixed_target)
+        {
+            Archeryinfo->Robot_state = start_timer;
+        }
+        else
+        {
+            ROS_INFO("target_x_low_ave=%d", target_x_low_ave);
+            ROS_INFO("target_y_low=%d", target_y_low);
+            Archeryinfo->Robot_state = find_period;
+        }
     }
+    
 }
 void KidsizeStrategy::Trace_period(){  //舊策略找週期
     ROS_INFO("RedTarget.Y=%d",Archeryinfo->RedTarget.Y);
@@ -549,8 +567,9 @@ void KidsizeStrategy::Trace_period(){  //舊策略找週期
         target_y_low = 0;
         Archeryinfo->Robot_state = find_target_mode_old;
     }
-    if((Archeryinfo->RedTarget.Y + 2) >= target_y_low)//在最低點的時候(2是誤差值)
+    if((Archeryinfo->RedTarget.Y + 20) >= target_y_low)//在最低點的時候(2是誤差值)
     {
+        ROS_INFO("target_x_low_ave=%d", target_x_low_ave);
         if(Archeryinfo->RedTarget.X == target_x_low_ave || Archeryinfo->RedTarget.X +1 == target_x_low_ave || Archeryinfo->RedTarget.X -1 == target_x_low_ave)//判斷x值有無在最低點的x值//if(Archeryinfo->RedTarget.X+1 >= target_x_low_ave)0715
         {
             if(!Periodflag)
@@ -565,20 +584,21 @@ void KidsizeStrategy::Trace_period(){  //舊策略找週期
                 Periodtime  = (1000000*(tend.tv_sec - tstart.tv_sec) + (tend.tv_usec - tstart.tv_usec))/1000;//算週期
                 ROS_INFO("Period is %f",Periodtime);
                 tool->Delay(2000);
-                Archeryinfo->Robot_state=start_timer;
+                Archeryinfo->Robot_state = start_timer;
             }
-        }
+       }
+        
     }
-
+    
 }
 void KidsizeStrategy::Start_timer(ros::NodeHandle nh) {  //等待符合條件進行中斷射擊
-    if(Periodtime < 5000)//週期小於轉腰的時間要將週期x2
+    if(Periodtime < 4000)//週期小於轉腰的時間要將週期x2
     {
-        countdown_time = 3*Periodtime - dirdata[3];
+        countdown_time = 2*Periodtime - dirdata[3];
     }
     else
     {
-        countdown_time = 2*Periodtime - dirdata[3];
+        countdown_time = Periodtime - dirdata[3];
     }
 // judge automaticlly testing
 
@@ -623,7 +643,7 @@ void KidsizeStrategy::Start_timer(ros::NodeHandle nh) {  //等待符合條件進
             if((Archeryinfo->RedTarget.Y +2) >= target_y_low)//到最低點時                
             {
                 if(Archeryinfo->RedTarget.X +1 == target_x_low_ave || Archeryinfo->RedTarget.X == target_x_low_ave || Archeryinfo->RedTarget.X -1 == target_x_low_ave)
-                {
+               {
                     timer_s = nh.createTimer(ros::Duration(countdown_time/1000),&KidsizeStrategy::Shooting_target,this,true,false); 
                     timer_s.start();//開始倒數計時
                     countdown_flag =true; 
@@ -680,12 +700,12 @@ void KidsizeStrategy::Trace_target_waist() {  //執行轉腰抬手function
          if(Archeryinfo->YellowTarget.size < 2800)
          {
               ROS_INFO("third state");
-             ros_com->sendBodySector(5);
-             ros_com->sendBodySector(5);
+            //  ros_com->sendBodySector(5);
+            //  ros_com->sendBodySector(5);
          }else{
              ROS_INFO("second state");
         
-             ros_com->sendBodySector(5);
+            //  ros_com->sendBodySector(5);
          }
 
      }
@@ -693,11 +713,11 @@ void KidsizeStrategy::Trace_target_waist() {  //執行轉腰抬手function
      {   
          if(Archeryinfo->YellowTarget.size >= 2800&& Archeryinfo->YellowTarget.size < 3200){
              ROS_INFO("second state");
-             ros_com->sendBodySector(5);
+            //ros_com->sendBodySector(5);
          }else{
              ROS_INFO("third state");
-             ros_com->sendBodySector(5);
-             ros_com->sendBodySector(5);
+            //ros_com->sendBodySector(5);
+            //ros_com->sendBodySector(5);
          }
                
      }
@@ -749,27 +769,46 @@ void KidsizeStrategy::Trace_target_waist() {  //執行轉腰抬手function
     //    ROS_INFO("none");
     //}
 
-    hand_up_cnt = (-(target_y_low - dirdata[13]) )/ 4.5 ;//抬手次數     5.5 
-    if(hand_up_cnt >= 5)
-    {
-        turn_waist_position = (-(target_x_low_ave - 190))/1*1 + turn_waist_cnt*(Archeryinfo->WaistTurnPosition);
-        hand_up_cnt = hand_up_cnt + 1;
-        ROS_INFO("    >1    turnwaistposition:%d", turn_waist_position);
+    hand_up_cnt = (-(target_y_low - dirdata[13]) )/ 3 ;//抬手次數
+    turn_waist_position = (-(target_x_low_ave - 160))/1*2.5 + turn_waist_cnt*(Archeryinfo->WaistTurnPosition) - 10;//轉腰次數
+
+    ROS_INFO("turnwaistposition:%d", turn_waist_position);
+    if(turn_waist_position < -200){
+        ROS_INFO("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        turn_waist_position += 0;
+        ros_com->sendSingleMotor(9, turn_waist_position, 50); 
+        DelayspinOnce(500);
     }
-    else
-    {
-        turn_waist_position = (-(target_x_low_ave - 160))/1*2 + turn_waist_cnt*(Archeryinfo->WaistTurnPosition); //
-        ROS_INFO("    <1    turnwaistposition:%d", turn_waist_position);
+    else if(turn_waist_position > 180){
+        ROS_INFO("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+        turn_waist_position -= 15;
+        ros_com->sendSingleMotor(9, turn_waist_position, 50); 
+        DelayspinOnce(500);
     }
-    ros_com->sendSingleMotor(9, turn_waist_position, 50); 
-    DelayspinOnce(500);
-    if (hand_up_cnt > 0)
+    else{
+        ROS_INFO("ccccccccccccccccccccccccccccccccccccccccccccc");
+        ros_com->sendSingleMotor(9, turn_waist_position, 50); 
+        DelayspinOnce(500);
+    }
+    
+    if (hand_up_cnt > 0 && hand_up_cnt <= 7)
+    {
+		ROS_INFO("UPANDWAIST");
+        ROS_INFO("hand_up_cnt = %d ",hand_up_cnt);
+        while (hand_up_cnt != 0)//抬手的次數,每抬一次減一
+        {
+            ros_com->sendBodySector(Raise_Hand);//執行36磁區
+            DelayspinOnce(150);
+            hand_up_cnt = hand_up_cnt - 1 ;
+        }
+    }
+    else if (hand_up_cnt > 7)
     {
 		ROS_INFO("UPUPUPUPUPUP");
         ROS_INFO("hand_up_cnt = %d ",hand_up_cnt);
         while (hand_up_cnt != 0)//抬手的次數,每抬一次減一
         {
-            ros_com->sendBodySector(Raise_Hand);//執行36磁區
+            ros_com->sendBodySector(Raise_Hand2);//執行36磁區
             DelayspinOnce(150);
             hand_up_cnt = hand_up_cnt - 1 ;
         }
@@ -785,14 +824,13 @@ void KidsizeStrategy::Trace_target_waist() {  //執行轉腰抬手function
             hand_up_cnt = hand_up_cnt + 1 ;
         }
 	}
-    tool->Delay(3000);
+    tool->Delay(1000);
     ROS_INFO("countdown_time = %f", countdown_time);
     ROS_INFO("wait for shoot");
     Archeryinfo->Robot_state = Shoot;
 }
 void KidsizeStrategy::Shooting_target(const ros::TimerEvent& event){ //射擊function
     ROS_INFO("Shooting");
-    
     
     ros_com->sendBodySector(Shooting);
     DelayspinOnce(1000);
@@ -919,7 +957,6 @@ void KidsizeStrategy::strategymain(ros::NodeHandle nh)
                     ROS_INFO("DIO = %d",strategy_info->DIOValue.DInput); 
                     ROS_INFO("Periodtime = %f",Periodtime);
                     ROS_INFO("turnwaistposition = %d",turn_waist_position);
-                    ROS_INFO("turnwaistcont = %d",turn_waist_cnt);
                     ROS_INFO("hand_up_cnt = %d ",hand_up_cnt);
                     ROS_INFO("countdown_time = %f", countdown_time);
                     ROS_INFO("end");
@@ -935,7 +972,7 @@ void KidsizeStrategy::strategymain(ros::NodeHandle nh)
         {
             DelayspinOnce(1000);
             ros_com->sendBodySector(Preparatoryaction);
-            DelayspinOnce(3000);
+            DelayspinOnce(3500);
             ROS_INFO("PREPARE");
             //DelayspinOnce(1000);
             Archeryinfo->Initialization_function();
@@ -985,4 +1022,3 @@ void KidsizeStrategy::strategymain(ros::NodeHandle nh)
     
     }
 }
-
