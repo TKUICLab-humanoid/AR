@@ -143,9 +143,9 @@ void KidsizeStrategy::Gamestart_Initialization(){  //初始化參數
             DelayspinOnce(50);
             HeadPosition(HeadMotorID::VerticalID,2100,120);
             DelayspinOnce(50);
-            HeadPosition(HeadMotorID::VerticalID,2047,120);
+            HeadPosition(HeadMotorID::VerticalID,2000,120);
             DelayspinOnce(50);
-            HeadPosition(HeadMotorID::VerticalID,2047,120);
+            HeadPosition(HeadMotorID::VerticalID,2000,120);
             DelayspinOnce(50);
             ros_com->sendBodySector(Preparatoryaction);  //call sector34
             DelayspinOnce(5500);
@@ -779,7 +779,7 @@ void KidsizeStrategy::Trace_target_waist() {  //執行轉腰抬手function
         ros_com->sendSingleMotor(9, turn_waist_position, 50); 
         DelayspinOnce(500);
     }
-    else if(turn_waist_position > 180){
+    else if(turn_waist_position > 150){
         ROS_INFO("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
         turn_waist_position -= 15;
         ros_com->sendSingleMotor(9, turn_waist_position, 50); 
