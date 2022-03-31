@@ -173,7 +173,7 @@ class Sendmessage:
     
 if __name__ == '__main__':
     try:
-        aa = Sendmessage()
+        aa = Sendmessage() 
         aa.strategy()
     except rospy.ROSInterruptException:
         pass
