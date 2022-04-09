@@ -53,6 +53,6 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_dependencies(strategy ${catkin_EXPORTED_TARGETS})
-target_link_libraries(strategy ${catkin_LIBRARIES} ${TKU_LIBRARIES} ${ROSCOMMUNICATION_LIBRARIES})
+#add_dependencies(strategy ${catkin_EXPORTED_TARGETS})
+#target_link_libraries(strategy ${catkin_LIBRARIES} ${TKU_LIBRARIES} ${ROSCOMMUNICATION_LIBRARIES})
 
