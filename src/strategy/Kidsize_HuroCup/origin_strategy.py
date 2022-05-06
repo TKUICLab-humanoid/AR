@@ -129,29 +129,35 @@ if __name__ == '__main__':
         endM = 0
         g = 0
         h = 0
+        i = 0
         while not rospy.is_shutdown():
             send.drawImageFunction(4,0,0,320,120,120,0,0,0)
             send.drawImageFunction(5,0,160,160,0,240,0,0,0)
             
-            if send.Web == True :
+            if send.is_start == True :
                 all() 
                 s = Low_xy(5) 
-                send.sendHeadMotor(1,3035,40)
+                if v == False:
+                    send.sendHeadMotor(1,3063,40)
+                    v = True
                 
                 if  -3 <= s[1]-Find_Target()[1] <= 3 and -10 <= s[0]-Find_Target()[0] <= 10  :
 
                     all()     
-                    if Low_xy(5)[0] - 160 > 10 or 160 - Low_xy(5)[0]>10 and v == False:
-                        m = 160 - Low_xy(5)[0]            
+                    if Low_xy(5)[0] - 160 > 10 or 160 - Low_xy(5)[0]>10 and v == True:
+                        m = 160 - Low_xy(5)[0] 
+                                 
                         send.sendSingleMotor(9,int(m*3),15)
-                      
+                        
+                        i = m*3 
                         if m*3 > 540 or m*3<-540:
                             break 
                         time.sleep(3) 
                         X_low = 0
                         Y_low = 0 
+                    
                     if -10< Low_xy(5)[0] - 160 < 10:
-                        v = True
+                        v = False
                         all()
                         TS_time(5)
                         endM = TS_time(5)[1]
@@ -168,10 +174,11 @@ if __name__ == '__main__':
                             g = endM - startM
                             
                             print("\n新的最低點XY是：",l)
-                            if g >= 3.66553:
-                                h = g - 3.66553
-                            if g<3:
-                                h = g*2 -3.66553
+                            print("\n轉腰的數值是：",i)
+                            if g >= 3.667:    #比賽3.667
+                                h = g - 3.667
+                            if g<3.667:
+                                h = g*2 -3.667
                             print(h)
                             start = end
                             X_low = 0
@@ -188,9 +195,9 @@ if __name__ == '__main__':
                             print("射擊")
                             send.sendBodySector(2)
                             
-                            send.Web = False
+                            send.is_start = False
 
-                    if send.Web == False : 
+                    if send.is_start == False : 
                         
                         g = 0
                         
