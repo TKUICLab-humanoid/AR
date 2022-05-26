@@ -138,13 +138,13 @@ if __name__ == '__main__':
                 all() 
                 s = Low_xy(5) 
                 if v == False:
-                    send.sendHeadMotor(1,3063,40)
+                    #send.sendHeadMotor(1,3063,40)
                     v = True
                 
                 if  -3 <= s[1]-Find_Target()[1] <= 3 and -10 <= s[0]-Find_Target()[0] <= 10  :
 
                     all()     
-                    if Low_xy(5)[0] - 160 > 10 or 160 - Low_xy(5)[0]>10 and v == True:
+                    if Low_xy(5)[0] - 160 > 7 or 160 - Low_xy(5)[0]>7 and v == True:
                         m = 160 - Low_xy(5)[0] 
                                  
                         send.sendSingleMotor(9,int(m*3),15)
@@ -175,10 +175,10 @@ if __name__ == '__main__':
                             
                             print("\n新的最低點XY是：",l)
                             print("\n轉腰的數值是：",i)
-                            if g >= 3.667:    #比賽3.667
-                                h = g - 3.667
-                            if g<3.667:
-                                h = g*2 -3.667
+                            if g >= 2.9:    #比賽3.667
+                                h = g - 2.9
+                            if g<2.9:
+                                h = g*2 -2.9
                             print(h)
                             start = end
                             X_low = 0
@@ -189,7 +189,7 @@ if __name__ == '__main__':
                             y = True
                             z = True
                             
-                        if -10 <= Low_xy(5)[0] - 160 <= 10 and Low_xy(5)[1]>120 and h != 0:
+                        if -5 <= Low_xy(5)[0] - 160 <= 5 and Low_xy(5)[1]>120 and h != 0:
                             print(h)
                             time.sleep(h)
                             print("射擊")
@@ -211,5 +211,13 @@ if __name__ == '__main__':
 #加上轉頭 完成
 #修改不要直接跳出 完成
 #轉腰的最大範圍 完成
-
 # AR2022.ini motion
+# 212:站姿
+# 400:暫時測試(站平）
+
+#初始：212->201->200->199->400
+#9:蹲下 128:起
+#198(射擊）:11->143->11->143->110->72->144
+#198(new):11->11->110->72->144
+#100:100 300夾
+#m6:270 m2:-180
