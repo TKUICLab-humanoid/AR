@@ -131,6 +131,7 @@ if __name__ == '__main__':
         h = 0
         i = 0
         hh = 0
+        r = rospy.Rate(5)
         while not rospy.is_shutdown():
             send.drawImageFunction(4,0,0,320,120,120,0,0,0)
             send.drawImageFunction(5,0,160,160,0,240,0,0,0)
@@ -181,10 +182,10 @@ if __name__ == '__main__':
                             
                             print("\n新的最低點XY是：",l)
                             print("\n轉腰的數值是：",i)
-                            if g >= 2.7:    #比賽3.667
-                                h = g - 2.7
-                            if g<2.7:
-                                h = g*2 -2.7
+                            if g >= 2.95:    #比賽3.667
+                                h = g - 2.95
+                            if g<2.95:
+                                h = g*2 -2.95
                             print(h)
                             start = end
                             X_low = 0
@@ -200,7 +201,7 @@ if __name__ == '__main__':
                             time.sleep(h)
                             print("射擊")
                             send.sendBodySector(2)
-                            
+                            time.sleep(4)
                             send.is_start = False
 
                     if send.is_start == False : 
@@ -209,6 +210,7 @@ if __name__ == '__main__':
                         
                        # if g >= 3 :
                        #     send.sendBodySector(1) #動作串198 射擊   
+            r.sleep()
                         
 
     except rospy.ROSInterruptException:
