@@ -29,6 +29,7 @@ z = True
 y = True
 l = 0
 tt = 0
+HH = True
 
 def Find_Target():
     global bcolor_XMin 
@@ -65,9 +66,10 @@ def Find_Target():
                                 rcolor_YMax = send.color_mask_subject_YMax[5][m]
                                 rcolor_X = send.color_mask_subject_X[5][m]
                                 rcolor_Y = send.color_mask_subject_Y[5][m]
-    #  這邊有修改                               # send.drawImageFunction(0,1,bcolor_XMin,bcolor_XMax,bcolor_YMin,bcolor_YMax,0,0,255)
+    #  這邊有修改                # send.drawImageFunction(0,1,bcolor_XMin,bcolor_XMax,bcolor_YMin,bcolor_YMax,0,0,255)
                                 # send.drawImageFunction(1,1,ycolor_XMin,ycolor_XMax,ycolor_YMin,ycolor_YMax,0,0,255)
                                 send.drawImageFunction(2,1,rcolor_XMin,rcolor_XMax,rcolor_YMin,rcolor_YMax,0,0,255)
+                                #print(rcolor_X,rcolor_Y) 
  
     return rcolor_X,rcolor_Y
     
@@ -94,7 +96,8 @@ def Low_xy(i):
                                 X_low = send.color_mask_subject_X[i][h]
                 # time.sleep(0.4)
                                 send.drawImageFunction(3,1,l_XMin,l_XMax,l_YMin,l_YMax,255,48,48) 
-                                time.sleep(0.4)   
+                                time.sleep(0.4)
+                                  
     return X_low ,Y_low
 
 def all():
@@ -139,12 +142,12 @@ if __name__ == '__main__':
             if send.is_start == True :
                 all() 
                 s = Low_xy(5) 
-                # if v == False:
+                if HH == True:
                 #     hh = 3123
-                #     send.sendHeadMotor(1,h,70)
+                    send.sendHeadMotor(1,3123,50)
                 #     time.sleep(5)
                 #     if hh == 3123:
-                v = True 
+                    HH = False 
 
                     
                 
@@ -182,10 +185,10 @@ if __name__ == '__main__':
                             
                             print("\n新的最低點XY是：",l)
                             print("\n轉腰的數值是：",i)
-                            if g >= 2.95:    #比賽3.667
-                                h = g - 2.95
-                            if g<2.95:
-                                h = g*2 -2.95
+                            if g >= 3.5:    #比賽3.667
+                                h = g - 3.5
+                            if g<3.5:
+                                h = g*2 -3.5
                             print(h)
                             start = end
                             X_low = 0
@@ -196,7 +199,7 @@ if __name__ == '__main__':
                             y = True
                             z = True
                             
-                        if -10 <= Low_xy(5)[0] - 160 <= 10 and Low_xy(5)[1]>120 and h != 0:
+                        if -10 <= Low_xy(5)[0] - 160 <= 10  and h != 0:
                             print(h)
                             time.sleep(h)
                             print("射擊")
@@ -205,7 +208,8 @@ if __name__ == '__main__':
                             send.is_start = False
 
                     if send.is_start == False : 
-                        # send.sendHeadMotor(1,2048,40)
+                        send.sendHeadMotor(1,2048,40)
+                        send.sendBodySector(3)
                         g = 0
                         
                        # if g >= 3 :
