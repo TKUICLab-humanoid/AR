@@ -24,7 +24,7 @@ end = 0
 k = 0
 Y_low = 0
 X_low = 0
-v = False
+v = True
 z = True
 y = True
 l = 0
@@ -144,8 +144,8 @@ if __name__ == '__main__':
                 s = Low_xy(5) 
                 if HH == True:
                 #     hh = 3123
-                    send.sendHeadMotor(1,3123,50)
-                #     time.sleep(5)
+                    send.sendHeadMotor(1,2950,50)
+                    time.sleep(5)
                 #     if hh == 3123:
                     HH = False 
 
@@ -153,20 +153,23 @@ if __name__ == '__main__':
                 
                 if  -10 <= s[1]-Find_Target()[1] <= 10 and -10 <= s[0]-Find_Target()[0] <= 10  :
 
-                    all()     
+                    all()   
+                    print('X軸差距 = ============',Low_xy(5)[0] - 160)  
                     if Low_xy(5)[0] - 160 > 10 or 160 - Low_xy(5)[0]>10 and v == True:
                         m = 160 - Low_xy(5)[0] 
                                  
                         send.sendSingleMotor(9,int(m*3),15)
                         
                         i = m*3 
-                        if m*3 > 540 or m*3<-540:
+                        if m*3 > 1024 or m*3<-1024:
                             break 
                         time.sleep(3) 
                         X_low = 0
                         Y_low = 0 
+                       
                     
-                    if -10< Low_xy(5)[0] - 160 < 10:
+                    if -10<= Low_xy(5)[0] - 160 <= 10:
+                        print("time start")
                         v = False
                         all()
                         TS_time(5)
@@ -185,10 +188,10 @@ if __name__ == '__main__':
                             
                             print("\n新的最低點XY是：",l)
                             print("\n轉腰的數值是：",i)
-                            if g >= 3.5:    #比賽3.667
-                                h = g - 3.5
-                            if g<3.5:
-                                h = g*2 -3.5
+                            if g >= 2.3:    #比賽3.667
+                                h = g - 2.3
+                            if g<2.3:
+                                h = g*2 -2.3
                             print(h)
                             start = end
                             X_low = 0
