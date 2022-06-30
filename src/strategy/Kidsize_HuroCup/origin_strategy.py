@@ -21,7 +21,7 @@ rcolor_X = 0
 rcolor_Y = 0
 start = 0
 end = 0
-k = 0
+
 Y_low = 0
 X_low = 0
 v = True
@@ -96,7 +96,7 @@ def Low_xy(i):
                                 X_low = send.color_mask_subject_X[i][h]
                 # time.sleep(0.4)
                                 send.drawImageFunction(3,1,l_XMin,l_XMax,l_YMin,l_YMax,255,48,48) 
-                                time.sleep(0.2) #修改====================================================================================================================
+                                time.sleep(0.27) #修改====================================================================================================================
                                   
     return X_low ,Y_low
 
@@ -114,14 +114,16 @@ def TS_time(i):
     a = 0
     s = Low_xy(i)
 
-    if  -5<s[1]-Find_Target()[1]<5  and k ==0 :
+    if  -11 <= s[0]-Find_Target()[0] <= 11 and -11 <= s[1]-Find_Target()[1] <= 11 and k == 0 :
         print("開始計時")         
         start =time.time()
-        time.sleep(1)
+        time.sleep(2)
         k = 1
-
-    if -5<s[1]-Find_Target()[1]<5  and k ==1 :
+        
+    if -11 <= s[0]-Find_Target()[0] <= 11 and -11 <= s[1]-Find_Target()[1] <= 11 and k == 1 :
         end = time.time()
+        
+
  
     return start,end
 
@@ -136,6 +138,7 @@ if __name__ == '__main__':
         i = 0
         hh = 0
         r = rospy.Rate(5)
+        k = 0
         while not rospy.is_shutdown():
             send.drawImageFunction(4,0,0,320,120,120,0,0,0)
             send.drawImageFunction(5,0,160,160,0,240,0,0,0)
@@ -144,7 +147,7 @@ if __name__ == '__main__':
                  
                 if HH == True:
                 #     hh = 3123
-                    send.sendHeadMotor(1,3015,50)
+                    send.sendHeadMotor(1,2795,50)
                     time.sleep(5)
                 #     if hh == 3123:
                     HH = False 
@@ -152,11 +155,12 @@ if __name__ == '__main__':
                 all() 
                 s = Low_xy(5)  
                 
-                if  -10 <= s[1]-Find_Target()[1] <= 10 and -10 <= s[0]-Find_Target()[0] <= 10  :
+                if  -12 <= s[1]-Find_Target()[1] <= 12 and -12 <= s[0]-Find_Target()[0] <= 12  :
 
                     all()   
                     print('X軸差距 = ============',Low_xy(5)[0] - 160)  
-                    if Low_xy(5)[0] - 160 > 10 or 160 - Low_xy(5)[0]>10 and v == True:
+                    print('Y軸差距 = ============',Low_xy(5)[1] - 120)  
+                    if Low_xy(5)[0] - 160 > 10 or 160 - Low_xy(5)[0]>10 and  Low_xy(5)[1]>120:
                         m = 160 - Low_xy(5)[0] 
    
                         i = m*3 
@@ -166,11 +170,11 @@ if __name__ == '__main__':
                         time.sleep(3) 
                         X_low = 0
                         Y_low = 0 
-                       
+                        
                     
                     if -10<= Low_xy(5)[0] - 160 <= 10:
                         print("time start")
-                        v = False
+                        
                         all()
                         TS_time(5)
                         endM = TS_time(5)[1]
@@ -188,33 +192,38 @@ if __name__ == '__main__':
                             
                             print("\n新的最低點XY是：",l)
                             print("\n轉腰的數值是：",i)
-                            if g >= 2.5:    #比賽3.667
-                                h = g - 2.5
-                            if g<2.5:
-                                h = g*2 -2.5
+                            if g >= 1.757:    #比賽3.667
+                                h = g - 1.757
+                            if g<1.757:
+                                h = g*2 -1.757
                             print(h)
                             start = end
                             X_low = 0
                             Y_low = 0
-                            k = 0
                             
+                            print(h)
                             v = False
                             y = True
                             z = True
                             
-                        if -10 <= Low_xy(5)[0] - 160 <= 10  and h != 0:
-                            print(h)
-                            time.sleep(h)
-                            print("射擊")
-                            send.sendBodySector(3)
-                            time.sleep(4)
-                            print("aaaaaaaaaaaaaaaaaaaaa")
-                            send.is_start = False
+                            # if h <= 0:
+                            #     h = 1   
+                            if -10 <= Low_xy(5)[0] - 160 <= 10  and h != 0:
+                                print(h)
+                                    
+                                time.sleep(h)
+                                print("射擊")
+                                send.sendBodySector(3)
+                                time.sleep(4)
+                                print("aaaaaaaaaaaaaaaaaaaaa")
+                                send.is_start = False
+                            
 
                     if send.is_start == False : 
                         send.sendHeadMotor(1,2048,40)
                         send.sendBodySector(2)
                         g = 0
+                        k = 0
                         
                        # if g >= 3 :
                        #     send.sendBodySector(1) #動作串198 射擊   
