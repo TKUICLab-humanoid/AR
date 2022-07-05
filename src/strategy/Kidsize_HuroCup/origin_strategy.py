@@ -147,7 +147,7 @@ if __name__ == '__main__':
                  
                 if HH == True:
                 #     hh = 3123
-                    send.sendHeadMotor(1,2795,50)
+                    send.sendHeadMotor(1,2805,50)
                     time.sleep(5)
                 #     if hh == 3123:
                     HH = False 
@@ -170,9 +170,26 @@ if __name__ == '__main__':
                         time.sleep(3) 
                         X_low = 0
                         Y_low = 0 
-                        
-                    
+
+                    print("現在Y值： ===============",Low_xy(5)[1])
                     if -10<= Low_xy(5)[0] - 160 <= 10:
+                        if Low_xy(5)[1] > 130 :
+                            send.sendBodySector(5)
+                            print("LOW")
+                            X_low = 0
+                            Y_low = 0 
+                            time.sleep(2)
+
+                    if -10<= Low_xy(5)[0] - 160 <= 10:
+                        if Low_xy(5)[1] <130 :
+                            send.sendBodySector(4)
+                            print("HIGH")
+                            X_low = 0
+                            Y_low = 0 
+                            time.sleep(2)
+
+                    
+                    if -10<= Low_xy(5)[0] - 160 <= 10 and Low_xy(5)[1] == 130 :
                         print("time start")
                         
                         all()
@@ -216,12 +233,15 @@ if __name__ == '__main__':
                                 send.sendBodySector(3)
                                 time.sleep(4)
                                 print("aaaaaaaaaaaaaaaaaaaaa")
+                                lll = 1
                                 send.is_start = False
                             
 
                     if send.is_start == False : 
-                        send.sendHeadMotor(1,2048,40)
-                        send.sendBodySector(2)
+                        if lll == 1:
+                            send.sendHeadMotor(1,2048,40)
+                            send.sendBodySector(2)
+                        
                         g = 0
                         k = 0
                         
