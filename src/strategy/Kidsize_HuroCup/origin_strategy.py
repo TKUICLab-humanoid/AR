@@ -133,18 +133,27 @@ if __name__ == '__main__':
     try:
         send = Sendmessage()
         m = 0
+        mi = 0
+        msum = 0
         startM = 0
         endM = 0
         g = 0
         h = 0
         i = 0
         hh = 0
+        hhll = 0
         r = rospy.Rate(5)
         k = 0
         hl = 0
         lll =0
         hll = 0
         hlll = 0
+        rh = 0
+        rlh = 0
+        rll = 0
+        rr = 0
+        rrl = 0
+        rrll = 0
         while not rospy.is_shutdown():
             send.drawImageFunction(4,0,0,320,120,120,0,0,0)
             send.drawImageFunction(5,0,160,160,0,240,0,0,0)
@@ -152,25 +161,26 @@ if __name__ == '__main__':
             if send.is_start == True :
                  
                 if HH == True:
-                #     hh = 3123
                     time.sleep(0.5)
-                    send.sendHeadMotor(1,2805,80)
-                    time.sleep(4)
-                #     if hh == 3123:
+                    send.sendHeadMotor(1,2830,80)
+                    send.sendHeadMotor(1,2830,80)
+                    # send.sendSingleMotor(9,10,15) #啟動轉腰
+                    time.sleep(3)
                     HH = False 
 
                 all() 
                 s = Low_xy(5)  
                 
-                if  -12 <= s[1]-Find_Target()[1] <= 12 and -12 <= s[0]-Find_Target()[0] <= 12  :
+                if  -10 <= s[0]-Find_Target()[0] <= 10  :
 
                     all()   
                     print('X軸差距 = ============',Low_xy(5)[0] - 160)  
                     print('Y軸差距 = ============',Low_xy(5)[1] - 120)  
-                    if Low_xy(5)[0] - 160 > 10 or 160 - Low_xy(5)[0]>10 and  Low_xy(5)[1]>120:
+                    if Low_xy(5)[0] - 160 > 2 or 160 - Low_xy(5)[0]>2: #and  Low_xy(5)[1]>120:
                         m = 160 - Low_xy(5)[0] 
    
-                        i = m*3 
+                        mi = m*3 
+                        msum = msum + mi
                         if m*3 > 1024 or m*3<-1024:
                             break 
                         send.sendSingleMotor(9,int(m*3),15)
@@ -180,19 +190,20 @@ if __name__ == '__main__':
 
                     print("現在Y值： ===============",Low_xy(5)[1])
                     if hlll == 0:
-                        if -10<= Low_xy(5)[0] - 160 <= 10:
-                            if Low_xy(5)[1] > 142 :
-                                hl = Low_xy(5)[1] - 142
+                        if -2<= Low_xy(5)[0] - 160 <= 2:
+                            if Low_xy(5)[1] > 145 :           #改151
+                                hl = Low_xy(5)[1] - 145
+                                
                                 print(hl)
                                 if hl >= 13:
                                     hl = 13
-                                
-
+                          
                                 for hll in range(0,hl) :
                                     send.sendBodySector(5)
                                     time.sleep(0.5)
                                     print("LOW")
-                                    i = i+ 1
+                                    hll = hll+ 1
+                                    rll = rll+1
                                 
                             
                                 X_low = 0
@@ -201,17 +212,29 @@ if __name__ == '__main__':
                                 hlll = hlll+1
                                 
 
-                        if -10<= Low_xy(5)[0] - 160 <= 10:
-                            if 120 <Low_xy(5)[1] <142 :
-                                hl =142 -  Low_xy(5)[1] 
+                        if -2<= Low_xy(5)[0] - 160 <= 2:
+                            if Low_xy(5)[1] <145 :
+                                hl =145 -  Low_xy(5)[1]
+                                hhll = hl
+
                                 print(hl)
                                 if hl >= 3:
                                     hl = 3
+                                    hhll = hhll - hl 
+                                    for hll in range(0,hhll) :
+                                        send.sendBodySector(7)
+                                        print("hand high")
+                                        hll = hll+ 1
+                                        rh = rh +1
+                                        time.sleep(0.5)
+
+                                    
                                 for hll in range(0,hl) :
                                     send.sendBodySector(4)
                                     time.sleep(0.5)
                                     print("HIGH")
-                                    i = i+ 1
+                                    rlh = rlh +1
+                                    hll = hll+ 1
                                 X_low = 0
                                 Y_low = 0 
                                 i = 0
@@ -219,7 +242,7 @@ if __name__ == '__main__':
                             
 
                     
-                    if -10<= Low_xy(5)[0] - 160 <= 10 and -10 <= Low_xy(5)[1] -142 <= 10 :
+                    if -2<= Low_xy(5)[0] - 160 <= 2:# and -10 <= Low_xy(5)[1] -162 <= 10 :
                         print("time start")
                         
                         all()
@@ -238,11 +261,12 @@ if __name__ == '__main__':
                             g = endM - startM
                             
                             print("\n新的最低點XY是：",l)
-                            print("\n轉腰的數值是：",i)
-                            if g >= 1.42:    #比賽3.667
+                            print("\n轉腰的數值是：",mi)
+
+                            if g >= 1.42:   
                                 h = g - 1.42
                             if g<1.42:
-                                h = g*2 -1.42#數值加大 箭矢往右邊
+                                h = g*2 -1.42    #數值加大 箭矢往右邊
                             print(h)
                             start = end
                             
@@ -257,19 +281,49 @@ if __name__ == '__main__':
                             if -10 <= Low_xy(5)[0] - 160 <= 10  and h != 0:
                                 print(h)
                                     
-                                time.sleep(h)
+                                #time.sleep(h)
                                 print("射擊")
+                                send.sendSingleMotor(9,int(-hhll*0.3),15)
+                                print("轉了：", int(-hhll*0.3))
+                                time.sleep(0.5)
                                 send.sendBodySector(3)
                                 time.sleep(4)
                                 print("aaaaaaaaaaaaaaaaaaaaa")
                                 lll = 1
+                                print ("總轉腰數值 ：",msum)
                                 send.is_start = False
                             
 
                     if send.is_start == False : 
                         if lll == 1:
+                            send.sendSingleMotor(9,int(-1*msum),15)
                             send.sendHeadMotor(1,2048,40)
+                            time.sleep(2)
                             send.sendBodySector(2)
+                            time.sleep(1)
+                            for rr in range(0,rlh) :
+                                send.sendBodySector(5)
+                                time.sleep(1)
+                                
+                                rr = rr +1
+                            time.sleep(2)
+
+                            for rrl in range(0,rh) :
+                                send.sendBodySector(8)
+                                time.sleep(0.5)
+                                
+                                rrl = rrl +1
+
+                            time.sleep(2)
+                            for rrll in range(0,rll) :
+                                send.sendBodySector(4)
+                                time.sleep(1)
+                                
+                                rrll = rrll +1
+                            time.sleep(2)
+
+                        send.sendSingleMotor(9,int(hhll*0.3),15)
+
                         
                         g = 0
                         k = 0
