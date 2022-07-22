@@ -119,7 +119,7 @@ def TS_time(i):
     if  -11 <= s[0]-Find_Target()[0] <= 11 and -11 <= s[1]-Find_Target()[1] <= 11 and k == 0 :
         print("開始計時")         
         start =time.time()
-        time.sleep(2)
+        # time.sleep(2)
         k = 1
         
     if -11 <= s[0]-Find_Target()[0] <= 11 and -11 <= s[1]-Find_Target()[1] <= 11 and k == 1 :
@@ -163,8 +163,8 @@ if __name__ == '__main__':
                  
                 if HH == True:
                     time.sleep(0.5)
-                    send.sendHeadMotor(1,2840,80)
-                    send.sendHeadMotor(1,2840,80)
+                    send.sendHeadMotor(1,2850,80)
+                    send.sendHeadMotor(1,2850,80)
                     # send.sendSingleMotor(9,10,15) #啟動轉腰
                     time.sleep(3)
                     HH = False 
@@ -178,7 +178,7 @@ if __name__ == '__main__':
                     print('X軸差距 = ============',Low_xy(5)[0] - 160)  
                     print('Y軸差距 = ============',Low_xy(5)[1] - 120) 
                     
-                    if Low_xy(5)[0] - 160 > 2 or 160 - Low_xy(5)[0]>2: #and  Low_xy(5)[1]>120:
+                    if Low_xy(5)[0] - 160 > 1 or 160 - Low_xy(5)[0]>1: #and  Low_xy(5)[1]>120:
                         m = 160 - Low_xy(5)[0] 
                         mi = m*3 
                         msum = msum + mi
@@ -196,9 +196,9 @@ if __name__ == '__main__':
 
                     print("現在Y值： ===============",Low_xy(5)[1])
                     if hlll == 0:
-                        if -2<= Low_xy(5)[0] - 160 <= 2:
-                            if Low_xy(5)[1] > 155 :           #改151
-                                hl = Low_xy(5)[1] - 155
+                        if -1<= Low_xy(5)[0] - 160 <= 1:
+                            if Low_xy(5)[1] > 140 :           #改151
+                                hl = Low_xy(5)[1] - 140
                                 
                                 print(hl)
                                 if hl >= 13:
@@ -218,9 +218,9 @@ if __name__ == '__main__':
                                 hlll = hlll+1
                                 
 
-                        if -2<= Low_xy(5)[0] - 160 <= 2:
-                            if Low_xy(5)[1] <155 :
-                                hl =155 -  Low_xy(5)[1]
+                        if -1<= Low_xy(5)[0] - 160 <= 1:
+                            if Low_xy(5)[1] <140 :
+                                hl =140 -  Low_xy(5)[1]
                                 hhll = hl
 
                                 print(hl)
@@ -248,14 +248,14 @@ if __name__ == '__main__':
                             
 
                     
-                    if -2<= Low_xy(5)[0] - 160 <= 2:# and -10 <= Low_xy(5)[1] -162 <= 10 :
+                    if -1<= Low_xy(5)[0] - 160 <= 1:# and -10 <= Low_xy(5)[1] -162 <= 10 :
                         print("time start")
                         
                         all()
                         TS_time(5)
                         endM = TS_time(5)[1]
                         startM = TS_time(5)[0]                          
-                        if endM -startM > 0 and y == True:       
+                        if endM -startM >= 0 and y == True:       
                             y = False     
                         all()
                         if -10 <= Low_xy(5)[0] - 160 <= 10 and Low_xy(5)[1]>120 and z== True:
@@ -283,17 +283,19 @@ if __name__ == '__main__':
                             z = True
                             
                             # if h <= 0:
-                            #     h = 1   
-                            if -10 <= Low_xy(5)[0] - 160 <= 10  and h != 0 and endd == 0:
+                            #     h = 1  
+                            all()
+                            time.sleep(1.5)
+                            if -1 <= Low_xy(5)[0] - 160 <= 1 and h != 0 and endd == 0:
                                 print(h)
                                     
                                 #time.sleep(h)
                                 print("射擊")
-                                send.sendSingleMotor(9,int(-hhll*0.3),15)
-                                print("轉了：", int(-hhll*0.3))
-                                time.sleep(0.5)
+                                send.sendSingleMotor(9,int(-hhll*1.25),10)
+                                print("轉了：", int(-hhll*1.25))
+                                time.sleep(5)
                                 send.sendBodySector(3)
-                                time.sleep(4)
+                                time.sleep(2)
                                 print("aaaaaaaaaaaaaaaaaaaaa")
                                 lll = 1
                                 endd = 1
@@ -319,7 +321,7 @@ if __name__ == '__main__':
 
                     for rrl in range(0,rh) :
                         send.sendBodySector(8)
-                        time.sleep(1)
+                        time.sleep(0.5)
                         
                         rrl = rrl +1
 
@@ -330,7 +332,7 @@ if __name__ == '__main__':
                         
                         rrll = rrll +1
                     time.sleep(2)
-                    send.sendSingleMotor(9,int(hhll*0.3),15)
+                    send.sendSingleMotor(9,int(hhll*1.25),15)
                     lll = 0
 
                 
