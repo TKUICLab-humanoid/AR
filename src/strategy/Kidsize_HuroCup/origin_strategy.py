@@ -155,6 +155,7 @@ if __name__ == '__main__':
         rrl = 0
         rrll = 0
         endd = 0
+        hlltr = True
         while not rospy.is_shutdown():
             send.drawImageFunction(4,0,0,320,120,120,0,0,0)
             send.drawImageFunction(5,0,160,160,0,240,0,0,0)
@@ -163,8 +164,8 @@ if __name__ == '__main__':
                  
                 if HH == True:
                     time.sleep(0.5)
-                    send.sendHeadMotor(1,2850,80)
-                    send.sendHeadMotor(1,2850,80)
+                    send.sendHeadMotor(1,2855,80)
+                    send.sendHeadMotor(1,2855,80)
                     # send.sendSingleMotor(9,10,15) #啟動轉腰
                     time.sleep(3)
                     HH = False 
@@ -197,19 +198,23 @@ if __name__ == '__main__':
                     print("現在Y值： ===============",Low_xy(5)[1])
                     if hlll == 0:
                         if -1<= Low_xy(5)[0] - 160 <= 1:
-                            if Low_xy(5)[1] > 140 :           #改151
-                                hl = Low_xy(5)[1] - 140
+                            if Low_xy(5)[1] > 143:           #改151
+                                hl = Low_xy(5)[1] - 143
                                 
                                 print(hl)
                                 if hl >= 13:
                                     hl = 13
                           
-                                for hll in range(0,hl) :
-                                    send.sendBodySector(5)
-                                    time.sleep(0.5)
-                                    print("LOW")
-                                    hll = hll+ 1
-                                    rll = rll+1
+                                if hll < hl and hlltr == True:
+                                    for hll in range(0,hl) :
+                                        send.sendBodySector(5)
+                                        time.sleep(1)
+                                        print("LOW")
+                                        hll = hll+ 1
+                                        rll = rll+1
+                                        if hll == 13 :
+                                            hlltr = False
+
                                 
                             
                                 X_low = 0
@@ -219,8 +224,8 @@ if __name__ == '__main__':
                                 
 
                         if -1<= Low_xy(5)[0] - 160 <= 1:
-                            if Low_xy(5)[1] <140 :
-                                hl =140 -  Low_xy(5)[1]
+                            if Low_xy(5)[1] <143 :
+                                hl =143 -  Low_xy(5)[1]
                                 hhll = hl
 
                                 print(hl)
@@ -232,15 +237,15 @@ if __name__ == '__main__':
                                         print("hand high")
                                         hll = hll+ 1
                                         rh = rh +1
-                                        time.sleep(0.5)
+                                        time.sleep(1)
 
-                                    
-                                for hll in range(0,hl) :
-                                    send.sendBodySector(4)
-                                    time.sleep(0.5)
-                                    print("HIGH")
-                                    rlh = rlh +1
-                                    hll = hll+ 1
+                                if hll < hl and hlltr == True:    
+                                    for hll in range(0,hl) :
+                                        send.sendBodySector(4)
+                                        time.sleep(1)
+                                        print("HIGH")
+                                        rlh = rlh +1
+                                        hll = hll+ 1
                                 X_low = 0
                                 Y_low = 0 
                                 i = 0
