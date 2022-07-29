@@ -164,8 +164,8 @@ if __name__ == '__main__':
                  
                 if HH == True:
                     time.sleep(0.5)
-                    send.sendHeadMotor(1,2855,80)
-                    send.sendHeadMotor(1,2855,80)
+                    send.sendHeadMotor(1,2850,80)
+                    send.sendHeadMotor(1,2850,80)
                     # send.sendSingleMotor(9,10,15) #啟動轉腰
                     time.sleep(3)
                     HH = False 
@@ -198,8 +198,8 @@ if __name__ == '__main__':
                     print("現在Y值： ===============",Low_xy(5)[1])
                     if hlll == 0:
                         if -1<= Low_xy(5)[0] - 160 <= 1:
-                            if Low_xy(5)[1] > 143:           #改151
-                                hl = Low_xy(5)[1] - 143
+                            if Low_xy(5)[1] > 137:           #改151
+                                hl = Low_xy(5)[1] - 137
                                 
                                 print(hl)
                                 if hl >= 13:
@@ -224,8 +224,8 @@ if __name__ == '__main__':
                                 
 
                         if -1<= Low_xy(5)[0] - 160 <= 1:
-                            if Low_xy(5)[1] <143 :
-                                hl =143 -  Low_xy(5)[1]
+                            if Low_xy(5)[1] <137 :
+                                hl =137 -  Low_xy(5)[1]
                                 hhll = hl
 
                                 print(hl)
@@ -239,13 +239,13 @@ if __name__ == '__main__':
                                         rh = rh +1
                                         time.sleep(1)
 
-                                if hll < hl and hlltr == True:    
-                                    for hll in range(0,hl) :
-                                        send.sendBodySector(4)
-                                        time.sleep(1)
-                                        print("HIGH")
-                                        rlh = rlh +1
-                                        hll = hll+ 1
+                                    
+                                for hll in range(0,hl) :
+                                    send.sendBodySector(4)
+                                    time.sleep(1)
+                                    print("HIGH")
+                                    rlh = rlh +1
+                                    hll = hll+ 1
                                 X_low = 0
                                 Y_low = 0 
                                 i = 0
@@ -296,8 +296,8 @@ if __name__ == '__main__':
                                     
                                 #time.sleep(h)
                                 print("射擊")
-                                send.sendSingleMotor(9,int(-hhll*1.25),10)
-                                print("轉了：", int(-hhll*1.25))
+                                send.sendSingleMotor(9,int(-hhll*1.4),10)
+                                print("轉了：", int(-hhll*1.4))
                                 time.sleep(5)
                                 send.sendBodySector(3)
                                 time.sleep(2)
@@ -337,7 +337,7 @@ if __name__ == '__main__':
                         
                         rrll = rrll +1
                     time.sleep(2)
-                    send.sendSingleMotor(9,int(hhll*1.25),15)
+                    send.sendSingleMotor(9,int(hhll*1.4),15)
                     lll = 0
 
                 
