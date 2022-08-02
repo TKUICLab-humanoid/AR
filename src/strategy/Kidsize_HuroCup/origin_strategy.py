@@ -119,7 +119,7 @@ def TS_time(i):
     if  -11 <= s[0]-Find_Target()[0] <= 11 and -11 <= s[1]-Find_Target()[1] <= 11 and k == 0 :
         print("開始計時")         
         start =time.time()
-        time.sleep(2)
+        # time.sleep(2)
         k = 1
         
     if -11 <= s[0]-Find_Target()[0] <= 11 and -11 <= s[1]-Find_Target()[1] <= 11 and k == 1 :
@@ -154,6 +154,10 @@ if __name__ == '__main__':
         rr = 0
         rrl = 0
         rrll = 0
+
+        endd = 0
+        hlltr = True
+
         while not rospy.is_shutdown():
             send.drawImageFunction(4,0,0,320,120,120,0,0,0)
             send.drawImageFunction(5,0,160,160,0,240,0,0,0)
@@ -162,8 +166,10 @@ if __name__ == '__main__':
                  
                 if HH == True:
                     time.sleep(0.5)
-                    send.sendHeadMotor(1,2830,80)
-                    send.sendHeadMotor(1,2830,80)
+
+                    send.sendHeadMotor(1,2864,80)
+                    send.sendHeadMotor(1,2864,80)
+
                     # send.sendSingleMotor(9,10,15) #啟動轉腰
                     time.sleep(3)
                     HH = False 
@@ -171,18 +177,24 @@ if __name__ == '__main__':
                 all() 
                 s = Low_xy(5)  
                 
-                if  -10 <= s[0]-Find_Target()[0] <= 10  :
+
+                if  -10 <= s[0]-Find_Target()[0] <= 10 and endd == 0  :
 
                     all()   
                     print('X軸差距 = ============',Low_xy(5)[0] - 160)  
-                    print('Y軸差距 = ============',Low_xy(5)[1] - 120)  
-                    if Low_xy(5)[0] - 160 > 2 or 160 - Low_xy(5)[0]>2: #and  Low_xy(5)[1]>120:
+                    print('Y軸差距 = ============',Low_xy(5)[1] - 120) 
+                    
+                    if Low_xy(5)[0] - 160 > 1 or 160 - Low_xy(5)[0]>1: #and  Low_xy(5)[1]>120:
                         m = 160 - Low_xy(5)[0] 
-   
                         mi = m*3 
                         msum = msum + mi
-                        if m*3 > 1024 or m*3<-1024:
+                        if msum > 800 or msum < -800:
+                            print("暴轉========================================================================================================================================================")
                             break 
+   
+                        
+                        
+                         
                         send.sendSingleMotor(9,int(m*3),15)
                         time.sleep(3) 
                         X_low = 0
@@ -190,20 +202,28 @@ if __name__ == '__main__':
 
                     print("現在Y值： ===============",Low_xy(5)[1])
                     if hlll == 0:
-                        if -2<= Low_xy(5)[0] - 160 <= 2:
-                            if Low_xy(5)[1] > 145 :           #改151
-                                hl = Low_xy(5)[1] - 145
+
+                        if -1<= Low_xy(5)[0] - 160 <= 1:
+                            if Low_xy(5)[1] > 135:           #改151
+                                hl = Low_xy(5)[1] - 135
+
                                 
                                 print(hl)
                                 if hl >= 13:
                                     hl = 13
                           
-                                for hll in range(0,hl) :
-                                    send.sendBodySector(5)
-                                    time.sleep(0.5)
-                                    print("LOW")
-                                    hll = hll+ 1
-                                    rll = rll+1
+
+                                if hll < hl and hlltr == True:
+                                    for hll in range(0,hl) :
+                                        send.sendBodySector(5)
+                                        time.sleep(1)
+                                        print("LOW")
+                                        hll = hll+ 1
+                                        rll = rll+1
+                                        if hll == 13 :
+                                            hlltr = False
+
+
                                 
                             
                                 X_low = 0
@@ -212,9 +232,11 @@ if __name__ == '__main__':
                                 hlll = hlll+1
                                 
 
-                        if -2<= Low_xy(5)[0] - 160 <= 2:
-                            if Low_xy(5)[1] <145 :
-                                hl =145 -  Low_xy(5)[1]
+
+                        if -1<= Low_xy(5)[0] - 160 <= 1:
+                            if Low_xy(5)[1] <135 :
+                                hl =135 -  Low_xy(5)[1]
+
                                 hhll = hl
 
                                 print(hl)
@@ -226,12 +248,14 @@ if __name__ == '__main__':
                                         print("hand high")
                                         hll = hll+ 1
                                         rh = rh +1
-                                        time.sleep(0.5)
+
+                                        time.sleep(1)
+
 
                                     
                                 for hll in range(0,hl) :
                                     send.sendBodySector(4)
-                                    time.sleep(0.5)
+                                    time.sleep(1)
                                     print("HIGH")
                                     rlh = rlh +1
                                     hll = hll+ 1
@@ -242,17 +266,19 @@ if __name__ == '__main__':
                             
 
                     
-                    if -2<= Low_xy(5)[0] - 160 <= 2:# and -10 <= Low_xy(5)[1] -162 <= 10 :
+
+                    if -1<= Low_xy(5)[0] - 160 <= 1:# and -10 <= Low_xy(5)[1] -162 <= 10 :
+
                         print("time start")
                         
                         all()
                         TS_time(5)
                         endM = TS_time(5)[1]
                         startM = TS_time(5)[0]                          
-                        if endM -startM > 0 and y == True:       
+                        if endM -startM >= 0 and y == True:       
                             y = False     
                         all()
-                        if -10 <= Low_xy(5)[0] - 160 <= 10 and Low_xy(5)[1]>120 and z== True:
+                        if -10 <= Low_xy(5)[0] - 160 <= 10  and z== True:#and Low_xy(5)[1]>120
                             l =  Low_xy(5)  
                             z = False  
                         
@@ -277,58 +303,69 @@ if __name__ == '__main__':
                             z = True
                             
                             # if h <= 0:
-                            #     h = 1   
-                            if -10 <= Low_xy(5)[0] - 160 <= 10  and h != 0:
+                            #     h = 1  
+                            all()
+                            time.sleep(1.5)
+                            if -1 <= Low_xy(5)[0] - 160 <= 1 and h != 0 and endd == 0:
                                 print(h)
                                     
                                 #time.sleep(h)
                                 print("射擊")
-                                send.sendSingleMotor(9,int(-hhll*0.3),15)
-                                print("轉了：", int(-hhll*0.3))
-                                time.sleep(0.5)
+
+                                #send.sendSingleMotor(9,int(-hhll),10)
+                               # print("轉了：", int(-hhll))
+                               # time.sleep(5)
+
                                 send.sendBodySector(3)
-                                time.sleep(4)
+                                time.sleep(2)
                                 print("aaaaaaaaaaaaaaaaaaaaa")
                                 lll = 1
+
+                                endd = 1
                                 print ("總轉腰數值 ：",msum)
-                                send.is_start = False
+                                
+                                #send.is_start = False
                             
 
-                    if send.is_start == False : 
-                        if lll == 1:
-                            send.sendSingleMotor(9,int(-1*msum),15)
-                            send.sendHeadMotor(1,2048,40)
-                            time.sleep(2)
-                            send.sendBodySector(2)
-                            time.sleep(1)
-                            for rr in range(0,rlh) :
-                                send.sendBodySector(5)
-                                time.sleep(1)
-                                
-                                rr = rr +1
-                            time.sleep(2)
-
-                            for rrl in range(0,rh) :
-                                send.sendBodySector(8)
-                                time.sleep(0.5)
-                                
-                                rrl = rrl +1
-
-                            time.sleep(2)
-                            for rrll in range(0,rll) :
-                                send.sendBodySector(4)
-                                time.sleep(1)
-                                
-                                rrll = rrll +1
-                            time.sleep(2)
-
-                        send.sendSingleMotor(9,int(hhll*0.3),15)
+            if send.is_start == False : 
+                print("11111111111111111111111111111111111111111111111111111111111111111111111111111111111111")
+                if lll == 1:
+                    send.sendSingleMotor(9,int(-1*msum),15)
+                    send.sendHeadMotor(1,2048,40)
+                    time.sleep(2)
+                    send.sendBodySector(2)
+                    time.sleep(1)
+                    for rr in range(0,rlh) :
+                        send.sendBodySector(5)
+                        time.sleep(1)
 
                         
-                        g = 0
-                        k = 0
-                        X_low = 0
-                        Y_low = 0
+                        rr = rr +1
+                    time.sleep(2)
+
+                    for rrl in range(0,rh) :
+                        send.sendBodySector(8)
+                        time.sleep(0.5)
+                        
+                        rrl = rrl +1
+
+                    time.sleep(2)
+                    for rrll in range(0,rll) :
+                        send.sendBodySector(4)
+                        time.sleep(1)
+                        
+                        rrll = rrll +1
+                    time.sleep(2)
+                    #send.sendSingleMotor(9,int(hhll),15)
+                    lll = 0
+
+                
+
+                        
+                        # g = 0
+                        # k = 0
+                        # X_low = 0
+                        # Y_low = 0
                         
                        # if g >= 3 :
                        #     send.sendBodySector(1) #動作串198 射擊   
