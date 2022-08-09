@@ -154,22 +154,20 @@ if __name__ == '__main__':
         rr = 0
         rrl = 0
         rrll = 0
-
         endd = 0
+        lowy = 0
         hlltr = True
-
+        DIO = True
         while not rospy.is_shutdown():
             send.drawImageFunction(4,0,0,320,120,120,0,0,0)
             send.drawImageFunction(5,0,160,160,0,240,0,0,0)
             
             if send.is_start == True :
-                 
+                
                 if HH == True:
                     time.sleep(0.5)
-
-                    send.sendHeadMotor(1,2864,80)
-                    send.sendHeadMotor(1,2864,80)
-
+                    send.sendHeadMotor(1,2819,80)
+                    send.sendHeadMotor(1,2819,80)
                     # send.sendSingleMotor(9,10,15) #啟動轉腰
                     time.sleep(3)
                     HH = False 
@@ -177,7 +175,6 @@ if __name__ == '__main__':
                 all() 
                 s = Low_xy(5)  
                 
-
                 if  -10 <= s[0]-Find_Target()[0] <= 10 and endd == 0  :
 
                     all()   
@@ -201,19 +198,20 @@ if __name__ == '__main__':
                         Y_low = 0 
 
                     print("現在Y值： ===============",Low_xy(5)[1])
+
+
+ 
+                    lowy = 140                   #最低點高低改這裡
                     if hlll == 0:
-
                         if -1<= Low_xy(5)[0] - 160 <= 1:
-                            if Low_xy(5)[1] > 135:           #改151
-                                hl = Low_xy(5)[1] - 135
-
+                            if Low_xy(5)[1] > lowy:           #改151
+                                hl = Low_xy(5)[1] - lowy
                                 
                                 print(hl)
                                 if hl >= 13:
                                     hl = 13
                           
-
-                                if hll < hl and hlltr == True:
+                                if hll < hl and hlltr == True: 
                                     for hll in range(0,hl) :
                                         send.sendBodySector(5)
                                         time.sleep(1)
@@ -223,7 +221,6 @@ if __name__ == '__main__':
                                         if hll == 13 :
                                             hlltr = False
 
-
                                 
                             
                                 X_low = 0
@@ -232,11 +229,9 @@ if __name__ == '__main__':
                                 hlll = hlll+1
                                 
 
-
                         if -1<= Low_xy(5)[0] - 160 <= 1:
-                            if Low_xy(5)[1] <135 :
-                                hl =135 -  Low_xy(5)[1]
-
+                            if Low_xy(5)[1] <lowy :
+                                hl =lowy -  Low_xy(5)[1]
                                 hhll = hl
 
                                 print(hl)
@@ -248,9 +243,7 @@ if __name__ == '__main__':
                                         print("hand high")
                                         hll = hll+ 1
                                         rh = rh +1
-
-                                        time.sleep(1)
-
+                                        time.sleep(0.5)
 
                                     
                                 for hll in range(0,hl) :
@@ -266,9 +259,7 @@ if __name__ == '__main__':
                             
 
                     
-
                     if -1<= Low_xy(5)[0] - 160 <= 1:# and -10 <= Low_xy(5)[1] -162 <= 10 :
-
                         print("time start")
                         
                         all()
@@ -311,16 +302,16 @@ if __name__ == '__main__':
                                     
                                 #time.sleep(h)
                                 print("射擊")
-
-                                #send.sendSingleMotor(9,int(-hhll),10)
-                               # print("轉了：", int(-hhll))
-                               # time.sleep(5)
-
+                                if send.DIOValue == 25:
+                                    send.sendSingleMotor(9,int(-hhll),10)
+                                    send.sendSingleMotor(9,int(-hl),10)
+                                    print("轉了：", int(-hhll*0.45))
+                                    time.sleep(5)
+                                    DIO = True
                                 send.sendBodySector(3)
                                 time.sleep(2)
                                 print("aaaaaaaaaaaaaaaaaaaaa")
                                 lll = 1
-
                                 endd = 1
                                 print ("總轉腰數值 ：",msum)
                                 
@@ -328,7 +319,7 @@ if __name__ == '__main__':
                             
 
             if send.is_start == False : 
-                print("11111111111111111111111111111111111111111111111111111111111111111111111111111111111111")
+                print("HHHHHHHH")
                 if lll == 1:
                     send.sendSingleMotor(9,int(-1*msum),15)
                     send.sendHeadMotor(1,2048,40)
@@ -338,7 +329,6 @@ if __name__ == '__main__':
                     for rr in range(0,rlh) :
                         send.sendBodySector(5)
                         time.sleep(1)
-
                         
                         rr = rr +1
                     time.sleep(2)
@@ -356,7 +346,10 @@ if __name__ == '__main__':
                         
                         rrll = rrll +1
                     time.sleep(2)
-                    #send.sendSingleMotor(9,int(hhll),15)
+                    if DIO == True:
+                        send.sendSingleMotor(9,int(hhll),15)
+                        send.sendSingleMotor(9,int(hl),10)
+                        DIO = False
                     lll = 0
 
                 
@@ -390,3 +383,9 @@ if __name__ == '__main__':
 #m6:270 m2:-180
 
 # 99 要修改
+
+
+
+
+#左手往上-33 右手1次10
+#3號馬達選轉6*2次
