@@ -166,8 +166,8 @@ if __name__ == '__main__':
                 
                 if HH == True:
                     time.sleep(0.5)
-                    send.sendHeadMotor(1,2819,80)
-                    send.sendHeadMotor(1,2819,80)
+                    send.sendHeadMotor(1,2816,80)
+                    send.sendHeadMotor(1,2816,80)
                     # send.sendSingleMotor(9,10,15) #啟動轉腰
                     time.sleep(3)
                     HH = False 
@@ -185,9 +185,17 @@ if __name__ == '__main__':
                         m = 160 - Low_xy(5)[0] 
                         mi = m*3 
                         msum = msum + mi
+                        print(msum)
                         if msum > 800 or msum < -800:
                             print("暴轉========================================================================================================================================================")
-                            break 
+                            time.sleep(2)
+                            send.sendSingleMotor(9,int(-800),10)
+                            Low_xy(5)
+                            Find_Target()
+                            msum = 0
+                            time.sleep(5)
+
+
    
                         
                         
@@ -210,7 +218,7 @@ if __name__ == '__main__':
                                 print(hl)
                                 if hl >= 13:
                                     hl = 13
-                          
+                                hhll = hhll - hl 
                                 if hll < hl and hlltr == True: 
                                     for hll in range(0,hl) :
                                         send.sendBodySector(5)
@@ -220,6 +228,16 @@ if __name__ == '__main__':
                                         rll = rll+1
                                         if hll == 13 :
                                             hlltr = False
+
+
+
+                                
+                                    # for hll in range(0,hhll) :
+                                    #     send.sendBodySector(10)
+                                    #     print("hand LOW")
+                                    #     hll = hll+ 1
+                                    #     rh = rh +1
+                                    #     time.sleep(0.5)
 
                                 
                             
