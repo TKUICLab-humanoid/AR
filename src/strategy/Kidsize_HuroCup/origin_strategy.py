@@ -166,8 +166,8 @@ if __name__ == '__main__':
                 
                 if HH == True:
                     time.sleep(0.5)
-                    send.sendHeadMotor(1,2816,80)
-                    send.sendHeadMotor(1,2816,80)
+                    send.sendHeadMotor(1,2812,80)
+                    send.sendHeadMotor(1,2812,80)
                     # send.sendSingleMotor(9,10,15) #啟動轉腰
                     time.sleep(3)
                     HH = False 
@@ -209,7 +209,7 @@ if __name__ == '__main__':
 
 
  
-                    lowy = 140                   #最低點高低改這裡
+                    lowy = 141                   #最低點高低改這裡
                     if hlll == 0:
                         if -1<= Low_xy(5)[0] - 160 <= 1:
                             if Low_xy(5)[1] > lowy:           #改151
@@ -321,6 +321,9 @@ if __name__ == '__main__':
                                 #time.sleep(h)
                                 print("射擊")
                                 if send.DIOValue == 25:
+                                    # send.sendBodySector(10)
+                                    # time.sleep(2)
+
                                     send.sendSingleMotor(9,int(-hhll),10)
                                     send.sendSingleMotor(9,int(-hl),10)
                                     print("轉了：", int(-hhll*0.45))
@@ -381,8 +384,6 @@ if __name__ == '__main__':
                        # if g >= 3 :
                        #     send.sendBodySector(1) #動作串198 射擊   
             r.sleep()
-                        
-
     except rospy.ROSInterruptException:
         pass
 
