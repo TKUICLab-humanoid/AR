@@ -166,8 +166,13 @@ if __name__ == '__main__':
                 
                 if HH == True:
                     time.sleep(0.5)
+<<<<<<< HEAD
                     send.sendHeadMotor(1,2819,80)
                     send.sendHeadMotor(1,2819,80)
+=======
+                    send.sendHeadMotor(1,2812,80)
+                    send.sendHeadMotor(1,2812,80)
+>>>>>>> develop
                     # send.sendSingleMotor(9,10,15) #啟動轉腰
                     time.sleep(3)
                     HH = False 
@@ -185,9 +190,17 @@ if __name__ == '__main__':
                         m = 160 - Low_xy(5)[0] 
                         mi = m*3 
                         msum = msum + mi
+                        print(msum)
                         if msum > 800 or msum < -800:
                             print("暴轉========================================================================================================================================================")
-                            break 
+                            time.sleep(2)
+                            send.sendSingleMotor(9,int(-800),10)
+                            Low_xy(5)
+                            Find_Target()
+                            msum = 0
+                            time.sleep(5)
+
+
    
                         
                         
@@ -201,7 +214,11 @@ if __name__ == '__main__':
 
 
  
+<<<<<<< HEAD
                     lowy = 140                   #最低點高低改這裡
+=======
+                    lowy = 141                   #最低點高低改這裡
+>>>>>>> develop
                     if hlll == 0:
                         if -1<= Low_xy(5)[0] - 160 <= 1:
                             if Low_xy(5)[1] > lowy:           #改151
@@ -210,7 +227,11 @@ if __name__ == '__main__':
                                 print(hl)
                                 if hl >= 13:
                                     hl = 13
+<<<<<<< HEAD
                           
+=======
+                                hhll = hhll - hl 
+>>>>>>> develop
                                 if hll < hl and hlltr == True: 
                                     for hll in range(0,hl) :
                                         send.sendBodySector(5)
@@ -220,6 +241,16 @@ if __name__ == '__main__':
                                         rll = rll+1
                                         if hll == 13 :
                                             hlltr = False
+
+
+
+                                
+                                    # for hll in range(0,hhll) :
+                                    #     send.sendBodySector(10)
+                                    #     print("hand LOW")
+                                    #     hll = hll+ 1
+                                    #     rh = rh +1
+                                    #     time.sleep(0.5)
 
                                 
                             
@@ -303,6 +334,12 @@ if __name__ == '__main__':
                                 #time.sleep(h)
                                 print("射擊")
                                 if send.DIOValue == 25:
+<<<<<<< HEAD
+=======
+                                    # send.sendBodySector(10)
+                                    # time.sleep(2)
+
+>>>>>>> develop
                                     send.sendSingleMotor(9,int(-hhll),10)
                                     send.sendSingleMotor(9,int(-hl),10)
                                     print("轉了：", int(-hhll*0.45))
@@ -363,8 +400,6 @@ if __name__ == '__main__':
                        # if g >= 3 :
                        #     send.sendBodySector(1) #動作串198 射擊   
             r.sleep()
-                        
-
     except rospy.ROSInterruptException:
         pass
 
