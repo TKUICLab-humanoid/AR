@@ -20,21 +20,15 @@ rcolor_YMin = 0
 rcolor_YMax = 0
 rcolor_X = 0
 rcolor_Y = 0
-start = 0
-end = 0
 
-Y_low = 0
-X_low = 0
-v = True
-z = True
-y = True
-l = 0
-tt = 0
-power = True
 #sendBodySector(3) 向右轉
 #sendBodySector(4) 向左轉
 #sendBodySector(5) 向下轉
 #sendBodySector(6) 向上轉
+#sendBodySector(7) 舉手
+#sendBodySector(8) 右手內凹
+#sendBodySector(9) 左手手爪轉動90度
+#sendBodySector(10)
 def Find_Target():
     global bcolor_XMin 
     global bcolor_XMax 
@@ -79,56 +73,6 @@ def Find_Target():
                     rcolor_Y=0
                     rcolor_X=0
     return rcolor_X,rcolor_Y
-    
-def Low_xy(i):
-    global Y_low
-    global X_low
-    k = 3
-    l_XMin =0
-    l_XMax =0
-    l_YMin =0
-    l_YMax =0
-    for f in range (send.color_mask_subject_cnts[2]):
-        for g in range (send.color_mask_subject_cnts[1]):
-            for h in range (send.color_mask_subject_cnts[5]):
-                if -2 <= send.color_mask_subject_X[2][f] - send.color_mask_subject_X[1][g] <=2 and -2 <= send.color_mask_subject_Y[2][f] - send.color_mask_subject_Y[1][g] <=2:
-                    if -2 <= send.color_mask_subject_X[1][g] - send.color_mask_subject_X[5][h] <= 2 and  -2 <= send.color_mask_subject_Y[1][g] - send.color_mask_subject_Y[5][h] <= 2 :
-                # if   send.color_mask_subject_Width[2][f] - send.color_mask_subject_Width[1][g]>0  and send.color_mask_subject_Height[2][f] - send.color_mask_subject_Height[1][g] >0 :
-                #     if   send.color_mask_subject_Width[1][g] - send.color_mask_subject_Width[5][h] >0 and send.color_mask_subject_Height[1][g] -send.color_mask_subject_Height[5][h] >0 :
-                        l_XMin = send.color_mask_subject_XMin[5][h]
-                        l_XMax = send.color_mask_subject_XMax[5][h]
-                        l_YMin = send.color_mask_subject_YMin[5][h]
-                        l_YMax = send.color_mask_subject_YMax[5][h]       
-                        if send.color_mask_subject_Y[i][h] >= Y_low:
-                            Y_low = send.color_mask_subject_Y[5][h]
-                            X_low = send.color_mask_subject_X[5][h]
-            # time.sleep(0.4)
-                            send.drawImageFunction(3,1,l_XMin,l_XMax,l_YMin,l_YMax,255,48,48) 
-                            time.sleep(0.27) #修改====================================================================================================================
-                                  
-    return X_low ,Y_low
-
-imagedata = [[None for H in range(240)]for W in range(320)]
-
-def TS_time(i):
-    global start
-    global end
-    global k 
-    a = 0
-    s = Low_xy(i)
-
-    if  -11 <= s[0]-Find_Target()[0] <= 11 and -11 <= s[1]-Find_Target()[1] <= 11 and k == 0 :
-        print("開始計時")         
-        start =time.time()
-        # time.sleep(2)
-        k = 1
-        
-    if -11 <= s[0]-Find_Target()[0] <= 11 and -11 <= s[1]-Find_Target()[1] <= 11 and k == 1 :
-        end = time.time()
-        
-
- 
-    return start,end
 
 if __name__ == '__main__':
     try:
@@ -146,6 +90,8 @@ if __name__ == '__main__':
         w=0#用於迴圈
         x_diff=0#計算瞄準點與目標點的x差距
         y_diff=0#計算瞄準點與目標點的y差距
+        time1=0
+        all_point=0
         stand=0
         waist_move=0
         hand_move=0
@@ -157,11 +103,6 @@ if __name__ == '__main__':
             
             if send.is_start == True :#啟動電源與擺頭
                 
-                if power == True:
-                    time.sleep(0.5)
-                    power = False
-
-                
                     while j<90 and i<20:
                         Find_Target()
                         if Find_Target()[0]!=0 or Find_Target()[1]!=0:#抓出每一個點，然後將實際的點放在另一個list裡
@@ -172,7 +113,10 @@ if __name__ == '__main__':
                             print(target_point_x[i],target_point_y[i])
                             i=i+1
                             j=j+1
-                            time.sleep(0.25)
+                            if i>5 and -2<=target_point_x[0]-target_point_x[5]<=2 and -2<=target_point_y[0]-target_point_y[5]<=2:#快速判斷定靶
+                                target_point_x[18]=target_point_x[5]
+                                i=20
+                            time.sleep(0.2)
                         if Find_Target()[0]==0 or Find_Target()[1]==0:#將空的點設置為零放在大LIST內
                             point_x[j]=0
                             point_y[j]=0
@@ -181,13 +125,13 @@ if __name__ == '__main__':
                                 if point_x[j]==0 or point_y[j]==0:
                                     k=k+1
                             print("沒點")
-                            time.sleep(0.25)
+                            time.sleep(0.2)
 
                     print(k)
-                    x_diff=target_point_x[16]-160#計算目標點與中心點的差距
-                    y_diff=target_point_y[16]-162
-                    waist_move=round(x_diff/10)
-                    hand_move=round(y_diff/2)
+                    x_diff=target_point_x[18]-160#計算目標點與中心點的差距
+                    y_diff=target_point_y[18]-60
+                    waist_move=round(x_diff/8)#將x與y的差距變成是接近馬達的刻度
+                    hand_move=round(y_diff/4)
                     print(waist_move,hand_move)
                     while w==0:#持續追蹤靶
                         Find_Target()
@@ -199,43 +143,50 @@ if __name__ == '__main__':
                                 for x in range (0,waist_move):
                                     send.sendBodySector(3)
                                     y=y+1
-                                time.sleep(0.1)
+                                time.sleep(0.25)
                                 waist_move=0
                             if waist_move<0:#當x_diff 的值是負的，得先將x_diff變成正的，再用迴圈向左轉
-                                waist_move=waist_move*(-1)
+                                waist_move=waist_move*(-1)-1
                                 for x in range (0,waist_move):
                                     send.sendBodySector(4)
                                     z=z+1
-                                time.sleep(0.1)
+                                time.sleep(0.25)
                                 waist_move=0
                             if hand_move>0:#當y_diff 的值是正的，就正常機體向下
                                 for x in range (0,hand_move):
                                     send.sendBodySector(6)
                                     t=t+1
-                                time.sleep(0.1)
+                                time.sleep(0.25)
                                 hand_move=0
                             if hand_move<0:#當y_diff 的值是負的，得先將y_diff變成正的，再用迴圈向上
                                 hand_move=hand_move*(-1)
                                 for x in range (0,hand_move):
                                     send.sendBodySector(5)
                                     s=s+1
-                                time.sleep(0.1)
+                                time.sleep(0.25)
                                 hand_move=0
+                            all_point=15+k
+                            time1=all_point*0.2
+                            time.sleep(2)
+                            send.sendBodySector(9)
+                            time.sleep(2)
+                            send.sendBodySector(10)
+                            time.sleep(1)
                             w=1
                     print("向右",y,"向左",z,"向上",t,"向下",s)
-                all_point=13+k-1
-                t=all_point*0.25
-                time.sleep(t)
-                #send.sendBodySector(8)
-
+                    break
             if send.is_start == False :
                 if stand==0:
-                    time.sleep(1)
-                    # send.sendBodySector(10)
-                    send.sendHeadMotor(1,2990,80)
-                    time.sleep(1)
-                    send.sendHeadMotor(1,2990,80)
-                    time.sleep(1)
+                    #send.sendBodySector(10)
+                    time.sleep(0.5)
+                    send.sendHeadMotor(1,2912,80)
+                    time.sleep(0.5)
+                    send.sendHeadMotor(1,2912,80)
+                    time.sleep(0.5)
+                    send.sendBodySector(7)
+                    time.sleep(2)
+                    send.sendBodySector(8)
+                    time.sleep(2)
                     print("lkj is idiot")
                     stand=1
     except rospy.ROSInterruptException:
