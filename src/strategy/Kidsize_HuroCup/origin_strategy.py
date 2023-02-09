@@ -115,6 +115,7 @@ if __name__ == '__main__':
                             j=j+1
                             if i>5 and -2<=target_point_x[0]-target_point_x[5]<=2 and -2<=target_point_y[0]-target_point_y[5]<=2:#快速判斷定靶
                                 target_point_x[18]=target_point_x[5]
+                                target_point_y[18]=target_point_y[5]
                                 i=20
                             time.sleep(0.2)
                         if Find_Target()[0]==0 or Find_Target()[1]==0:#將空的點設置為零放在大LIST內
@@ -129,9 +130,9 @@ if __name__ == '__main__':
 
                     print(k)
                     x_diff=target_point_x[18]-160#計算目標點與中心點的差距
-                    y_diff=target_point_y[18]-60
-                    waist_move=round(x_diff/8)#將x與y的差距變成是接近馬達的刻度
-                    hand_move=round(y_diff/4)
+                    y_diff=target_point_y[18]-150
+                    waist_move=round(x_diff/5)#將x與y的差距變成是接近馬達的刻度
+                    hand_move=round(y_diff)
                     print(waist_move,hand_move)
                     while w==0:#持續追蹤靶
                         Find_Target()
@@ -154,14 +155,15 @@ if __name__ == '__main__':
                                 waist_move=0
                             if hand_move>0:#當y_diff 的值是正的，就正常機體向下
                                 for x in range (0,hand_move):
-                                    send.sendBodySector(6)
+                                    send.sendBodySector(5)
                                     t=t+1
                                 time.sleep(0.25)
                                 hand_move=0
                             if hand_move<0:#當y_diff 的值是負的，得先將y_diff變成正的，再用迴圈向上
                                 hand_move=hand_move*(-1)
                                 for x in range (0,hand_move):
-                                    send.sendBodySector(5)
+                                    send.sendBodySector(6)
+                                    send.sendBodySector(11)
                                     s=s+1
                                 time.sleep(0.25)
                                 hand_move=0
