@@ -140,6 +140,11 @@ def TS_time(i):
 if __name__ == '__main__':
     try:
         send = Sendmessage()
+        nn=0
+        mm=0
+        n=0
+        a=0
+        b=0
         m = 0
         mi = 0
         msum = 0
@@ -187,43 +192,75 @@ if __name__ == '__main__':
                 if  -10 <= s[0]-Find_Target()[0] <= 10 and endd == 0  :
 
                     all()   
-                    print('\nX軸差距 = ============',Low_xy(5)[0] - 160)  
+                    print('\nX軸差距 = ============',Low_xy(5)[0] - 240)  
                     print('\nY軸差距 = ============',Low_xy(5)[1] - 120) 
 
 #========================================================================
 #開始變動x軸
 #========================================================================
 
-                    if Low_xy(5)[0] - 160 > 1 or 160 - Low_xy(5)[0]>1: #and  Low_xy(5)[1]>120:
-                        m = 160 - Low_xy(5)[0]                          
+#                     if Low_xy(5)[0] - 240 > 1 or 240 - Low_xy(5)[0]>1: #and  Low_xy(5)[1]>120:
+#                         m = 240 - Low_xy(5)[0]                          
+# #紅心點與中心x的差距
+#                         mi = m*3                                        
+# #轉腰的數值
+#                         msum = msum + mi
+#                         print(msum)
+#                         if msum > 800 or msum < -800:                   
+# #差別很大所以要爆轉
+#                             print("\n暴轉=========================================================================================\n")
+#                             time.sleep(2)
+#                             #####send.sendSingleMotor(9,int(-800),10)
+#                             print("\n腰向右轉很大\n")        
+# #腰部的馬達右轉（轉很多）
+#                             Low_xy(5)
+#                             Find_Target()
+#                             msum = 0
+#                             time.sleep(5)
+
+
+# #差別沒有很大
+                       
+#                         ######send.sendSingleMotor(9,int(m*3),15)             
+#                         print("\n腰微微轉\n")
+# #腰部馬達轉小幅度
+#                         time.sleep(3) 
+#                         X_low = 0
+#                         Y_low = 0 
+
+#                     print("\n現在Y值： ===============",Low_xy(5)[1])
+
+
+                    if Low_xy(5)[0] - 240 > 10 : #and  Low_xy(5)[1]>120:
+                        m = Low_xy(5)[0]-240
 #紅心點與中心x的差距
                         mi = m*3                                        
 #轉腰的數值
                         msum = msum + mi
                         print(msum)
-                        if msum > 800 or msum < -800:                   
-#差別很大所以要爆轉
-                            print("\n暴轉=========================================================================================\n")
-                            time.sleep(2)
-                            #####send.sendSingleMotor(9,int(-800),10)
-                            print("\n腰向右轉很大\n")        
-#腰部的馬達右轉（轉很多）
-                            Low_xy(5)
-                            Find_Target()
-                            msum = 0
-                            time.sleep(5)
-
-
-#差別沒有很大，
-                        ######send.sendSingleMotor(9,int(m*3),15)             
-                        print("\n腰微微轉\n")
-#腰部馬達轉小幅度
-                        time.sleep(3) 
-                        X_low = 0
-                        Y_low = 0 
-
+                        mm = int(m/10)
+                        print("mm= ",mm)
+# turn right 
+                        for a in range(0,mm):
+                            send.sendBodySector(40)
+                            print("bbbbbbbb")
+                        print("turn right")
+                    if  240 - Low_xy(5)[0] > 10:
+                        n = 240 - Low_xy(5)[0] 
+                        nn = int(n/10)
+                        print("nn= ",nn)
+#turn left
+                        for b in range(0,nn):
+                            send.sendBodySector(41)
+                            print("aaaaaaaaaaaaaa")
+                        print("turn left")
+                        
                     print("\n現在Y值： ===============",Low_xy(5)[1])
-
+                    Low_xy(5)
+                    Find_Target()
+                    time.sleep(5)
+                    X_low = 0
+                    Y_low = 0 
 #========================================================================
 #開始變動y軸
 #========================================================================
@@ -233,7 +270,8 @@ if __name__ == '__main__':
 #紅色圓最低點高低改這裡 
 #改151  
                     if hlll == 0:
-                        if -1<= Low_xy(5)[0] - 160 <= 1:
+                        if -10<= Low_xy(5)[0] - 240 <= 10:
+                            print("cccccccccccccc")
                             if Low_xy(5)[1] > lowy:              
 #比賽紅色的中心在練習紅色最低點的下面（表示）
                                 hl = Low_xy(5)[1] - lowy
@@ -245,7 +283,7 @@ if __name__ == '__main__':
                                     hhll = hhll - hl 
 #手太低，調整手部馬達向上
                                     for hll in range(0,hhll) :
-                                        #####send.sendBodySector(10)
+                                        send.sendBodySector(39)
                                         print("\n現在的手太低了，手部馬達需要向上調整\n")
                                         #print("hand LOW")
                                         hll = hll+ 1
@@ -270,7 +308,7 @@ if __name__ == '__main__':
                                 hlll = hlll+1
                                 
 #比賽在練習的上面所以腿部馬達向上
-                        if -1<= Low_xy(5)[0] - 160 <= 1:
+                        if -10<= Low_xy(5)[0] - 240 <= 10:
                             if Low_xy(5)[1] <lowy :
                                 hl =lowy -  Low_xy(5)[1]
                                 hhll = hl
@@ -282,7 +320,7 @@ if __name__ == '__main__':
                                     hhll = hhll - hl 
 #手太高，調整手部馬達向下 
                                     for hll in range(0,hhll) :
-                                        #####send.sendBodySector(7)
+                                        send.sendBodySector(38)
                                         print("\n現在的手太高了，手部馬達需要向下調整y軸\n")
                                         #print("hand high")
                                         hll = hll+ 1
@@ -303,7 +341,7 @@ if __name__ == '__main__':
 #===================================================================================                            
 #已經找到目標
 #===================================================================================
-                    if -1<= Low_xy(5)[0] - 160 <= 1:# and -10 <= Low_xy(5)[1] -162 <= 10 :  
+                    if -10<= Low_xy(5)[0] - 240 <= 10:# and -10 <= Low_xy(5)[1] -162 <= 10 :  
 #再次確保
                         print("\ntime start\n")
                         
@@ -315,7 +353,7 @@ if __name__ == '__main__':
 #結束時間大於開始時間（一定會成立再次確保）
                             y = False     
                         all()
-                        if -10 <= Low_xy(5)[0] - 160 <= 10  and z== True:#and Low_xy(5)[1]>120
+                        if -10 <= Low_xy(5)[0] - 240 <= 10  and z== True:#and Low_xy(5)[1]>120
                             l =  Low_xy(5)  
                             z = False  
                         
@@ -343,7 +381,7 @@ if __name__ == '__main__':
                             #     h = 1  
                             all()
                             time.sleep(1.5)
-                            if -1 <= Low_xy(5)[0] - 160 <= 1 and h != 0 and endd == 0:
+                            if -10<= Low_xy(5)[0] - 240 <= 10 and h != 0 and endd == 0:
                                 print(h)
                                     
                                 #time.sleep(h)
@@ -364,7 +402,7 @@ if __name__ == '__main__':
                                     time.sleep(5)
                                     DIO = True
 #調整手部馬達進行拉弓
-                                #####send.sendBodySector(3)      
+                                send.sendBodySector(33)      
                                 print("\n手部所有馬達做出拉弓的動作\n")
                                 time.sleep(2)
                                 print("\naaaaaaaaaaaaaaaaaaaaa\n")
@@ -449,3 +487,4 @@ if __name__ == '__main__':
 
 #左手往上-33 右手1次10
 #3號馬達選轉6*2次
+
