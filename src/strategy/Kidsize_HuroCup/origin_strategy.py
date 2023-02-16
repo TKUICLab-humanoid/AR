@@ -88,6 +88,7 @@ if __name__ == '__main__':
         t=0#向上的次數
         s=0#向右的次數
         w=0#用於迴圈
+        f=0
         x_diff=0#計算瞄準點與目標點的x差距
         y_diff=0#計算瞄準點與目標點的y差距
         time1=0
@@ -128,18 +129,18 @@ if __name__ == '__main__':
                             print("沒點")
                             time.sleep(0.2)
 
-                    print(k)
-                    x_diff=target_point_x[18]-160#計算目標點與中心點的差距
-                    y_diff=target_point_y[18]-150
-                    waist_move=round(x_diff/5)#將x與y的差距變成是接近馬達的刻度
-                    hand_move=round(y_diff)
-                    print(waist_move,hand_move)
                     while w==0:#持續追蹤靶
                         Find_Target()
                         time.sleep(0.25)
                         now_target=Find_Target()
                         if -15<now_target[0]-target_point_x[3]<15 and -15<now_target[1]-target_point_y[3]<15:#判斷通過基準點，我們設定是第4個點
                             print("i find you!")
+                            print(k)
+                            x_diff=target_point_x[18]-160#計算目標點與中心點的差距
+                            y_diff=target_point_y[18]-160
+                            waist_move=round(x_diff/5)#將x與y的差距變成是接近馬達的刻度
+                            hand_move=round(y_diff/2)
+                            print(waist_move,hand_move)
                             if waist_move>0:#當x_diff 的值是正的，就正常向右轉
                                 for x in range (0,waist_move):
                                     send.sendBodySector(3)
@@ -164,6 +165,7 @@ if __name__ == '__main__':
                                 for x in range (0,hand_move):
                                     send.sendBodySector(6)
                                     send.sendBodySector(11)
+                                    send.sendBodySector(16)
                                     s=s+1
                                 time.sleep(0.25)
                                 hand_move=0
@@ -174,9 +176,10 @@ if __name__ == '__main__':
                             time.sleep(2)
                             send.sendBodySector(10)
                             time.sleep(1)
+                            print("向右",y,"向左",z,"向上",s,"向下",t)
                             w=1
-                    print("向右",y,"向左",z,"向上",t,"向下",s)
-                    break
+                            f=1
+
             if send.is_start == False :
                 if stand==0:
                     #send.sendBodySector(10)
@@ -191,5 +194,33 @@ if __name__ == '__main__':
                     time.sleep(2)
                     print("lkj is idiot")
                     stand=1
+                if f==1 and w==1:
+                    for x in range (0,y):
+                        send.sendBodySector(13)
+                        time.sleep(0.25)
+                    y=0
+                    for x in range (0,z):
+                        send.sendBodySector(14)
+                        time.sleep(0.25)
+                    z=0
+                    for x in range (0,t):
+                        send.sendBodySector(6)
+                        time.sleep(0.25)
+                    t=0
+                    for x in range (0,s):
+                        send.sendBodySector(5)
+                        send.sendBodySector(17)
+                        send.sendBodySector(15)
+                        time.sleep(0.1)
+                    time.sleep(0.1)
+                    send.sendBodySector(12)
+                    s=0
+                    time.sleep(0.5)
+                    w=0
+                    f=0
+                    i=0
+                    j=0
+                    k=0
+
     except rospy.ROSInterruptException:
         pass
