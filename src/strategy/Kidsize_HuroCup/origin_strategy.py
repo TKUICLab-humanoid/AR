@@ -229,44 +229,37 @@ if __name__ == '__main__':
 #                         Y_low = 0 
 
 #                     print("\n現在Y值： ===============",Low_xy(5)[1])
-
-
-                    if Low_xy(5)[0] - 240 > 10 : #and  Low_xy(5)[1]>120:
-                        m = Low_xy(5)[0]-240
-#紅心點與中心x的差距
-                        mi = m*3                                        
-#轉腰的數值
+                    if Low_xy(5)[0] - 240 > 10 or 240 - Low_xy(5)[0]>10: #and  Low_xy(5)[1]>120:
+                        m = 240 - Low_xy(5)[0] 
+                        mi = m*3 
                         msum = msum + mi
                         print(msum)
-                        mm = int(m/10)
-                        print("mm= ",mm)
-# turn right 
-                        for a in range(0,mm):
-                            send.sendBodySector(40)
-                            print("bbbbbbbb")
-                        print("turn right")
-                    if  240 - Low_xy(5)[0] > 10:
-                        n = 240 - Low_xy(5)[0] 
-                        nn = int(n/10)
-                        print("nn= ",nn)
-#turn left
-                        for b in range(0,nn):
-                            send.sendBodySector(41)
-                            print("aaaaaaaaaaaaaa")
-                        print("turn left")
+                        # if msum > 800 or msum < -800:
+                        #     print("暴轉========================================================================================================================================================")
+                        #     time.sleep(2)
+                        #     send.sendSingleMotor(9,int(-800),10)
+                        #     Low_xy(5)
+                        #     Find_Target()
+                        #     msum = 0
+                        #     time.sleep(5)
+
+
+   
                         
-                    print("\n現在Y值： ===============",Low_xy(5)[1])
-                    Low_xy(5)
-                    Find_Target()
-                    time.sleep(5)
-                    X_low = 0
-                    Y_low = 0 
+                        
+                         
+                        send.sendSingleMotor(9,int(m*3),15)
+                        time.sleep(3) 
+                        X_low = 0
+                        Y_low = 0 
+
+                    print("現在Y值： ===============",Low_xy(5)[1])
 #========================================================================
 #開始變動y軸
 #========================================================================
 
 #比賽在練習的下面所以腿部馬達要向下調整
-                    lowy = 141                   
+                    lowy = 120                  
 #紅色圓最低點高低改這裡 
 #改151  
                     if hlll == 0:
@@ -278,8 +271,8 @@ if __name__ == '__main__':
                                 
                                 print(hl)
 #現在y差異很大時，調整手部馬達
-                                if hl >= 13:                     # hl>=13
-                                    hl = 13
+                                if hl >= 5:                     # hl>=13
+                                    hl = 5
                                     hhll = hhll - hl 
 #手太低，調整手部馬達向上
                                     for hll in range(0,hhll) :
@@ -300,7 +293,7 @@ if __name__ == '__main__':
                                         #print("LOW")
                                         hll = hll+ 1
                                         rll = rll+1
-                                        if hll == 13 :           # hll加到13
+                                        if hll == 5 :           # hll加到13
                                             hlltr = False
                                 X_low = 0
                                 Y_low = 0 
@@ -487,4 +480,3 @@ if __name__ == '__main__':
 
 #左手往上-33 右手1次10
 #3號馬達選轉6*2次
-
