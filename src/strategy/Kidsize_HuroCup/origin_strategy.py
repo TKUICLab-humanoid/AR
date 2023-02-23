@@ -192,15 +192,15 @@ if __name__ == '__main__':
                 if  -10 <= s[0]-Find_Target()[0] <= 10 and endd == 0  :
 
                     all()   
-                    print('\nX軸差距 = ============',Low_xy(5)[0] - 240)  
+                    print('\nX軸差距 = ============',Low_xy(5)[0] - 257)  
                     print('\nY軸差距 = ============',Low_xy(5)[1] - 120) 
 
 #========================================================================
 #開始變動x軸
 #========================================================================
 
-#                     if Low_xy(5)[0] - 240 > 1 or 240 - Low_xy(5)[0]>1: #and  Low_xy(5)[1]>120:
-#                         m = 240 - Low_xy(5)[0]                          
+#                     if Low_xy(5)[0] - 257 > 1 or 257 - Low_xy(5)[0]>1: #and  Low_xy(5)[1]>120:
+#                         m = 257 - Low_xy(5)[0]                          
 # #紅心點與中心x的差距
 #                         mi = m*3                                        
 # #轉腰的數值
@@ -221,7 +221,7 @@ if __name__ == '__main__':
 
 # #差別沒有很大
                        
-#                         ######send.sendSingleMotor(9,int(m*3),15)             
+#                         ######send.sendSingleMotor(9,int(m),15)             
 #                         print("\n腰微微轉\n")
 # #腰部馬達轉小幅度
 #                         time.sleep(3) 
@@ -229,9 +229,9 @@ if __name__ == '__main__':
 #                         Y_low = 0 
 
 #                     print("\n現在Y值： ===============",Low_xy(5)[1])
-                    if Low_xy(5)[0] - 240 > 10 or 240 - Low_xy(5)[0]>10: #and  Low_xy(5)[1]>120:
-                        m = 240 - Low_xy(5)[0] 
-                        mi = m*3 
+                    if Low_xy(5)[0] - 257 > 10 or 257- Low_xy(5)[0]>10: #and  Low_xy(5)[1]>120:
+                        m = 257 - Low_xy(5)[0] 
+                        mi = m
                         msum = msum + mi
                         print(msum)
                         # if msum > 800 or msum < -800:
@@ -248,7 +248,7 @@ if __name__ == '__main__':
                         
                         
                          
-                        send.sendSingleMotor(9,int(m*3),15)
+                        send.sendSingleMotor(9,int(m*1.5),15)
                         time.sleep(3) 
                         X_low = 0
                         Y_low = 0 
@@ -259,11 +259,11 @@ if __name__ == '__main__':
 #========================================================================
 
 #比賽在練習的下面所以腿部馬達要向下調整
-                    lowy = 120                  
+                    lowy = 150               
 #紅色圓最低點高低改這裡 
 #改151  
                     if hlll == 0:
-                        if -10<= Low_xy(5)[0] - 240 <= 10:
+                        if -10<= Low_xy(5)[0] - 257 <= 10:
                             print("cccccccccccccc")
                             if Low_xy(5)[1] > lowy:              
 #比賽紅色的中心在練習紅色最低點的下面（表示）
@@ -299,9 +299,9 @@ if __name__ == '__main__':
                                 Y_low = 0 
                                 i = 0
                                 hlll = hlll+1
-                                
+                                time.sleep(1)
 #比賽在練習的上面所以腿部馬達向上
-                        if -10<= Low_xy(5)[0] - 240 <= 10:
+                        if -10<= Low_xy(5)[0] - 257 <= 10:
                             if Low_xy(5)[1] <lowy :
                                 hl =lowy -  Low_xy(5)[1]
                                 hhll = hl
@@ -331,10 +331,11 @@ if __name__ == '__main__':
                                 Y_low = 0 
                                 i = 0
                                 hlll = hlll+1
+				                
 #===================================================================================                            
 #已經找到目標
 #===================================================================================
-                    if -10<= Low_xy(5)[0] - 240 <= 10:# and -10 <= Low_xy(5)[1] -162 <= 10 :  
+                    if -10<= Low_xy(5)[0] - 257 <= 10:# and -10 <= Low_xy(5)[1] -162 <= 10 :  
 #再次確保
                         print("\ntime start\n")
                         
@@ -346,7 +347,7 @@ if __name__ == '__main__':
 #結束時間大於開始時間（一定會成立再次確保）
                             y = False     
                         all()
-                        if -10 <= Low_xy(5)[0] - 240 <= 10  and z== True:#and Low_xy(5)[1]>120
+                        if -10 <= Low_xy(5)[0] - 257 <= 10  and z== True:#and Low_xy(5)[1]>120
                             l =  Low_xy(5)  
                             z = False  
                         
@@ -374,7 +375,7 @@ if __name__ == '__main__':
                             #     h = 1  
                             all()
                             time.sleep(1.5)
-                            if -10<= Low_xy(5)[0] - 240 <= 10 and h != 0 and endd == 0:
+                            if -10<= Low_xy(5)[0] - 257 <= 10 and h != 0 and endd == 0:
                                 print(h)
                                     
                                 #time.sleep(h)
