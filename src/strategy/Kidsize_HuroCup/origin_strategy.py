@@ -106,7 +106,7 @@ if __name__ == '__main__':
                 
                     while j<90 and i<20:
                         Find_Target()
-                        if Find_Target()[0]!=0 or Find_Target()[1]!=0:#抓出每一個點，然後將實際的點放在另一個list裡
+                        if Find_Target()[0]!=0 and Find_Target()[1]>125:#抓出每一個點，然後將實際的點放在另一個list裡
                             point_x[j]=Find_Target()[0]
                             point_y[j]=Find_Target()[1]
                             target_point_x[i]=point_x[j]
@@ -119,7 +119,7 @@ if __name__ == '__main__':
                                 target_point_y[18]=target_point_y[5]
                                 i=20
                             time.sleep(0.2)
-                        if Find_Target()[0]==0 or Find_Target()[1]==0:#將空的點設置為零放在大LIST內
+                        if Find_Target()[0]==0 or Find_Target()[1]<125:#將空的點設置為零放在大LIST內
                             point_x[j]=0
                             point_y[j]=0
                             j=j+1
@@ -136,8 +136,8 @@ if __name__ == '__main__':
                         if -15<now_target[0]-target_point_x[3]<15 and -15<now_target[1]-target_point_y[3]<15:#判斷通過基準點，我們設定是第4個點
                             print("i find you!")
                             print(k)
-                            x_diff=target_point_x[18]-160#計算目標點與中心點的差距
-                            y_diff=target_point_y[18]-160
+                            x_diff=target_point_x[18]-180#計算目標點與中心點的差距
+                            y_diff=target_point_y[18]-155
                             waist_move=round(x_diff/5)#將x與y的差距變成是接近馬達的刻度
                             hand_move=round(y_diff/2)
                             print(waist_move,hand_move)
@@ -145,20 +145,20 @@ if __name__ == '__main__':
                                 for x in range (0,waist_move):
                                     send.sendBodySector(3)
                                     y=y+1
-                                time.sleep(0.25)
+                                time.sleep(0.2)
                                 waist_move=0
                             if waist_move<0:#當x_diff 的值是負的，得先將x_diff變成正的，再用迴圈向左轉
                                 waist_move=waist_move*(-1)-1
                                 for x in range (0,waist_move):
                                     send.sendBodySector(4)
                                     z=z+1
-                                time.sleep(0.25)
+                                time.sleep(0.2)
                                 waist_move=0
                             if hand_move>0:#當y_diff 的值是正的，就正常機體向下
                                 for x in range (0,hand_move):
                                     send.sendBodySector(5)
                                     t=t+1
-                                time.sleep(0.25)
+                                time.sleep(0.2)
                                 hand_move=0
                             if hand_move<0:#當y_diff 的值是負的，得先將y_diff變成正的，再用迴圈向上
                                 hand_move=hand_move*(-1)
@@ -167,15 +167,14 @@ if __name__ == '__main__':
                                     send.sendBodySector(11)
                                     send.sendBodySector(16)
                                     s=s+1
-                                time.sleep(0.25)
+                                time.sleep(0.2)
                                 hand_move=0
                             all_point=15+k
                             time1=all_point*0.2
                             time.sleep(2)
                             send.sendBodySector(9)
-                            time.sleep(2)
-                            send.sendBodySector(10)
                             time.sleep(1)
+                            send.sendBodySector(10)
                             print("向右",y,"向左",z,"向上",s,"向下",t)
                             w=1
                             f=1
@@ -211,8 +210,8 @@ if __name__ == '__main__':
                         send.sendBodySector(5)
                         send.sendBodySector(17)
                         send.sendBodySector(15)
-                        time.sleep(0.1)
-                    time.sleep(0.1)
+                        time.sleep(0.2)
+                    time.sleep(0.2)
                     send.sendBodySector(12)
                     s=0
                     time.sleep(0.5)
