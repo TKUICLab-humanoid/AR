@@ -123,7 +123,7 @@ if __name__ == '__main__':
                             point_x[j]=0
                             point_y[j]=0
                             j=j+1
-                            if 17>i>4:#計算起始點跟瞄準點中間有多少個沒點
+                            if 18>i>3:#計算起始點跟瞄準點中間有多少個沒點
                                 if point_x[j]==0 or point_y[j]==0:
                                     k=k+1
                             print("沒點")
@@ -131,13 +131,13 @@ if __name__ == '__main__':
 
                     while w==0:#持續追蹤靶
                         Find_Target()
-                        time.sleep(0.25)
+                        time.sleep(0.2)
                         now_target=Find_Target()
                         if -15<now_target[0]-target_point_x[3]<15 and -15<now_target[1]-target_point_y[3]<15:#判斷通過基準點，我們設定是第4個點
                             print("i find you!")
                             print(k)
-                            x_diff=target_point_x[18]-180#計算目標點與中心點的差距
-                            y_diff=target_point_y[18]-155
+                            x_diff=target_point_x[18]-176#計算目標點與中心點的差距
+                            y_diff=target_point_y[18]-147
                             waist_move=round(x_diff/5)#將x與y的差距變成是接近馬達的刻度
                             hand_move=round(y_diff/2)
                             print(waist_move,hand_move)
@@ -170,8 +170,8 @@ if __name__ == '__main__':
                                 time.sleep(0.2)
                                 hand_move=0
                             all_point=15+k
-                            time1=all_point*0.2
-                            time.sleep(2)
+                            time1=all_point*0.2-3.8
+                            time.sleep(time1)
                             send.sendBodySector(9)
                             time.sleep(1)
                             send.sendBodySector(10)
