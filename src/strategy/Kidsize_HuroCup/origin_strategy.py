@@ -158,6 +158,7 @@ if __name__ == '__main__':
         r = rospy.Rate(5)
         k = 0
         hl = 0
+        hhl = 0
         lll =0
         hll = 0
         hlll = 0
@@ -259,70 +260,100 @@ if __name__ == '__main__':
 #========================================================================
 
 #比賽在練習的下面所以腿部馬達要向下調整
-                    lowy = 150               
+                    lowy = 150              
 #紅色圓最低點高低改這裡 
 #改151  
                     if hlll == 0:
+#                         if -10<= Low_xy(5)[0] - 257 <= 10:
+                        
+#                             if Low_xy(5)[1] > lowy:              
+# #比賽紅色的中心在練習紅色最低點的下面（表示）
+#                                 hhl = Low_xy(5)[1] - lowy
+#                                 hhll = hhl
+#                                 print(hhl)
+# #現在y差異很大時，調整手部馬達
+#                                 if hhl >= 0:                     # hl>=13
+#                                     hhl = hhl/2
+                                     
+# #手太低，調整手部馬達向上
+#                                     for hll in range(0,hhl) :
+#                                         send.sendBodySector(39)
+#                                         print("\n現在的手太低了，手部馬達需要向上調整\n")
+#                                         #print("hand LOW")
+#                                         hll = hll+ 1
+#                                         rh = rh +1
+#                                         time.sleep(0.5)
+                                
+# #現在y差異不大時，調整腿部馬達
+#                                 if hll < hl and hlltr == True:   # hl>0
+#                                     for hll in range(0,hl) :     # hll在0-hl中間
+#                                         send.sendBodySector(37)   
+#                                         print("\ny軸還有小小的偏差，所以向上調整腿部馬達\n")
+# # 脚部馬達下降一定角度
+#                                         time.sleep(1)
+#                                         #print("LOW")
+#                                         hll = hll+ 1
+#                                         rll = rll+1
+#                                         if hll == 5 :           # hll加到13
+#                                             hlltr = False
+#                                 X_low = 0
+#                                 Y_low = 0 
+#                                 i = 0
+#                                 hlll = hlll+1
+#                                 time.sleep(1)
                         if -10<= Low_xy(5)[0] - 257 <= 10:
                             print("cccccccccccccc")
-                            if Low_xy(5)[1] > lowy:              
-#比賽紅色的中心在練習紅色最低點的下面（表示）
-                                hl = Low_xy(5)[1] - lowy
-                                
-                                print(hl)
-#現在y差異很大時，調整手部馬達
-                                if hl >= 5:                     # hl>=13
-                                    hl = 5
-                                    hhll = hhll - hl 
-#手太低，調整手部馬達向上
-                                    for hll in range(0,hhll) :
-                                        send.sendBodySector(39)
-                                        print("\n現在的手太低了，手部馬達需要向上調整\n")
-                                        #print("hand LOW")
-                                        hll = hll+ 1
-                                        rh = rh +1
-                                        time.sleep(0.5)
-                                
-#現在y差異不大時，調整腿部馬達
-                                if hll < hl and hlltr == True:   # hl>0
-                                    for hll in range(0,hl) :     # hll在0-hl中間
-                                        send.sendBodySector(37)   
-                                        print("\ny軸還有小小的偏差，所以向上調整腿部馬達\n")
-# 脚部馬達下降一定角度
-                                        time.sleep(1)
-                                        #print("LOW")
-                                        hll = hll+ 1
-                                        rll = rll+1
-                                        if hll == 5 :           # hll加到13
-                                            hlltr = False
-                                X_low = 0
-                                Y_low = 0 
-                                i = 0
-                                hlll = hlll+1
-                                time.sleep(1)
-#比賽在練習的上面所以腿部馬達向上
-                        if -10<= Low_xy(5)[0] - 257 <= 10:
-                            if Low_xy(5)[1] <lowy :
-                                hl =lowy -  Low_xy(5)[1]
-                                hhll = hl
+                            if Low_xy(5)[1] >lowy :
+                                hhl =Low_xy(5)[1] - lowy
+                                hhll = hhl
 
-                                print(hl)
+                                print(hhl)
 #現在y差比較多的時候，調整手部馬達
-                                if hl >= 3:         
-                                    hl = 3
-                                    hhll = hhll - hl 
+                                if hhl >= 0:         
+                                    hhl = int(hhl/2)
 #手太高，調整手部馬達向下 
-                                    for hll in range(0,hhll) :
+                                    for hll in range(0,hhl) :
                                         send.sendBodySector(38)
-                                        print("\n現在的手太高了，手部馬達需要向下調整y軸\n")
+                                        print("\n現在的手太gao了，手部馬達需要向xia調整\n")
                                         #print("hand high")
                                         hll = hll+ 1
                                         rh = rh +1
                                         time.sleep(0.5)
 #現在y差不多的時候，調整腿部馬達
-                                for hll in range(0,hl) :
+                                for hll in range(0,hhll) :
                                     send.sendBodySector(36)
-                                    print("\ny軸還有小小的偏差，所以向下調整腿部馬達\n")
+                                    print("\ny軸還有小小的偏差，所以向xia調整腿部馬達\n")
+                                    time.sleep(1)
+                                    #print("HIGH")
+                                    rlh = rlh +1
+                                    hll = hll+ 1
+                                X_low = 0
+                                Y_low = 0 
+                                i = 0
+                                hlll = hlll+1
+#比賽在練習的上面所以腿部馬達向上
+                        if -10<= Low_xy(5)[0] - 257 <= 10:
+                            print("bbbbbbbbb")
+                            if Low_xy(5)[1] <lowy :
+                                hhl =Low_xy(5)[1] - lowy
+                                hhll = hhl
+
+                                print(hhl)
+#現在y差比較多的時候，調整手部馬達
+                                if hhl <= 0:         
+                                    hhl = int(hhl/2)
+#手太高，調整手部馬達向下 
+                                    for hll in range(hhl,0) :
+                                        send.sendBodySector(37)
+                                        print("\n現在的手太di了，手部馬達需要向shang調整y軸\n")
+                                        #print("hand high")
+                                        hll = hll+ 1
+                                        rh = rh +1
+                                        time.sleep(0.5)
+#現在y差不多的時候，調整腿部馬達
+                                for hll in range(0,hhll) :
+                                    send.sendBodySector(37)
+                                    print("\ny軸還有小小的偏差，所以向shang調整腿部馬達\n")
                                     time.sleep(1)
                                     #print("HIGH")
                                     rlh = rlh +1
@@ -396,6 +427,8 @@ if __name__ == '__main__':
                                     time.sleep(5)
                                     DIO = True
 #調整手部馬達進行拉弓
+                                send.sendBodySector(32)
+                                time.sleep(1.5)
                                 send.sendBodySector(33)      
                                 print("\n手部所有馬達做出拉弓的動作\n")
                                 time.sleep(2)
