@@ -47,8 +47,8 @@ def Find_Target():
     for j in range (send.color_mask_subject_cnts[2]):
         for k in range (send.color_mask_subject_cnts[1]):
             for m in range (send.color_mask_subject_cnts[5]):
-                if -2 <= send.color_mask_subject_X[2][j] - send.color_mask_subject_X[1][k] <=2 and -2 <= send.color_mask_subject_Y[2][j] - send.color_mask_subject_Y[1][k] <=2:
-                    if -2 <= send.color_mask_subject_X[1][k] - send.color_mask_subject_X[5][m] <= 2 and  -2 <= send.color_mask_subject_Y[1][k] - send.color_mask_subject_Y[5][m] <= 2 :
+                if -4 <= send.color_mask_subject_X[2][j] - send.color_mask_subject_X[1][k] <=4 and -4 <= send.color_mask_subject_Y[2][j] - send.color_mask_subject_Y[1][k] <=3:
+                    if -4 <= send.color_mask_subject_X[1][k] - send.color_mask_subject_X[5][m] <= 4 and  -4 <= send.color_mask_subject_Y[1][k] - send.color_mask_subject_Y[5][m] <= 4 :
                 # if   send.color_mask_subject_Width[2][j] - send.color_mask_subject_Width[1][k]>0  and send.color_mask_subject_Height[2][j] - send.color_mask_subject_Height[1][k] >0 :
                 #     if   send.color_mask_subject_Width[1][k] - send.color_mask_subject_Width[5][m] >0 and send.color_mask_subject_Height[1][k] -send.color_mask_subject_Height[5][m] >0 :
                         bcolor_XMin = send.color_mask_subject_XMin[2][j]
@@ -136,8 +136,8 @@ if __name__ == '__main__':
                         if -15<now_target[0]-target_point_x[3]<15 and -15<now_target[1]-target_point_y[3]<15:#判斷通過基準點，我們設定是第4個點
                             print("i find you!")
                             print(k)
-                            x_diff=target_point_x[18]-176#計算目標點與中心點的差距
-                            y_diff=target_point_y[18]-147
+                            x_diff=target_point_x[18]-175#計算目標點與中心點的差距
+                            y_diff=target_point_y[18]-160
                             waist_move=round(x_diff/5)#將x與y的差距變成是接近馬達的刻度
                             hand_move=round(y_diff/2)
                             print(waist_move,hand_move)
@@ -170,7 +170,7 @@ if __name__ == '__main__':
                                 time.sleep(0.2)
                                 hand_move=0
                             all_point=15+k
-                            time1=all_point*0.2-3.8
+                            time1=all_point*0.2-1.5
                             time.sleep(time1)
                             send.sendBodySector(9)
                             time.sleep(1)
@@ -194,26 +194,30 @@ if __name__ == '__main__':
                     print("lkj is idiot")
                     stand=1
                 if f==1 and w==1:
-                    for x in range (0,y):
-                        send.sendBodySector(13)
+                    if y>0:
+                        for x in range (0,y):
+                            send.sendBodySector(13)
+                            time.sleep(0.25)
+                        y=0
+                    if z>0:
+                        for x in range (0,z):
+                            send.sendBodySector(14)
                         time.sleep(0.25)
-                    y=0
-                    for x in range (0,z):
-                        send.sendBodySector(14)
+                        z=0
+                    if t>0:
+                        for x in range (0,t):
+                            send.sendBodySector(19)
                         time.sleep(0.25)
-                    z=0
-                    for x in range (0,t):
-                        send.sendBodySector(6)
-                        time.sleep(0.25)
-                    t=0
-                    for x in range (0,s):
-                        send.sendBodySector(5)
-                        send.sendBodySector(17)
-                        send.sendBodySector(15)
+                        t=0
+                    if s>0:
+                        for x in range (0,s):
+                            send.sendBodySector(20)
+                            send.sendBodySector(17)
+                            send.sendBodySector(15)
                         time.sleep(0.2)
-                    time.sleep(0.2)
+                        s=0
+                    time.sleep(1)
                     send.sendBodySector(12)
-                    s=0
                     time.sleep(0.5)
                     w=0
                     f=0
