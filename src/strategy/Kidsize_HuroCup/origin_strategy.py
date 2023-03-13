@@ -47,8 +47,8 @@ def Find_Target():
     for j in range (send.color_mask_subject_cnts[2]):
         for k in range (send.color_mask_subject_cnts[1]):
             for m in range (send.color_mask_subject_cnts[5]):
-                if -4 <= send.color_mask_subject_X[2][j] - send.color_mask_subject_X[1][k] <=4 and -4 <= send.color_mask_subject_Y[2][j] - send.color_mask_subject_Y[1][k] <=3:
-                    if -4 <= send.color_mask_subject_X[1][k] - send.color_mask_subject_X[5][m] <= 4 and  -4 <= send.color_mask_subject_Y[1][k] - send.color_mask_subject_Y[5][m] <= 4 :
+                if -6 <= send.color_mask_subject_X[2][j] - send.color_mask_subject_X[1][k] <6 and -6 <= send.color_mask_subject_Y[2][j] - send.color_mask_subject_Y[1][k] <=6:
+                    if -6 <= send.color_mask_subject_X[1][k] - send.color_mask_subject_X[5][m] <= 6 and  -6 <= send.color_mask_subject_Y[1][k] - send.color_mask_subject_Y[5][m] <= 6 :
                 # if   send.color_mask_subject_Width[2][j] - send.color_mask_subject_Width[1][k]>0  and send.color_mask_subject_Height[2][j] - send.color_mask_subject_Height[1][k] >0 :
                 #     if   send.color_mask_subject_Width[1][k] - send.color_mask_subject_Width[5][m] >0 and send.color_mask_subject_Height[1][k] -send.color_mask_subject_Height[5][m] >0 :
                         bcolor_XMin = send.color_mask_subject_XMin[2][j]
@@ -136,8 +136,8 @@ if __name__ == '__main__':
                         if -15<now_target[0]-target_point_x[3]<15 and -15<now_target[1]-target_point_y[3]<15:#判斷通過基準點，我們設定是第4個點
                             print("i find you!")
                             print(k)
-                            x_diff=target_point_x[18]-175#計算目標點與中心點的差距
-                            y_diff=target_point_y[18]-160
+                            x_diff=target_point_x[18]-180#計算目標點與中心點的差距
+                            y_diff=target_point_y[18]-153
                             waist_move=round(x_diff/5)#將x與y的差距變成是接近馬達的刻度
                             hand_move=round(y_diff/2)
                             print(waist_move,hand_move)
