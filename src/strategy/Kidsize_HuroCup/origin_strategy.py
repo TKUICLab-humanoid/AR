@@ -140,37 +140,27 @@ def TS_time(i):
 if __name__ == '__main__':
     try:
         send = Sendmessage()
-        nn=0
-        mm=0
-        n=0
-        a=0
-        b=0
-        m = 0
+        waist = 0 #m
         mi = 0
-        msum = 0
         startM = 0
         endM = 0
         g = 0
         h = 0
         i = 0
-        hh = 0
-        hhll = 0
-        r = rospy.Rate(5)
+        d_cnt = 0
+        up_cnt = 0
         k = 0
-        hl = 0
-        hhl = 0
-        lll =0
+        down = 0 #hl
+        up = 0 #hhl
+        back = 0 #lll
         hll = 0
         hlll = 0
         rh = 0
         rlh = 0
-        rll = 0
         rr = 0
         rrl = 0
-        rrll = 0
         endd = 0
         lowy = 0
-        hlltr = True
         DIO = True
         while not rospy.is_shutdown():
             send.drawImageFunction(4,0,0,320,120,120,0,0,0)
@@ -183,7 +173,6 @@ if __name__ == '__main__':
 ##頭部
                     send.sendHeadMotor(1,3048,80)
                     send.sendHeadMotor(1,3048,80)
-                    # send.sendSingleMotor(9,10,15) #啟動轉腰
                     time.sleep(3)
                     HH = False 
 
@@ -200,56 +189,11 @@ if __name__ == '__main__':
 #開始變動x軸
 #========================================================================
 
-#                     if Low_xy(5)[0] - 257 > 1 or 257 - Low_xy(5)[0]>1: #and  Low_xy(5)[1]>120:
-#                         m = 257 - Low_xy(5)[0]                          
-# #紅心點與中心x的差距
-#                         mi = m*3                                        
-# #轉腰的數值
-#                         msum = msum + mi
-#                         print(msum)
-#                         if msum > 800 or msum < -800:                   
-# #差別很大所以要爆轉
-#                             print("\n暴轉=========================================================================================\n")
-#                             time.sleep(2)
-#                             #####send.sendSingleMotor(9,int(-800),10)
-#                             print("\n腰向右轉很大\n")        
-# #腰部的馬達右轉（轉很多）
-#                             Low_xy(5)
-#                             Find_Target()
-#                             msum = 0
-#                             time.sleep(5)
-
-
-# #差別沒有很大
-                       
-#                         ######send.sendSingleMotor(9,int(m),15)             
-#                         print("\n腰微微轉\n")
-# #腰部馬達轉小幅度
-#                         time.sleep(3) 
-#                         X_low = 0
-#                         Y_low = 0 
-
-#                     print("\n現在Y值： ===============",Low_xy(5)[1])
                     if Low_xy(5)[0] - 257 > 10 or 257- Low_xy(5)[0]>10: #and  Low_xy(5)[1]>120:
-                        m = 257 - Low_xy(5)[0] 
-                        mi = m
-                        msum = msum + mi
-                        print(msum)
-                        # if msum > 800 or msum < -800:
-                        #     print("暴轉========================================================================================================================================================")
-                        #     time.sleep(2)
-                        #     send.sendSingleMotor(9,int(-800),10)
-                        #     Low_xy(5)
-                        #     Find_Target()
-                        #     msum = 0
-                        #     time.sleep(5)
-
-
+                        waist = 257 - Low_xy(5)[0] 
+                        mi = waist + mi
    
-                        
-                        
-                         
-                        send.sendSingleMotor(9,int(m*1.5),15)
+                        send.sendSingleMotor(9,int(waist*1.5),15)
                         time.sleep(3) 
                         X_low = 0
                         Y_low = 0 
@@ -259,69 +203,30 @@ if __name__ == '__main__':
 #開始變動y軸
 #========================================================================
 
-#比賽在練習的下面所以腿部馬達要向下調整
-                    lowy = 150              
-#紅色圓最低點高低改這裡 
-#改151  
-                    if hlll == 0:
-#                         if -10<= Low_xy(5)[0] - 257 <= 10:
-                        
-#                             if Low_xy(5)[1] > lowy:              
-# #比賽紅色的中心在練習紅色最低點的下面（表示）
-#                                 hhl = Low_xy(5)[1] - lowy
-#                                 hhll = hhl
-#                                 print(hhl)
-# #現在y差異很大時，調整手部馬達
-#                                 if hhl >= 0:                     # hl>=13
-#                                     hhl = hhl/2
-                                     
-# #手太低，調整手部馬達向上
-#                                     for hll in range(0,hhl) :
-#                                         send.sendBodySector(39)
-#                                         print("\n現在的手太低了，手部馬達需要向上調整\n")
-#                                         #print("hand LOW")
-#                                         hll = hll+ 1
-#                                         rh = rh +1
-#                                         time.sleep(0.5)
-                                
-# #現在y差異不大時，調整腿部馬達
-#                                 if hll < hl and hlltr == True:   # hl>0
-#                                     for hll in range(0,hl) :     # hll在0-hl中間
-#                                         send.sendBodySector(37)   
-#                                         print("\ny軸還有小小的偏差，所以向上調整腿部馬達\n")
-# # 脚部馬達下降一定角度
-#                                         time.sleep(1)
-#                                         #print("LOW")
-#                                         hll = hll+ 1
-#                                         rll = rll+1
-#                                         if hll == 5 :           # hll加到13
-#                                             hlltr = False
-#                                 X_low = 0
-#                                 Y_low = 0 
-#                                 i = 0
-#                                 hlll = hlll+1
-#                                 time.sleep(1)
-                        if -10<= Low_xy(5)[0] - 257 <= 10:
-                            print("cccccccccccccc")
-                            if Low_xy(5)[1] >lowy :
-                                hhl =Low_xy(5)[1] - lowy
-                                hhll = hhl
+                    lowy = 125              #紅色圓最低點高低改這裡 
 
-                                print(hhl)
+                    if hlll == 0:
+                        if -10<= Low_xy(5)[0] - 257 <= 10:
+                            if Low_xy(5)[1] >lowy :
+                                print("dddddoooooowwwwwnnnn")
+                                down =Low_xy(5)[1] - lowy
+                                d_cnt = down
+
+                                print(down)
 #現在y差比較多的時候，調整手部馬達
-                                if hhl >= 0:         
-                                    hhl = int(hhl/2)
+                                if down >= 0:         
+                                    down = int(down/2)
 #手太高，調整手部馬達向下 
-                                    for hll in range(0,hhl) :
-                                        send.sendBodySector(38)
+                                    for hll in range(0,down) :
+                                        send.sendBodySector(36)
                                         print("\n現在的手太gao了，手部馬達需要向xia調整\n")
                                         #print("hand high")
-                                        hll = hll+ 1
+                                        down = down+ 1
                                         rh = rh +1
                                         time.sleep(0.5)
 #現在y差不多的時候，調整腿部馬達
-                                for hll in range(0,hhll) :
-                                    send.sendBodySector(36)
+                                for hll in range(0,d_cnt) :
+                                    send.sendBodySector(38)
                                     print("\ny軸還有小小的偏差，所以向xia調整腿部馬達\n")
                                     time.sleep(1)
                                     #print("HIGH")
@@ -332,32 +237,33 @@ if __name__ == '__main__':
                                 i = 0
                                 hlll = hlll+1
 #比賽在練習的上面所以腿部馬達向上
-                        if -10<= Low_xy(5)[0] - 257 <= 10:
-                            print("bbbbbbbbb")
                             if Low_xy(5)[1] <lowy :
-                                hhl =Low_xy(5)[1] - lowy
-                                hhll = hhl
+                                print("uuuuuuuuppppppppp")
+                                up = lowy - Low_xy(5)[1]
+                                up_cnt = up
 
-                                print(hhl)
+                                print(up)
 #現在y差比較多的時候，調整手部馬達
-                                if hhl <= 0:         
-                                    hhl = int(hhl/2)
+                                if up >= 0:         
+                                    up = int(up/2)
 #手太高，調整手部馬達向下 
-                                    for hll in range(hhl,0) :
-                                        send.sendBodySector(37)
+                                    for hll in range(0,up) :
+                                        send.sendBodySector(39)
                                         print("\n現在的手太di了，手部馬達需要向shang調整y軸\n")
                                         #print("hand high")
                                         hll = hll+ 1
                                         rh = rh +1
                                         time.sleep(0.5)
 #現在y差不多的時候，調整腿部馬達
-                                for hll in range(0,hhll) :
-                                    send.sendBodySector(37)
-                                    print("\ny軸還有小小的偏差，所以向shang調整腿部馬達\n")
-                                    time.sleep(1)
-                                    #print("HIGH")
-                                    rlh = rlh +1
-                                    hll = hll+ 1
+                                if up_cnt >= 0:
+                                    #up_cnt = int(up_cnt/1.5)
+                                    for hll in range(0,up_cnt) :
+                                        send.sendBodySector(37)
+                                        print("\ny軸還有小小的偏差，所以向shang調整腿部馬達\n")
+                                        time.sleep(1)
+                                        #print("HIGH")
+                                        rlh = rlh +1
+                                        hll = hll+ 1
                                 X_low = 0
                                 Y_low = 0 
                                 i = 0
@@ -388,7 +294,7 @@ if __name__ == '__main__':
                             g = endM - startM
                             
                             print("\n新的最低點XY是：",l)
-                            print("\n轉腰的數值是：",mi)
+                            print("\n轉腰的數值是：",waist)
 
                             if g >= 1.42:   
                                 h = g - 1.42
@@ -411,39 +317,37 @@ if __name__ == '__main__':
                                     
                                 #time.sleep(h)
                                 print("射擊")
-                                print(hhll)
-                                print(hl)
+                                print('up = %d',up)
+                                print('down = %d',down)
 #執行調整腰部馬達
-                                if send.DIOValue == 25:
-                                    ## send.sendBodySector(10)
-                                    # time.sleep(2)
+                                # if send.DIOValue == 25:
+                                #     ## send.sendBodySector(10)
+                                #     # time.sleep(2)
 
-                                    #####send.sendSingleMotor(9,int(-hhll),10)
-                                    print("\n腰部馬達向左轉\n")
-                                    time.sleep(2)
-                                    #####send.sendSingleMotor(9,int(-hl),10)
-                                    print("\n腰部馬達再向左轉\n")
-                                    print("\n轉了：", int(-hhll*0.45))
-                                    time.sleep(5)
-                                    DIO = True
+                                #     #####send.sendSingleMotor(9,int(-hhll),10)
+                                #     print("\n腰部馬達向左轉\n")
+                                #     time.sleep(2)
+                                #     #####send.sendSingleMotor(9,int(-hl),10)
+                                #     print("\n腰部馬達再向左轉\n")
+                                #     print("\n轉了：", int(-hhll*0.45))
+                                #     time.sleep(5)
+                                #     DIO = True
 #調整手部馬達進行拉弓
-                                send.sendBodySector(32)
-                                time.sleep(1.5)
+                                send.sendBodySector(32) #微轉腰
+                                time.sleep(3.5)
                                 send.sendBodySector(33)      
                                 print("\n手部所有馬達做出拉弓的動作\n")
                                 time.sleep(2)
                                 print("\naaaaaaaaaaaaaaaaaaaaa\n")
-                                lll = 1
+                                back = 1
                                 endd = 1
-                                print ("\n總轉腰數值 ：",msum)
+                                print ("\n總轉腰數值 ：",mi)
                                 
-                                #send.is_start = False
                             
 
             if send.is_start == False : 
                 print("\nHHHHHHHH\n")
-                if lll == 1:
-                    #####send.sendSingleMotor(9,int(-1*msum),15)
+                if back == 1:
                     print("\n腰部馬達歸位\n")
                     #####send.sendHeadMotor(1,2048,40)
                     print("\n頭部馬達歸位\n")
@@ -467,50 +371,21 @@ if __name__ == '__main__':
                         rrl = rrl +1
 
                     time.sleep(2)
-                    for rrll in range(0,rll) :
-                        #####send.sendBodySector(4)
-                        print("\n腿部馬達向下調整\n")
-                        time.sleep(1)
-                        
-                        rrll = rrll +1
-                    time.sleep(2)
                     if DIO == True:
                         #####send.sendSingleMotor(9,int(hhll),15)
                         print("\n腰部馬達向右轉\n")
                         #####send.sendSingleMotor(9,int(hl),10)
                         print("\n腰部馬達向右轉完，歸位\n")
                         DIO = False
-                    lll = 0
-#沒有用的，以前就沒有   
-                        # g = 0
-                        # k = 0
-                        # X_low = 0
-                        # Y_low = 0
-                        
-                       # if g >= 3 :
-                       #     send.sendBodySector(1) #動作串198 射擊   
-            r.sleep()
+                    back = 0 
     except rospy.ROSInterruptException:
         pass
 
-#加上轉頭 完成
-#修改不要直接跳出 完成
-#轉腰的最大範圍 完成
-# AR2022.ini motion
-# 212:站姿
-# 400:暫時測試(站平）
-
-#初始：212->201->200->199->400
-#9:蹲下 128:起
-#198(射擊）:11->143->11->143->110->72->144
-#198(new):11->11->110->72->144
-#100:100 300夾
-#m6:270 m2:-180
-
-# 99 要修改
 
 
 
 
 #左手往上-33 右手1次10
 #3號馬達選轉6*2次
+
+#若要改成只上下動腿 up/down值不除二
