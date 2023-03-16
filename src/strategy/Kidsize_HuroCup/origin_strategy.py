@@ -137,8 +137,8 @@ if __name__ == '__main__':
                             print("i find you!")
                             print(k)
                             x_diff=target_point_x[18]-180#計算目標點與中心點的差距
-                            y_diff=target_point_y[18]-153
-                            waist_move=round(x_diff/5)#將x與y的差距變成是接近馬達的刻度
+                            y_diff=target_point_y[18]-154
+                            waist_move=round(x_diff/5.2)#將x與y的差距變成是接近馬達的刻度
                             hand_move=round(y_diff/2)
                             print(waist_move,hand_move)
                             if waist_move>0:#當x_diff 的值是正的，就正常向右轉
@@ -173,7 +173,7 @@ if __name__ == '__main__':
                             time1=all_point*0.2-1.5
                             time.sleep(time1)
                             send.sendBodySector(9)
-                            time.sleep(1)
+                            time.sleep(1.5)
                             send.sendBodySector(10)
                             print("向右",y,"向左",z,"向上",s,"向下",t)
                             w=1
