@@ -210,15 +210,16 @@ if __name__ == '__main__':
                             if Low_xy(5)[1] >lowy :
                                 print("dddddoooooowwwwwnnnn")
                                 down =Low_xy(5)[1] - lowy
-                                d_cnt = down
-
-                                print(down)
+                                d_cnt = int(down/2)
 #現在y差比較多的時候，調整手部馬達
                                 if down >= 0:         
-                                    down = int(down/2)
+                                    down = int(down/4)
+                                    print(down)
+                                    print(d_cnt)
+
 #手太高，調整手部馬達向下 
                                     for hll in range(0,down) :
-                                        send.sendBodySector(36)
+                                        send.sendBodySector(38)
                                         print("\n現在的手太gao了，手部馬達需要向xia調整\n")
                                         #print("hand high")
                                         down = down+ 1
@@ -226,7 +227,7 @@ if __name__ == '__main__':
                                         time.sleep(0.5)
 #現在y差不多的時候，調整腿部馬達
                                 for hll in range(0,d_cnt) :
-                                    send.sendBodySector(38)
+                                    send.sendBodySector(36)
                                     print("\ny軸還有小小的偏差，所以向xia調整腿部馬達\n")
                                     time.sleep(1)
                                     #print("HIGH")
@@ -240,12 +241,24 @@ if __name__ == '__main__':
                             if Low_xy(5)[1] <lowy :
                                 print("uuuuuuuuppppppppp")
                                 up = lowy - Low_xy(5)[1]
-                                up_cnt = up
-
-                                print(up)
+                                up_cnt = int(up/2)
+                                if up_cnt >= 5 :
+                                    jin = int(up_cnt/5)
+                                    jin = jin - 1
+                                    for ji in range(0,jin):
+                                        print("123456789 = ",jin)
+                                        send.sendBodySector(66)
+                                        time.sleep(1)
+                                        up_cnt = up_cnt - 5
+                                        up = up - 2
+                                        print("dddddddddddddddddddddddddddddddddd",up_cnt)
+                                
 #現在y差比較多的時候，調整手部馬達
                                 if up >= 0:         
-                                    up = int(up/2)
+                                    up = int(up/4)
+                                    print(up)
+                                    print(up_cnt)
+                                    
 #手太高，調整手部馬達向下 
                                     for hll in range(0,up) :
                                         send.sendBodySector(39)
@@ -381,11 +394,3 @@ if __name__ == '__main__':
     except rospy.ROSInterruptException:
         pass
 
-
-
-
-
-#左手往上-33 右手1次10
-#3號馬達選轉6*2次
-
-#若要改成只上下動腿 up/down值不除二
