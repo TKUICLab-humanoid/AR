@@ -92,6 +92,7 @@ if __name__ == '__main__':
         x_diff=0#計算瞄準點與目標點的x差距
         y_diff=0#計算瞄準點與目標點的y差距
         time1=0
+        move_time=0
         all_point=0
         stand=0
         waist_move=0
@@ -136,10 +137,10 @@ if __name__ == '__main__':
                         if -15<now_target[0]-target_point_x[3]<15 and -15<now_target[1]-target_point_y[3]<15:#判斷通過基準點，我們設定是第4個點
                             print("i find you!")
                             print(k)
-                            x_diff=target_point_x[18]-180#計算目標點與中心點的差距
-                            y_diff=target_point_y[18]-154
-                            waist_move=round(x_diff/5.2)#將x與y的差距變成是接近馬達的刻度
-                            hand_move=round(y_diff/2)
+                            x_diff=target_point_x[18]-174#計算目標點與中心點的差距
+                            y_diff=target_point_y[18]-152
+                            waist_move=round(x_diff/4.8)#將x與y的差距變成是接近馬達的刻度
+                            hand_move=round(y_diff/1.7)
                             print(waist_move,hand_move)
                             if waist_move>0:#當x_diff 的值是正的，就正常向右轉
                                 for x in range (0,waist_move):
@@ -155,6 +156,7 @@ if __name__ == '__main__':
                                 time.sleep(0.2)
                                 waist_move=0
                             if hand_move>0:#當y_diff 的值是正的，就正常機體向下
+                                send.sendBodySector(18)
                                 for x in range (0,hand_move):
                                     send.sendBodySector(5)
                                     t=t+1
@@ -170,7 +172,8 @@ if __name__ == '__main__':
                                 time.sleep(0.2)
                                 hand_move=0
                             all_point=15+k
-                            time1=all_point*0.2-1.5
+                            move_time=0
+                            time1=all_point*0.2
                             time.sleep(time1)
                             send.sendBodySector(9)
                             time.sleep(1.5)
@@ -205,6 +208,7 @@ if __name__ == '__main__':
                         time.sleep(0.25)
                         z=0
                     if t>0:
+                        send.sendBodySector(21)
                         for x in range (0,t):
                             send.sendBodySector(19)
                         time.sleep(0.25)
