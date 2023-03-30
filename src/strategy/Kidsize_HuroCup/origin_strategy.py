@@ -139,7 +139,7 @@ if __name__ == '__main__':
                             print(k)
                             x_diff=target_point_x[18]-174#計算目標點與中心點的差距
                             y_diff=target_point_y[18]-152
-                            waist_move=round(x_diff/4.8)#將x與y的差距變成是接近馬達的刻度
+                            waist_move=round(x_diff/4.9)#將x與y的差距變成是接近馬達的刻度
                             hand_move=round(y_diff/1.7)
                             print(waist_move,hand_move)
                             if waist_move>0:#當x_diff 的值是正的，就正常向右轉
@@ -156,7 +156,6 @@ if __name__ == '__main__':
                                 time.sleep(0.2)
                                 waist_move=0
                             if hand_move>0:#當y_diff 的值是正的，就正常機體向下
-                                send.sendBodySector(18)
                                 for x in range (0,hand_move):
                                     send.sendBodySector(5)
                                     t=t+1
@@ -176,7 +175,7 @@ if __name__ == '__main__':
                             time1=all_point*0.2
                             time.sleep(time1)
                             send.sendBodySector(9)
-                            time.sleep(1.5)
+                            time.sleep(1.9)
                             send.sendBodySector(10)
                             print("向右",y,"向左",z,"向上",s,"向下",t)
                             w=1
@@ -208,7 +207,6 @@ if __name__ == '__main__':
                         time.sleep(0.25)
                         z=0
                     if t>0:
-                        send.sendBodySector(21)
                         for x in range (0,t):
                             send.sendBodySector(19)
                         time.sleep(0.25)
