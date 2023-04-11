@@ -126,13 +126,15 @@ def TS_time(i):
     a = 0
     s = Low_xy(i)
 
-    if  -11 <= s[0]-Find_Target()[0] <= 11 and -11 <= s[1]-Find_Target()[1] <= 11 and k == 0 :
+    rcolor_X,rcolor_Y = Find_Target()
+    if  -11 <= s[0]-rcolor_X <= 11 and -11 <= s[1]-rcolor_Y <= 11 and k == 0 :
         print("\n開始計時\n")         
         start =time.time()
         # time.sleep(2)
         k = 1
         
-    if -11 <= s[0]-Find_Target()[0] <= 11 and -11 <= s[1]-Find_Target()[1] <= 11 and k == 1 :
+    rcolor_X,rcolor_Y = Find_Target()
+    if -11 <= s[0]-rcolor_X <= 11 and -11 <= s[1]-rcolor_Y <= 11 and k == 1 :
         end = time.time()
  
     return start,end
@@ -204,17 +206,17 @@ if __name__ == '__main__':
 #開始變動y軸
 #========================================================================
 
-                    lowy = 125              #紅色圓最低點高低改這裡 
+                    lowy = 110              #紅色圓最低點高低改這裡 
 
                     if hlll == 0:
                         if -10<= Low_xy(5)[0] - 257 <= 10:
                             if Low_xy(5)[1] >lowy :
                                 print("dddddoooooowwwwwnnnn")
                                 down =Low_xy(5)[1] - lowy
-                                d_cnt = int(down/2)
+                                d_cnt = int(down/4.2)
 #現在y差比較多的時候，調整手部馬達
                                 if down >= 0:         
-                                    down = int(down/4)
+                                    down = int(down/8.4)
                                     print(down)
                                     print(d_cnt)
 
@@ -242,28 +244,12 @@ if __name__ == '__main__':
                             if Low_xy(5)[1] <lowy :
                                 print("uuuuuuuuppppppppp")
                                 up = lowy - Low_xy(5)[1]
-                                up_cnt = int(up/2)
-                                if up_cnt >= 8:
-                                    print("cccccccccccccccccccccccc")
-                                    jin = int(up_cnt/5)
-                                    #jin = jin - 1
-                                    for ji in range(0,jin):
-                                        print("123456789 = ",jin)
-                                        send.sendBodySector(66)
-                                        time.sleep(1)
-                                        up_cnt = up_cnt - 8
-                                        up = int(up/4)
-                                        up = up - 2
-                                        print("dddddddddddddddddddddddddddddddddd",up_cnt)
-                                
+                                up_cnt = int(up/4.2)
 #現在y差比較多的時候，調整手部馬達
-                                
                                 if up >= 0:
-                                    if up_cnt < 8:       
-                                        up = int(up/4)
+                                    up = int(up/8.4)
                                     print(up)
                                     print(up_cnt)
-                                    
 #手太高，調整手部馬達向下 
                                     for hll in range(0,up) :
                                         send.sendBodySector(39)
@@ -273,19 +259,65 @@ if __name__ == '__main__':
                                         rh = rh +1
                                         time.sleep(0.5)
 #現在y差不多的時候，調整腿部馬達
-                                if up_cnt >= 0:
-                                    #up_cnt = int(up_cnt/1.5)
-                                    for hll in range(0,up_cnt) :
-                                        send.sendBodySector(37)
-                                        print("\ny軸還有小小的偏差，所以向shang調整腿部馬達\n")
-                                        time.sleep(0.7)
-                                        #print("HIGH")
-                                        rlh = rlh +1
-                                        hll = hll+ 1
+                                
+                                for hll in range(0,up_cnt) :
+                                    send.sendBodySector(37)
+                                    print("\ny軸還有小小的偏差，所以向shang調整腿部馬達\n")
+                                    time.sleep(0.7)
+                                    #print("HIGH")
+                                    rlh = rlh +1
+                                    hll = hll+ 1
                                 X_low = 0
                                 Y_low = 0 
                                 i = 0
                                 hlll = hlll+1
+#                             if Low_xy(5)[1] <lowy :
+#                                 print("uuuuuuuuppppppppp")
+#                                 up = lowy - Low_xy(5)[1]
+#                                 up_cnt = int(up/2)
+#                                 if up_cnt >= 8:
+#                                     print("cccccccccccccccccccccccc")
+#                                     jin = int(up_cnt/5)
+#                                     #jin = jin - 1
+#                                     for ji in range(0,jin):
+#                                         print("123456789 = ",jin)
+#                                         send.sendBodySector(66)
+#                                         time.sleep(1)
+#                                         up_cnt = up_cnt - 8
+#                                         up = int(up/4)
+#                                         up = up - 2
+#                                         print("dddddddddddddddddddddddddddddddddd",up_cnt)
+                                
+# #現在y差比較多的時候，調整手部馬達
+                                
+#                                 if up >= 0:
+#                                     if up_cnt < 8:       
+#                                         up = int(up/4)
+#                                     print(up)
+#                                     print(up_cnt)
+                                    
+# #手太高，調整手部馬達向下 
+#                                     for hll in range(0,up) :
+#                                         send.sendBodySector(39)
+#                                         print("\n現在的手太di了，手部馬達需要向shang調整y軸\n")
+#                                         #print("hand high")
+#                                         hll = hll+ 1
+#                                         rh = rh +1
+#                                         time.sleep(0.5)
+# #現在y差不多的時候，調整腿部馬達
+#                                 if up_cnt >= 0:
+#                                     #up_cnt = int(up_cnt/1.5)
+#                                     for hll in range(0,up_cnt) :
+#                                         send.sendBodySector(37)
+#                                         print("\ny軸還有小小的偏差，所以向shang調整腿部馬達\n")
+#                                         time.sleep(0.7)
+#                                         #print("HIGH")
+#                                         rlh = rlh +1
+#                                         hll = hll+ 1
+#                                 X_low = 0
+#                                 Y_low = 0 
+#                                 i = 0
+#                                 hlll = hlll+1
 				                
 #===================================================================================                            
 #已經找到目標
@@ -310,6 +342,8 @@ if __name__ == '__main__':
 #一定要執行前面兩條
                             print("\n測量時間：%f 秒" % (endM -startM ))
                             g = endM - startM
+                            print("eeeeeeeeeeeeeeeeeeeee",endM)
+                            print("sssssssssssssssssssss",startM)
                             
                             print("\n新的最低點XY是：",l)
                             print("\n轉腰的數值是：",waist)
@@ -329,7 +363,7 @@ if __name__ == '__main__':
                             # if h <= 0:
                             #     h = 1  
                             #all()
-                            #time.sleep(1)
+                            #time.sleep(1.5)
                             #if -10<= Low_xy(5)[0] - 257 <= 10 and h != 0 and endd == 0:
                             print(h)
                                 
@@ -351,12 +385,12 @@ if __name__ == '__main__':
                             #     time.sleep(5)
                             #     DIO = True
 #調整手部馬達進行拉弓
-                            for zh in range(0,up):
-                                print("tttttttttttuuuuuuuuuuuuuuuurrrrrrrrrrrrrrrrnnnnnnnnnnnnn")
-                                send.sendSingleMotor(9,-8,10)
-                                time.sleep(0.5)
+                            # for zh in range(0,up):
+                            #     print("tttttttttttuuuuuuuuuuuuuuuurrrrrrrrrrrrrrrrnnnnnnnnnnnnn")
+                            #     send.sendSingleMotor(9,-8,10)
+                            #     time.sleep(0.5)
                             send.sendBodySector(32) #微轉腰
-                            time.sleep(2)
+                            time.sleep(1)
                             send.sendBodySector(33)      
                             print("\n手部所有馬達做出拉弓的動作\n")
                             time.sleep(2)
