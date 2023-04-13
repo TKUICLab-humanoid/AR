@@ -127,9 +127,8 @@ if __name__ == '__main__':
                             point_x[j]=0
                             point_y[j]=0
                             j=j+1
-                            if 21>i>1:#計算起始點跟瞄準點中間有多少個沒點
-                                if point_x[j]==0 or point_y[j]==0:
-                                    k=k+1
+                            if 21>i>0:#計算起始點跟瞄準點中間有多少個沒點
+                                k=k+1
                             print("沒點")
                             time.sleep(0.2)
 
@@ -137,11 +136,12 @@ if __name__ == '__main__':
                         Find_Target()
                         time.sleep(0.2)
                         now_target=Find_Target()
-                        if -15<now_target[0]-target_point_x[0]<15 and -15<now_target[1]-target_point_y[0]<15:#判斷通過基準點，我們設定是第4個點
+                        if -5<now_target[0]-target_point_x[0]<5 and -5<now_target[1]-target_point_y[0]<5:#判斷通過基準點，我們設定是第4個點
                             print("i find you!")
+                            print(Find_Target()[0],Find_Target()[1])
                             print(k)
                             x_diff=target_point_x[20]-174#計算目標點與中心點的差距
-                            y_diff=target_point_y[20]-152
+                            y_diff=target_point_y[20]-145
                             waist_move=round(x_diff/4.9)#將x與y的差距變成是接近馬達的刻度
                             hand_move=round(y_diff/1.7)
                             print(waist_move,hand_move)
@@ -174,9 +174,9 @@ if __name__ == '__main__':
                                 time.sleep(0.2)
                                 hand_move=0
                             all_point=20+k
-                            move_time=(z+t+s+y)*0.02
+                            move_time=(y+z+s+t)*0.04
                             time1=all_point*0.2
-                            wait_time=time1-move_time-2.1+stand87
+                            wait_time=time1-move_time-1.9+stand87
                             time.sleep(wait_time)
                             send.sendBodySector(9)
                             time.sleep(1.7)
