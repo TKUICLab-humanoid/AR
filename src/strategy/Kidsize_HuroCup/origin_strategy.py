@@ -107,7 +107,7 @@ if __name__ == '__main__':
             
             if send.is_start == True :#啟動電源與擺頭
                 
-                    while j<150 and i<21:
+                    while j<150 and i<15:
                         Find_Target()
                         if Find_Target()[0]!=0 and Find_Target()[1]>125:#抓出每一個點，然後將實際的點放在另一個list裡
                             point_x[j]=Find_Target()[0]
@@ -117,17 +117,17 @@ if __name__ == '__main__':
                             print(target_point_x[i],target_point_y[i])
                             i=i+1
                             j=j+1
-                            if i>5 and -2<=target_point_x[0]-target_point_x[4]<=2 and -2<=target_point_y[0]-target_point_y[4]<=2:#快速判斷定靶
-                                target_point_x[20]=target_point_x[4]
-                                target_point_y[20]=target_point_y[4]
-                                i=21
+                            if i>5 and -2<=target_point_x[0]-target_point_x[3]<=2 and -2<=target_point_y[0]-target_point_y[3]<=2:#快速判斷定靶
+                                target_point_x[14]=target_point_x[3]
+                                target_point_y[14]=target_point_y[3]
+                                i=15
                                 stand87=3
                             time.sleep(0.2)
-                        if Find_Target()[0]==0 or Find_Target()[1]<125:#將空的點設置為零放在大LIST內
+                        if Find_Target()[0]==0 or Find_Target()[1]<=125:#將空的點設置為零放在大LIST內
                             point_x[j]=0
                             point_y[j]=0
                             j=j+1
-                            if 21>i>0:#計算起始點跟瞄準點中間有多少個沒點
+                            if 15>i>0:#計算起始點跟瞄準點中間有多少個沒點
                                 k=k+1
                             print("沒點")
                             time.sleep(0.2)
@@ -140,8 +140,8 @@ if __name__ == '__main__':
                             print("i find you!")
                             print(Find_Target()[0],Find_Target()[1])
                             print(k)
-                            x_diff=target_point_x[20]-174#計算目標點與中心點的差距
-                            y_diff=target_point_y[20]-145
+                            x_diff=target_point_x[14]-175#計算目標點與中心點的差距
+                            y_diff=target_point_y[14]-151
                             waist_move=round(x_diff/4.9)#將x與y的差距變成是接近馬達的刻度
                             hand_move=round(y_diff/1.7)
                             print(waist_move,hand_move)
@@ -173,10 +173,10 @@ if __name__ == '__main__':
                                     s=s+1
                                 time.sleep(0.2)
                                 hand_move=0
-                            all_point=20+k
-                            move_time=(y+z+s+t)*0.04
+                            all_point=14+k
+                            move_time=(y+z+s+t)*0.0071
                             time1=all_point*0.2
-                            wait_time=time1-move_time-1.9+stand87
+                            wait_time=time1-move_time-2.379+stand87
                             time.sleep(wait_time)
                             send.sendBodySector(9)
                             time.sleep(1.7)
