@@ -47,7 +47,9 @@ class AR:
         if self.first_target_y > self.center_y:
             rospy.loginfo(f"aaaaaaaaaaaaaaaaa")
         else:
-            if self.low_y_old < self.center_y:
+            #while self.low_y_old <= self.center_y:
+               # self.find_target()
+            if self.low_y_old <= self.center_y:
                 self.low_y_old = self.center_y
                 self.low_x_old = self.center_x
                 rospy.loginfo(f"aaaaaaaaaaaaaaaaa{self.low_y_old}")
@@ -80,10 +82,17 @@ class AR:
                 rospy.loginfo(f"First{self.low_x_end},{self.low_y_end}")
                 self.time_of_period()
                 rospy.loginfo(f"Start time is {self.time_start}")
+                if self.first_target_y == self.low_y_old:
+                    self.low_x_end = self.low_x_old
+                    self.low_y_end = self.low_y_old
+                    rospy.loginfo("cccccccccccccccccccccccccc")
+                    self.status = 'second'
+                time.sleep(0.1)
             elif self.status == 'second':
+                
                 self.find_target()
                 rospy.loginfo(f"x = {self.center_x - self.low_x_end}, y = {self.center_y - self.low_y_end}")
-                if abs(self.center_x - self.low_x_end) <= 0 and abs(self.center_y - self.low_y_end) <= 1:
+                if abs(self.center_x - self.low_x_end) <= 1 and abs(self.center_y - self.low_y_end) <= 1:
                     self.calculate_time = False
                     self.time_of_period()
                     rospy.loginfo(f"End time is {self.time_end}")
@@ -94,12 +103,12 @@ class AR:
                 if self.low_x_end < 257:
                     self.x_left_distance = 257 - self.low_x_end
                     rospy.loginfo(f"turn left")
-                    send.sendSingleMotor(9,int(1.5*self.x_left_distance),20)
+                    send.sendSingleMotor(9,int(2.5*self.x_left_distance),30)
                     time.sleep(3)
                 elif self.low_x_end > 257:
                     self.x_right_distance = 257 - self.low_x_end
                     rospy.loginfo(f"turn right")
-                    send.sendSingleMotor(9,int(1.5*self.x_right_distance),20)
+                    send.sendSingleMotor(9,int(2.5*self.x_right_distance),30)
                     time.sleep(3)
                 if self.low_y_end > 120:
                     self.y_bottom_distance = 120 - self.low_y_end
@@ -122,7 +131,10 @@ class AR:
                     self.full_period_time *= 2
                 elif self.full_period_time < self.motion_time *0.5:
                     self.full_period_time *= 3
-                self.time_delay = self.full_period_time - self.motion_time
+                self.time_delay = self.full_period_time - self.motion_time + 0.5
+                if self.time_delay < 0:
+                    self.time_delay = self.time_delay + self.motion_time
+                    rospy.loginfo("bbbbbbbbbbbbbbbbbbbbbb") 
                 time.sleep(self.time_delay)
                 rospy.loginfo(f"{self.time_delay}")
                 rospy.loginfo(f"射擊")
