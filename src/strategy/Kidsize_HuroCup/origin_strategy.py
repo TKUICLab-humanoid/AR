@@ -62,7 +62,6 @@ class FindMoveShoot:
         def __init__(self) :
             self.i = 0 #最低點是第幾個點
             self.j = 0 #總共幾個點
-            self.k = 0 #no_point在預設區間出現的個數
             self.x = 0 #要動多少
             self.turn_right = 0 #向右的次數
             self.turn_left = 0 #向左的次數
@@ -105,8 +104,8 @@ class FindMoveShoot:
                                     time.sleep(0.1)
 
                                 if -4 <= self.first_X - Find.RCOLOR_X <= 4 and -4 <= self.first_Y - Find.RCOLOR_Y <= 4 and self.j>3 : #當靶轉完一圈後瞄準最低點
-                                    self.x_diff = self.LOWEST_X - 168#計算目標點與瞄準點的差距(瞄準點是[172,152]) 改大射左
-                                    self.y_diff = self.LOWEST_Y - 155 #改大射高
+                                    self.x_diff = self.LOWEST_X - 165 #計算目標點與瞄準點的差距(瞄準點是[172,152]) 改大射左
+                                    self.y_diff = self.LOWEST_Y - 150 #改大射高
                                     self.waist_move = round(self.x_diff / 4.5)#將x與y的差距變成是接近馬達的刻度
                                     self.hand_move = round(self.y_diff / 1.5)
                                     rospy.loginfo(f'{self.waist_move} , {self.hand_move}')
@@ -143,10 +142,10 @@ class FindMoveShoot:
                                          self.i = self.i + self.j
                                     if self.j < 5:                 #定靶給固定delay
                                          self.FIXED_TARGET_WAIT=3
-                                    self.all_point = self.i + self.k #把沒點跟起點到最低點的點個數加總
+                                    self.all_point = self.i  #把沒點跟起點到最低點的點個數加總
                                     self.move_time = (self.turn_right + self.turn_left + self.up + self.down) * 0.005
-                                    self.time_find_point = self.all_point * 0.1 #算出全部點的時間
-                                    self.wait_time = self.time_find_point - self.move_time -1.7 + self.FIXED_TARGET_WAIT #算出總共需要的delay時間
+                                    self.time_find_point = self.all_point * 0.0957 #算出全部點的時間
+                                    self.wait_time = self.time_find_point - 1.64 + self.FIXED_TARGET_WAIT #算出總共需要的delay時間
                                     time.sleep(self.wait_time)
                                     send.sendBodySector(9)
                                     time.sleep(1.0)
@@ -206,7 +205,6 @@ class FindMoveShoot:
                         self.f = 0
                         self.i = 0
                         self.j = 0
-                        self.k = 0
                         self.FIXED_TARGET_WAIT = 0
                         self.LOWEST_X = 0#最低點x座標存放處
                         self.LOWEST_Y = 0#最低點y座標存放處
