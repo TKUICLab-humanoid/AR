@@ -127,15 +127,21 @@ class AR:
                         time.sleep(0.5)
                         rospy.loginfo(f"Shortening {self.count}")
                 self.motion_time = 2 + 3 + 0.5 * self.y_bottom_count + 0.5 * self.y_top_count
-                if self.motion_time * 0.5 < self.full_period_time < self.motion_time:
+                if self.motion_time * 0.67 <= self.full_period_time < self.motion_time:
                     self.full_period_time *= 2
-                elif self.full_period_time < self.motion_time *0.5:
+                    rospy.loginfo(f"one")
+                elif self.motion_time * 0.33 <= self.full_period_time < self.motion_time * 0.67:
+                    self.full_period_time *= 2
+                    rospy.loginfo(f"three")
+                elif self.full_period_time < self.motion_time *0.33:
                     self.full_period_time *= 3
+                    rospy.loginfo(f"two")
                 self.time_delay = self.full_period_time - self.motion_time + 0.5
                 if self.time_delay < 0:
                     self.time_delay = self.time_delay + self.motion_time
                     rospy.loginfo("bbbbbbbbbbbbbbbbbbbbbb") 
                 time.sleep(self.time_delay)
+                rospy.loginfo(f"other")
                 rospy.loginfo(f"{self.time_delay}")
                 rospy.loginfo(f"射擊")
                 send.sendBodySector(33)
