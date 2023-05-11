@@ -104,8 +104,8 @@ class FindMoveShoot:
                                     time.sleep(0.1)
 
                                 if -3 <= self.first_X - Find.RCOLOR_X <= 3 and -3 <= self.first_Y - Find.RCOLOR_Y <= 3 and self.j>3 : #當靶轉完一圈後瞄準最低點
-                                    self.x_diff = self.LOWEST_X - 165 #計算目標點與瞄準點的差距(瞄準點是[172,152]) 改大射左
-                                    self.y_diff = self.LOWEST_Y - 150 #改大射高
+                                    self.x_diff = self.LOWEST_X - 168 #計算目標點與瞄準點的差距(瞄準點是[172,152]) 改大射左
+                                    self.y_diff = self.LOWEST_Y - 162 #改大射高
                                     self.waist_move = round(self.x_diff / 4.5)#將x與y的差距變成是接近馬達的刻度
                                     self.hand_move = round(self.y_diff / 1.5)
                                     rospy.loginfo(f'{self.waist_move} , {self.hand_move}')
@@ -117,7 +117,7 @@ class FindMoveShoot:
                                             time.sleep(0.2)
                                             self.waist_move = 0
                                     if self.waist_move < 0:#當x_diff 的值是負的，得先將x_diff變成正的，再用迴圈向左轉
-                                            self.waist_move = self.waist_move * (-1) - 1
+                                            self.waist_move = self.waist_move * (-1) - 2
                                             for self.x in range (0,self.waist_move):
                                                 send.sendBodySector(4)
                                                 self.turn_left= self.turn_left + 1
@@ -138,14 +138,14 @@ class FindMoveShoot:
                                                 self.up = self.up + 1
                                             time.sleep(0.2)
                                             self.hand_move = 0
-                                    if self.i <= 19 or 5 <= self.j <= 30:#如果最低點與起始點太近或是靶轉得太快就讓他多轉一圈
-                                         self.i = self.i + self.j -1
+                                    if self.i <= 25 or 5 <= self.j <= 30:#如果最低點與起始點太近或是靶轉得太快就讓他多轉一圈
+                                         self.i = self.i + self.j
                                     if self.j < 5:                 #定靶給固定delay
                                          self.FIXED_TARGET_WAIT = 3
                                     self.all_point = self.i  #把沒點跟起點到最低點的點個數加總
-                                    self.move_time = (self.turn_right + self.turn_left + self.up + self.down) * 0.0042
-                                    self.time_find_point = self.all_point * 0.1002 #算出全部點的時間
-                                    self.wait_time = self.time_find_point - self.move_time - 1.7735 + self.FIXED_TARGET_WAIT #算出總共需要的delay時間
+                                    self.move_time = (self.turn_right + self.turn_left + self.up + self.down) * 0.0035
+                                    self.time_find_point = (self.all_point -1) * 0.1002 #算出全部點的時間
+                                    self.wait_time = self.time_find_point - self.move_time - 1.73 + self.FIXED_TARGET_WAIT #算出總共需要的delay時間
                                     time.sleep(self.wait_time)
                                     send.sendBodySector(9)
                                     time.sleep(1.0)
