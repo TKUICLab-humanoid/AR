@@ -10,11 +10,11 @@ import math
 HORIZON_HEAD = 2912
 HEAD_CHECK = 2080
 VERTICAL_HEAD = 2048
-X_BENCHMARK = 166 #改大射左
-Y_BENCHMARK = 154 #改大射高
+X_BENCHMARK = 164 #改大射左
+Y_BENCHMARK = 157 #改大射高
 X_MOTOR_SCALE = 4.6
 Y_MOTOR_SCALE = 1.4
-LEFT_WAIST_FIX = 2
+LEFT_WAIST_FIX = 1
 SHOOT_FLOW_WAIT = 1.4
 
 send = Sendmessage()
@@ -32,10 +32,10 @@ class FindTarget:
         for j in range (send.color_mask_subject_cnts[2]):
             for k in range (send.color_mask_subject_cnts[1]):
                 for m in range (send.color_mask_subject_cnts[5]):
-                    if -5 <= send.color_mask_subject_X[2][j] - send.color_mask_subject_X[1][k] < 5 and \
-                        -5 <= send.color_mask_subject_Y[2][j] - send.color_mask_subject_Y[1][k] <= 5:
-                        if -5 <= send.color_mask_subject_X[1][k] - send.color_mask_subject_X[5][m] <= 5 and \
-                            -5 <= send.color_mask_subject_Y[1][k] - send.color_mask_subject_Y[5][m] <= 5:
+                    if -3 <= send.color_mask_subject_X[2][j] - send.color_mask_subject_X[1][k] <= 3 and \
+                        -3 <= send.color_mask_subject_Y[2][j] - send.color_mask_subject_Y[1][k] <= 3:
+                        if -3 <= send.color_mask_subject_X[1][k] - send.color_mask_subject_X[5][m] <= 3 and \
+                            -3 <= send.color_mask_subject_Y[1][k] - send.color_mask_subject_Y[5][m] <= 3:
                             self.red_color_xmin = send.color_mask_subject_XMin[5][m]
                             self.red_color_xmax = send.color_mask_subject_XMax[5][m]
                             self.red_color_ymin = send.color_mask_subject_YMin[5][m]
@@ -75,9 +75,8 @@ class FindMoveShoot:
                 send.sendHeadMotor(2, HEAD_CHECK, 80)
                 time.sleep(0.05)
                 send.sendHeadMotor(2, VERTICAL_HEAD, 80)
-                time.sleep(0.05)
-                self.step = 'find_lowest'
-            find.find_target() 
+                time.sleep(0.7)
+                self.step = 'find_lowest' 
             if self.step == 'find_lowest':#比較每個點後取代最低點並更新最低點
                 find.find_target()
                 if (self.lowest_y <= find.red_color_y):
@@ -85,7 +84,7 @@ class FindMoveShoot:
                     self.lowest_y = find.red_color_y
                     rospy.loginfo(f'LOWEST_X : {self.lowest_x}, LOWEST_Y : {self.lowest_y}')
                     self.wait_point = self.wait_point + 1 
-                elif abs(self.lowest_y - find.red_color_y) <= 2 and abs(self.lowest_x - find.red_color_x) <= 3  and self.wait_point > 20:
+                elif abs(self.lowest_y - find.red_color_y) <= 1 and abs(self.lowest_x - find.red_color_x) <= 3  and self.wait_point > 20:
                     self.start_count = time.time() 
                     rospy.logwarn(f'LOWEST_X : {find.red_color_x} , LOWEST_Y : {find.red_color_y}')
                     rospy.logwarn(f'START: {self.start_count}')
@@ -96,7 +95,7 @@ class FindMoveShoot:
                 find.find_target()
                 rospy.logwarn(f'LOWEST_Y: {find.red_color_y}')
                 rospy.logwarn(f'LOWEST_X: {find.red_color_x}')
-                if abs( self.lowest_y - find.red_color_y ) <= 3 and abs( self.lowest_x - find.red_color_x ) <= 3:
+                if abs( self.lowest_y - find.red_color_y ) <= 2 and abs( self.lowest_x - find.red_color_x ) <= 2:
                     self.end_count = time.time()
                     rospy.logwarn(f'END: {self.end_count}')
                     self.step = 'move_shoot'
@@ -170,9 +169,9 @@ class FindMoveShoot:
                 send.sendHeadMotor(1, HORIZON_HEAD, 80)
                 time.sleep(0.5)
                 send.sendBodySector(7)
-                time.sleep(2)
+                time.sleep(1)
                 send.sendBodySector(8)
-                time.sleep(2)
+                time.sleep(1)
                 rospy.loginfo("lkj is idiot")
                 self.stand = 1
                 rospy.loginfo(f'final_point:{find.red_color_x} ,{find.red_color_y} ')
@@ -226,4 +225,5 @@ if __name__ == '__main__':
 #sendBodySector(7) 舉手
 #sendBodySector(8) 右手內凹
 #sendBodySector(9) 左手手爪轉動90度
-#sendBodySector(10)
+#sendBodySector(10) 
+
