@@ -15,7 +15,7 @@ Y_BENCHMARK = 157   #改大射高A
 X_MOTOR_SCALE = 4.6
 Y_MOTOR_SCALE = 1.4
 LEFT_WAIST_FIX = 1
-SHOOT_FLOW_WAIT = 1.4
+SHOOT_FLOW_WAIT = 1.6
 
 send = Sendmessage()
 
@@ -32,10 +32,10 @@ class FindTarget:
         for j in range (send.color_mask_subject_cnts[2]):
             for k in range (send.color_mask_subject_cnts[1]):
                 for m in range (send.color_mask_subject_cnts[5]):
-                    if -3 <= send.color_mask_subject_X[2][j] - send.color_mask_subject_X[1][k] <= 3 and \
-                        -3 <= send.color_mask_subject_Y[2][j] - send.color_mask_subject_Y[1][k] <= 3:
-                        if -3 <= send.color_mask_subject_X[1][k] - send.color_mask_subject_X[5][m] <= 3 and \
-                            -3 <= send.color_mask_subject_Y[1][k] - send.color_mask_subject_Y[5][m] <= 3:
+                    if -2 <= send.color_mask_subject_X[2][j] - send.color_mask_subject_X[1][k] <= 2 and \
+                        -2 <= send.color_mask_subject_Y[2][j] - send.color_mask_subject_Y[1][k] <= 2:
+                        if -2 <= send.color_mask_subject_X[1][k] - send.color_mask_subject_X[5][m] <= 2 and \
+                            -2 <= send.color_mask_subject_Y[1][k] - send.color_mask_subject_Y[5][m] <= 2:
                             self.red_color_xmin = send.color_mask_subject_XMin[5][m]
                             self.red_color_xmax = send.color_mask_subject_XMax[5][m]
                             self.red_color_ymin = send.color_mask_subject_YMin[5][m]
