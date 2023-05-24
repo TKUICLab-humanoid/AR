@@ -108,41 +108,41 @@ class AR:
                 if self.low_x_end < 257:
                     self.x_left_distance = 257 - self.low_x_end
                     rospy.loginfo(f"turn left")
-                    send.sendSingleMotor(9,int(2.5*self.x_left_distance),30)
+                    send.sendSingleMotor(9,int(2.3*self.x_left_distance),30)
                     time.sleep(3)
                 elif self.low_x_end > 257:
                     self.x_right_distance = 257 - self.low_x_end
                     rospy.loginfo(f"turn right")
-                    send.sendSingleMotor(9,int(2.5*self.x_right_distance),30)
+                    send.sendSingleMotor(9,int(2.3*self.x_right_distance),30)
                     time.sleep(3)
-                # if self.low_y_end > 120:
-                #     self.y_bottom_distance = 120 - self.low_y_end
-                #     self.y_bottom_count = int(self.y_bottom_distance / 4.2)
-                #     for self.count in range(0,self.y_bottom_count):
-                #         rospy.loginfo(f"low")
-                #         send.sendBodySector(36)
-                #         time.sleep(0.5)
-                #         rospy.loginfo(f"Extension {self.count}")
-                # elif self.low_y_end < 120:
-                #     self.y_top_distance = self.low_y_end - 120
-                #     self.y_top_count = int(self.y_top_distance / 4.2)
-                #     for self.count in range(0,self.y_top_count):
-                #         rospy.loginfo(f"high")
-                #         send.sendBodySector(37)
-                #         time.sleep(0.5)
-                #         rospy.loginfo(f"Shortening {self.count}")
+                if self.low_y_end > 120:
+                    self.y_bottom_distance = 120 - self.low_y_end
+                    self.y_bottom_count = int(self.y_bottom_distance / 4.2)
+                    for self.count in range(0,self.y_bottom_count):
+                        rospy.loginfo(f"low")
+                        send.sendBodySector(36)
+                        time.sleep(0.5)
+                        rospy.loginfo(f"Extension {self.count}")
+                elif self.low_y_end < 120:
+                    self.y_top_distance = self.low_y_end - 120
+                    self.y_top_count = int(self.y_top_distance / 4.2)
+                    for self.count in range(0,self.y_top_count):
+                        rospy.loginfo(f"high")
+                        send.sendBodySector(37)
+                        time.sleep(0.5)
+                        rospy.loginfo(f"Shortening {self.count}")
                 self.motion_time = 2 + 3 + 0.5 * self.y_bottom_count + 0.5 * self.y_top_count
                 rospy.loginfo(f"time {self.motion_time}")
                 if self.motion_time * 0.67 <= self.full_period_time < self.motion_time:
                     self.full_period_time *= 2
                     rospy.loginfo(f"one")
                 elif self.motion_time * 0.33 <= self.full_period_time < self.motion_time * 0.67:
-                    self.full_period_time *= 1.95
+                    self.full_period_time *= 1.97
                     rospy.loginfo(f"three")
                 else:
                     self.full_period_time *= 1
                     rospy.loginfo(f"two")
-                self.time_delay = self.full_period_time - self.motion_time + 0.5
+                self.time_delay = self.full_period_time - self.motion_time + 0.5 - 0.3
                 if self.time_delay < 0:
                     self.time_delay = self.time_delay + self.motion_time + 0.5
                     rospy.loginfo("bbbbbbbbbbbbbbbbbbbbbb") 
