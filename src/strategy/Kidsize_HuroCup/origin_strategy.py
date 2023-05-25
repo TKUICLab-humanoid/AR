@@ -58,6 +58,8 @@ class AR:
                 self.low_x_end = self.center_x
                 rospy.loginfo(f"The lowest center x is {self.low_x_end}")
                 rospy.loginfo(f"The lowest center y is {self.low_y_end}")
+                self.time_of_period()
+                time.sleep(0.5)
                 self.status = "second"
                 
 
@@ -71,6 +73,7 @@ class AR:
         if send.is_start:
             #self.find_target()
             if self.status == "Zero":
+               
                 self.find_target()
                 self.first_target_y = self.center_y
                 self.first_target_x = self.center_x
@@ -80,13 +83,15 @@ class AR:
                 self.find_target()
                 self.low_xy()
                 rospy.loginfo(f"First{self.low_x_end},{self.low_y_end}")
-                self.time_of_period()
+                # self.time_of_period()
                 rospy.loginfo(f"Start time is {self.time_start}")
-                if self.first_target_y == self.low_y_old:
-                    self.low_x_end = self.low_x_old
-                    self.low_y_end = self.low_y_old
-                    rospy.loginfo("cccccccccccccccccccccccccc")
-                    self.status = 'second'
+                # if self.first_target_y == self.low_y_old:
+                #     self.low_x_end = self.low_x_old
+                #     self.low_y_end = self.low_y_old
+                #     rospy.loginfo("cccccccccccccccccccccccccc")
+                #     self.time_of_period()
+                #     rospy.loginfo(f"Start time is {self.time_start}")
+                #     self.status = 'second'
                 time.sleep(0.1)
             elif self.status == 'second':
                 
@@ -103,12 +108,12 @@ class AR:
                 if self.low_x_end < 257:
                     self.x_left_distance = 257 - self.low_x_end
                     rospy.loginfo(f"turn left")
-                    send.sendSingleMotor(9,int(2.5*self.x_left_distance),30)
+                    send.sendSingleMotor(9,int(2.3*self.x_left_distance),30)
                     time.sleep(3)
                 elif self.low_x_end > 257:
                     self.x_right_distance = 257 - self.low_x_end
                     rospy.loginfo(f"turn right")
-                    send.sendSingleMotor(9,int(2.5*self.x_right_distance),30)
+                    send.sendSingleMotor(9,int(2.3*self.x_right_distance),30)
                     time.sleep(3)
                 if self.low_y_end > 120:
                     self.y_bottom_distance = 120 - self.low_y_end
@@ -127,15 +132,22 @@ class AR:
                         time.sleep(0.5)
                         rospy.loginfo(f"Shortening {self.count}")
                 self.motion_time = 2 + 3 + 0.5 * self.y_bottom_count + 0.5 * self.y_top_count
-                if self.motion_time * 0.5 < self.full_period_time < self.motion_time:
+                rospy.loginfo(f"time {self.motion_time}")
+                if self.motion_time * 0.67 <= self.full_period_time < self.motion_time:
                     self.full_period_time *= 2
-                elif self.full_period_time < self.motion_time *0.5:
-                    self.full_period_time *= 3
-                self.time_delay = self.full_period_time - self.motion_time + 0.5
+                    rospy.loginfo(f"one")
+                elif self.motion_time * 0.33 <= self.full_period_time < self.motion_time * 0.67:
+                    self.full_period_time *= 1.97
+                    rospy.loginfo(f"three")
+                else:
+                    self.full_period_time *= 1
+                    rospy.loginfo(f"two")
+                self.time_delay = self.full_period_time - self.motion_time + 0.5 - 0.3
                 if self.time_delay < 0:
-                    self.time_delay = self.time_delay + self.motion_time
+                    self.time_delay = self.time_delay + self.motion_time + 0.5
                     rospy.loginfo("bbbbbbbbbbbbbbbbbbbbbb") 
                 time.sleep(self.time_delay)
+                rospy.loginfo(f"other")
                 rospy.loginfo(f"{self.time_delay}")
                 rospy.loginfo(f"射擊")
                 send.sendBodySector(33)
