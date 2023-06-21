@@ -41,8 +41,9 @@ class Sendmessage:
         self.imu_value_Pitch = 0
         self.DIOValue = 0x00
         self.is_start = False
+        self.get_object = False
         self.time = 0
-        aaaa = rospy.init_node('talker', anonymous=True)
+        #aaaa = rospy.init_node('talker', anonymous=True)
         object_list_sub = rospy.Subscriber("/Object/List",ObjectList, self.getObject)
         label_model_sub = rospy.Subscriber("/LabelModel/List",LabelModelObjectList, self.getLabelModel)
         #compress_image_sub = rospy.Subscriber("compress_image",Image, self.catchImage)
@@ -158,6 +159,7 @@ class Sendmessage:
                 self.color_mask_subject_Width[i][j] = msg.Objectlist[i].Colorarray[j].Width
                 self.color_mask_subject_Height[i][j] = msg.Objectlist[i].Colorarray[j].Height
                 self.color_mask_subject_size[i][j] = msg.Objectlist[i].Colorarray[j].size
+                self.get_object = True
         time_end = time.time()
         # self.time = time_end - time_start
     def sensorPackageFunction(self,msg):        
