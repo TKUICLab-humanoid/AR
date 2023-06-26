@@ -10,9 +10,9 @@ import math
 HORIZON_HEAD = 3048
 HEAD_CHECK = 2080
 VERTICAL_HEAD = 2048
-X_BENCHMARK = 170 #改大射左
-Y_BENCHMARK = 150 #改大射高
-SHOOT_DELAY = 1.2
+X_BENCHMARK = 180   #改大射左
+Y_BENCHMARK = 155   #改大射高
+SHOOT_DELAY = 1   #改大變快
 
 #motion sector
 PREPARE = 123   #預備動作
@@ -53,6 +53,7 @@ class Archery:
         self.stand = 0
         self.x_points = []
         self.y_points = []
+        self.first_point = False
         self.ctrl_status = 'find_period'
         self.lowest_x = 0
         self.lowest_y = 0
@@ -63,10 +64,12 @@ class Archery:
         self.end_time = 0
         self.init_cnt = 0
         self.archery_action_ready = False
+        self.waist_delay = 0
 
     def initial(self):
         self.x_points = []
         self.y_points = []
+        self.first_point = False
         self.ctrl_status = 'find_period'
         self.lowest_x = 0
         self.lowest_y = 0
@@ -76,11 +79,12 @@ class Archery:
         self.start_time = 0
         self.end_time = 0
         self.archery_action_ready = False
+        self.waist_delay = 0
 
     def shoot(self, event):
         rospy.logerr("###### in SHOOT func #####")
         if self.archery_action_ready:
-            time.sleep(self.end_time - self.start_time - SHOOT_DELAY)
+            time.sleep(self.end_time - self.start_time - SHOOT_DELAY)# + self.waist_delay)
             rospy.logerr("!!!!!! SHOOT !!!!!!!")
             send.sendBodySector(SHOOT)
             send.drawImageFunction(6, 1, self.lowest_x-1, self.lowest_x+1, self.lowest_y-1, self.lowest_y+1, 255, 0, 255)
@@ -100,6 +104,10 @@ class Archery:
                     self.y_points.append(self.archery_target.red_y)
                     rospy.logwarn(f"x: {self.archery_target.red_x}")
                     rospy.logwarn(f'Y: {self.archery_target.red_y}')
+                    if not self.first_point:
+                        if self.x_points[0] and self.y_points[0] != 0:
+                            time.sleep(0.2)
+                            self.first_point = True
                     self.archery_target.found = False
 
                     if len(self.x_points) > 1:
@@ -130,21 +138,24 @@ class Archery:
                 #turn waist
                 if self.lowest_x - X_BENCHMARK > 0:
                     self.turn_right = X_BENCHMARK - self.lowest_x
-                    send.sendSingleMotor(9,int(2.3*self.turn_right),30)
+                    send.sendSingleMotor(9,int(2.8*self.turn_right),15)
                     rospy.loginfo('turn right')
                     rospy.loginfo(f'turn angle:{self.turn_right}')
+                    # self.waist_delay = 0.3
                     time.sleep(3)
 
                 else:
                     self.turn_left = X_BENCHMARK - self.lowest_x
-                    send.sendSingleMotor(9,int(2.3*self.turn_left),30)
+                    send.sendSingleMotor(9,int(2.8*self.turn_left),15)
                     rospy.loginfo('turn left')
                     rospy.loginfo(f'turn angle:{self.turn_left}')
+                    # self.waist_delay = 0.3
                     time.sleep(3)
 
                 #hand move
                 if self.lowest_y - Y_BENCHMARK > 0:
                     self.hand_move_cnt = abs(int((Y_BENCHMARK - self.lowest_y) / 2))
+                    rospy.loginfo('LEG_DOWN')
                     while self.hand_move_cnt != 0:
                         send.sendBodySector(LEG_DOWN)
                         self.hand_move_cnt -= 1
