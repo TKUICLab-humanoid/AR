@@ -3,7 +3,7 @@
 import rospy
 import numpy as np
 import sys
-sys.path.append('/home/iclab/Desktop/adult_hurocup/src/strategy')
+sys.path.append('/home/iclab/Desktop/kid_hurocup/src/strategy')
 from Python_API import Sendmessage
 import time
 import timeit
@@ -33,19 +33,20 @@ class ArcheryTarget:
         self.found = False
         
     def find(self):
-        if send.get_object:
+        if send.data_check:
             for j in range (send.color_mask_subject_cnts[2]):
                 for k in range (send.color_mask_subject_cnts[1]):
                     for m in range (send.color_mask_subject_cnts[5]):
-                        if -5 <= send.color_mask_subject_X[2][j] - send.color_mask_subject_X[1][k] < 5 and \
-                            -5 <= send.color_mask_subject_Y[2][j] - send.color_mask_subject_Y[1][k] <= 5:
-                            if -5 <= send.color_mask_subject_X[1][k] - send.color_mask_subject_X[5][m] <= 5 and \
-                                -5 <= send.color_mask_subject_Y[1][k] - send.color_mask_subject_Y[5][m] <= 5:
-                                self.red_x = send.color_mask_subject_X[5][m]
-                                self.red_y = send.color_mask_subject_Y[5][m]
+                        if -5 <= np.array(send.color_mask_subject_X[2])[j] - np.array(send.color_mask_subject_X[1])[k] < 5 and \
+                            -5 <= np.array(send.color_mask_subject_Y[2])[j] - np.array(send.color_mask_subject_Y[1])[k] <= 5:
+                            if -5 <= np.array(send.color_mask_subject_X[1])[k] - np.array(send.color_mask_subject_X[5])[m] <= 5 and \
+                                -5 <= np.array(send.color_mask_subject_Y[1])[k] - np.array(send.color_mask_subject_Y[5])[m] <= 5:
+                                self.red_x = np.array(send.color_mask_subject_X[5])[m]
+                                self.red_y = np.array(send.color_mask_subject_Y[5])[m]
+                                self.red_y = np.array(send.color_mask_subject_Y[5])[m]
                                 self.found = True
 
-            send.get_object = False
+            send.data_check = False
         else:
             self.red_x, self.red_y = 0, 0
 
@@ -138,7 +139,7 @@ class Archery:
                 time.sleep(0.05)
                 send.sendHeadMotor(2, VERTICAL_HEAD, 80)
                 time.sleep(0.7)
-
+            # print(send.color_mask_subject_size)
             self.archery_target.find()
 
             if self.ctrl_status == 'find_period':
