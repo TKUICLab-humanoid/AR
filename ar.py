@@ -2,6 +2,8 @@
 #coding=utf-8
 import rospy
 import numpy as np
+import sys
+sys.path.append('/home/iclab/Desktop/adult_hurocup/src/strategy')
 from Python_API import Sendmessage
 import time
 import timeit
@@ -20,6 +22,7 @@ SHOOT = 456       #射擊磁區
 HAND_UP = 111     #抬手
 HAND_BACK = 112
 LEG_DOWN = 1218   #降手
+LEG_BACK = 1219
 
 send = Sendmessage()
 
@@ -30,21 +33,22 @@ class ArcheryTarget:
         self.found = False
         
     def find(self):
-        if send.get_object:
+        # if send.data_check:
             for j in range (send.color_mask_subject_cnts[2]):
                 for k in range (send.color_mask_subject_cnts[1]):
                     for m in range (send.color_mask_subject_cnts[5]):
-                        if -5 <= send.color_mask_subject_X[2][j] - send.color_mask_subject_X[1][k] < 5 and \
-                            -5 <= send.color_mask_subject_Y[2][j] - send.color_mask_subject_Y[1][k] <= 5:
-                            if -5 <= send.color_mask_subject_X[1][k] - send.color_mask_subject_X[5][m] <= 5 and \
-                                -5 <= send.color_mask_subject_Y[1][k] - send.color_mask_subject_Y[5][m] <= 5:
-                                self.red_x = send.color_mask_subject_X[5][m]
-                                self.red_y = send.color_mask_subject_Y[5][m]
-                                self.found = True
-
-            send.get_object = False
-        else:
-            self.red_x, self.red_y = 0, 0
+                        if np.array(send.color_mask_subject_size[2])[j] > 3500:
+                            if -5 <= np.array(send.color_mask_subject_X[2])[j] - np.array(send.color_mask_subject_X[1])[k] < 5 and \
+                                -5 <= np.array(send.color_mask_subject_Y[2])[j] - np.array(send.color_mask_subject_Y[1])[k] <= 5:
+                                if -5 <= np.array(send.color_mask_subject_X[1])[k] - np.array(send.color_mask_subject_X[5])[m] <= 5 and \
+                                    -5 <= np.array(send.color_mask_subject_Y[1])[k] - np.array(send.color_mask_subject_Y[5])[m] <= 5:
+                                    self.red_x = np.array(send.color_mask_subject_X[5])[m]
+                                    self.red_y = np.array(send.color_mask_subject_Y[5])[m]
+                                    self.red_y = np.array(send.color_mask_subject_Y[5])[m]
+                                    self.found = True
+            # send.data_check = False
+                        else:
+                            self.red_x, self.red_y = 0, 0
 
 class Archery:
     def __init__(self):
@@ -71,6 +75,7 @@ class Archery:
         self.turn_left_cnt = 0
         self.turn_right_cnt = 0
         self.hand_back_cnt = 0
+        self.leg_back_cnt = 0
         self.waist_delay = 0
 
     def initial(self):
@@ -92,6 +97,7 @@ class Archery:
         self.turn_left_cnt = 0
         self.turn_right_cnt = 0
         self.hand_back_cnt = 0
+        self.leg_back_cnt = 0
         self.waist_delay = 0
 
     def shoot(self, event):
@@ -109,14 +115,18 @@ class Archery:
 
     def main(self):
         if send.is_start:
+
             if self.init_cnt == 1:
                 self.initial()
+                # send.data_check = False
                 send.sendHeadMotor(2,2078,50)
                 time.sleep(0.2)
                 send.sendHeadMotor(2,2048,50)
-                time.sleep(0.8)
+                time.sleep(1)
                 self.init_cnt = 0
+            # send.data_check = False
             self.archery_target.find()
+
             if self.ctrl_status == 'find_period':
                 if self.archery_target.found:
                     self.x_points.append(self.archery_target.red_x)
@@ -176,7 +186,7 @@ class Archery:
                 #hand move
                 if self.lowest_y - Y_BENCHMARK > 0:
                     self.leg_move_cnt = abs(int((Y_BENCHMARK - self.lowest_y) / 2))
-                    self.hand_back_cnt = self.leg_move_cnt
+                    self.leg_back_cnt = self.leg_move_cnt
                     rospy.loginfo('LEG_DOWN')
                     while self.hand_move_cnt != 0:
                         send.sendBodySector(LEG_DOWN)
@@ -210,6 +220,7 @@ class Archery:
                 time.sleep(0.5)
                 send.sendBodySector(PREPARE)
                 time.sleep(2.8)
+                rospy.logerr('not start')
                 self.stand = 1
             if self.back_flag:
                 if self.turn_right_cnt != 0:
@@ -223,11 +234,16 @@ class Archery:
                     rospy.loginfo(f'HAND_back_cnt:{self.hand_back_cnt}')
                     self.hand_back_cnt -= 1
                     time.sleep(0.5)
+                for i in range(0, self.leg_back_cnt):
+                    send.sendBodySector(LEG_BACK)
+                    rospy.loginfo(f'LEG_back_cnt:{self.leg_back_cnt}')
+                    self.hand_back_cnt -= 1
+                    time.sleep(0.5)
                 self.back_flag = False
-
-            rospy.logerr('not start')   
+                rospy.logerr('not start')
+   
             self.init_cnt = 1
-            time.sleep(2)    
+            time.sleep(0.2)    
 
 
 
