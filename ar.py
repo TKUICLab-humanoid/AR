@@ -2,8 +2,6 @@
 #coding=utf-8
 import rospy
 import numpy as np
-import sys
-sys.path.append('/home/iclab/Desktop/kid_hurocup/src/strategy')
 from Python_API import Sendmessage
 import time
 import timeit
@@ -14,15 +12,21 @@ HEAD_CHECK = 2080
 HAND_BACK = 222
 LEG_BACK = 1812
 VERTICAL_HEAD = 2048
-X_BENCHMARK = 200   #改大射左
+X_BENCHMARK = 195    #改大射左
 Y_BENCHMARK = 145   #改大射高
-SHOOT_DELAY = 0.8   #改大變快
+SHOOT_DELAY = 0.9   #改大變快
 
 #motion sector
 PREPARE = 123   #預備動作
 SHOOT = 456       #射擊磁區
 HAND_UP = 111     #抬手
 LEG_DOWN = 1218   #蹲腳
+
+
+#========================================================
+RIGHT_TURN = 2.4
+LEFT_TURN = 2.5
+#========================================================
 
 send = Sendmessage()
 
@@ -33,7 +37,7 @@ class ArcheryTarget:
         self.found = False
         
     def find(self):
-        if send.data_check:
+        if send.get_object:
             for j in range (send.color_mask_subject_cnts[2]):
                 for k in range (send.color_mask_subject_cnts[1]):
                     for m in range (send.color_mask_subject_cnts[5]):
@@ -46,7 +50,7 @@ class ArcheryTarget:
                                 self.red_y = np.array(send.color_mask_subject_Y[5])[m]
                                 self.found = True
 
-            send.data_check = False
+            send.get_object = False
         else:
             self.red_x, self.red_y = 0, 0
 
@@ -182,18 +186,22 @@ class Archery:
                 #turn waist
                 if self.lowest_x - X_BENCHMARK > 0:
                     self.turn_right = X_BENCHMARK - self.lowest_x
-                    send.sendSingleMotor(9,int(2.4*self.turn_right),15)
+                    send.sendSingleMotor(9,int(RIGHT_TURN*self.turn_right),15)
+                    right = RIGHT_TURN*self.turn_right
                     rospy.loginfo('turn right')
                     rospy.loginfo(f'turn angle:{self.turn_right}')
+                    rospy.loginfo(f'Motor_right:{right}')
                     self.turn_right_cnt = 1
                     # self.waist_delay = 0.3
                     time.sleep(3)
 
                 else:
                     self.turn_left = X_BENCHMARK - self.lowest_x
-                    send.sendSingleMotor(9,int(2.25*self.turn_left),15)
+                    send.sendSingleMotor(9,int(LEFT_TURN*self.turn_left),15)
+                    left = LEFT_TURN*self.turn_left
                     rospy.loginfo('turn left')
                     rospy.loginfo(f'turn angle:{self.turn_left}')
+                    rospy.loginfo(f'Motor_left:{left}')
                     self.turn_left_cnt = 1
                     # self.waist_delay = 0.3
                     time.sleep(3)
@@ -240,10 +248,10 @@ class Archery:
                 rospy.loginfo('預備動作執行完畢')
             if self.back_flag:
                 if self.turn_right_cnt != 0:
-                    send.sendSingleMotor(9,int(-(2.4*self.turn_right)),15)
+                    send.sendSingleMotor(9,int(-(RIGHT_TURN*self.turn_right)),15)
                     time.sleep(2)
                 elif self.turn_left_cnt != 0:
-                    send.sendSingleMotor(9,int(-(2.2*self.turn_left)),15)
+                    send.sendSingleMotor(9,int(-(LEFT_TURN*self.turn_left)),15)
                     time.sleep(2)
                 for i in range(0, self.hand_back_cnt):
                     send.sendBodySector(HAND_BACK)
