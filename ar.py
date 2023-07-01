@@ -2,8 +2,8 @@
 #coding=utf-8
 import rospy
 import numpy as np
-import sys
-sys.path.append('/home/iclab/Desktop/adult_hurocup/src/strategy')
+# import sys
+# sys.path.append('/home/iclab/Desktop/adult_hurocup/src/strategy')
 from Python_API import Sendmessage
 import time
 import timeit
@@ -14,7 +14,7 @@ HEAD_CHECK = 2080
 VERTICAL_HEAD = 2048
 X_BENCHMARK = 255   #改大射左
 Y_BENCHMARK = 141   #改大射高
-SHOOT_DELAY = 0.6   #改大變快       #週期4.7 0.6s /週期2 0.5~0.55s
+SHOOT_DELAY = 0.6   #改大變快  不同週期須測試 0.3sOK 0.2~sOK
 
 #motion sector
 PREPARE = 123   #預備動作
@@ -33,7 +33,7 @@ class ArcheryTarget:
         self.found = False
         
     def find(self):
-        # if send.data_check:
+        if send.get_object:
             for j in range (send.color_mask_subject_cnts[2]):
                 for k in range (send.color_mask_subject_cnts[1]):
                     for m in range (send.color_mask_subject_cnts[5]):
@@ -46,9 +46,9 @@ class ArcheryTarget:
                                     self.red_y = np.array(send.color_mask_subject_Y[5])[m]
                                     self.red_y = np.array(send.color_mask_subject_Y[5])[m]
                                     self.found = True
-            # send.data_check = False
-                        else:
-                            self.red_x, self.red_y = 0, 0
+            send.get_object = False
+        else:
+            self.red_x, self.red_y = 0, 0
 
 class Archery:
     def __init__(self):
@@ -68,6 +68,7 @@ class Archery:
         self.leg_move_cnt = 0
         self.start_time = 0
         self.end_time = 0
+        self.period = 0
         self.init_cnt = 0
         self.archery_action_ready = False
         self.timer = 0
@@ -91,6 +92,7 @@ class Archery:
         self.leg_move_cnt = 0
         self.start_time = 0
         self.end_time = 0
+        self.period = 0
         self.archery_action_ready = False
         self.timer = 0
         self.back_flag = False
@@ -103,7 +105,7 @@ class Archery:
     def shoot(self, event):
         rospy.logerr("###### in SHOOT func #####")
         if self.archery_action_ready:
-            time.sleep(self.end_time - self.start_time - SHOOT_DELAY)# + self.waist_delay)
+            time.sleep(self.period - SHOOT_DELAY)# - self.waist_delay)
             rospy.logerr("!!!!!! SHOOT !!!!!!!")
             send.sendBodySector(SHOOT)
             send.drawImageFunction(6, 1, self.lowest_x-1, self.lowest_x+1, self.lowest_y-1, self.lowest_y+1, 255, 0, 255)
@@ -145,10 +147,14 @@ class Archery:
                             self.end_time = time.time()
                             self.lowest_y = max(self.y_points)
                             self.lowest_x = self.x_points[self.y_points.index(self.lowest_y)]
+                            self.period = self.end_time - self.start_time
                             rospy.loginfo(f"endtime = {self.end_time}")
-                            rospy.loginfo(f"period = {self.end_time - self.start_time}")
+                            rospy.loginfo(f"period = {self.period}")
                             rospy.loginfo(f'low_y = :{self.lowest_y}')
                             rospy.loginfo(f'low_x = :{self.lowest_x}')
+                
+                            if self.period < 2.5:
+                                self.waist_delay = 0.1
                             self.ctrl_status = 'wait_lowest_point'
                     else:
                         self.start_time = time.time()
@@ -157,7 +163,7 @@ class Archery:
             elif self.ctrl_status == 'wait_lowest_point':
                 dis = ((self.archery_target.red_x-self.lowest_x)**2 + (self.archery_target.red_y-self.lowest_y)**2)**0.5
                 if dis <= 1:
-                    self.timer = rospy.Timer(rospy.Duration(self.end_time - self.start_time), self.shoot)
+                    self.timer = rospy.Timer(rospy.Duration(self.period), self.shoot)
                     send.drawImageFunction(6, 1, self.lowest_x-2, self.lowest_x+2, self.lowest_y-2, self.lowest_y+2, 0, 0, 255)
                     rospy.loginfo("at lowest y")
                     self.ctrl_status = 'archery_action'
@@ -176,7 +182,10 @@ class Archery:
 
                 else:
                     self.turn_left = X_BENCHMARK - self.lowest_x
-                    send.sendSingleMotor(9,int(2.32*self.turn_left),15)
+                    if self.turn_left > 130:
+                        send.sendSingleMotor(9,int(2.4*self.turn_left),15)
+                    else:
+                        send.sendSingleMotor(9,int(2.32*self.turn_left),15)
                     rospy.loginfo('turn left')
                     rospy.loginfo(f'turn angle:{self.turn_left}')
                     # self.waist_delay = 0.3
@@ -188,9 +197,9 @@ class Archery:
                     self.leg_move_cnt = abs(int((Y_BENCHMARK - self.lowest_y) / 2))
                     self.leg_back_cnt = self.leg_move_cnt
                     rospy.loginfo('LEG_DOWN')
-                    while self.hand_move_cnt != 0:
+                    while self.leg_move_cnt != 0:
                         send.sendBodySector(LEG_DOWN)
-                        self.hand_move_cnt -= 1
+                        self.leg_move_cnt -= 1
                         time.sleep(0.5)
                     
                 else:
