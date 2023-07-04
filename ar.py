@@ -13,7 +13,7 @@ HORIZON_HEAD = 3048
 HEAD_CHECK = 2080
 VERTICAL_HEAD = 2048
 X_BENCHMARK = 255   #改大射左
-Y_BENCHMARK = 141   #改大射高
+Y_BENCHMARK = 135   #改大射高
 SHOOT_DELAY = 0.6   #改大變快  不同週期須測試 0.3sOK 0.2~sOK
 
 #motion sector
@@ -105,7 +105,7 @@ class Archery:
     def shoot(self, event):
         rospy.logerr("###### in SHOOT func #####")
         if self.archery_action_ready:
-            time.sleep(self.period - SHOOT_DELAY)# - self.waist_delay)
+            time.sleep(self.period - SHOOT_DELAY + self.waist_delay)
             rospy.logerr("!!!!!! SHOOT !!!!!!!")
             send.sendBodySector(SHOOT)
             send.drawImageFunction(6, 1, self.lowest_x-1, self.lowest_x+1, self.lowest_y-1, self.lowest_y+1, 255, 0, 255)
@@ -153,7 +153,7 @@ class Archery:
                             rospy.loginfo(f'low_y = :{self.lowest_y}')
                             rospy.loginfo(f'low_x = :{self.lowest_x}')
                 
-                            if self.period < 2.5:
+                            if int(self.period) < 2.1:
                                 self.waist_delay = 0.1
                             self.ctrl_status = 'wait_lowest_point'
                     else:
