@@ -12,9 +12,9 @@ HEAD_CHECK = 2080
 HAND_BACK = 222
 LEG_BACK = 1812
 VERTICAL_HEAD = 2048
-X_BENCHMARK = 185    #改大射左
+X_BENCHMARK = 205    #改大射左
 Y_BENCHMARK = 125   #改大射高
-SHOOT_DELAY = 1   #改大變快
+SHOOT_DELAY = 0.8   #改大變快
 
 #motion sector
 PREPARE = 123   #預備動作
@@ -176,7 +176,7 @@ class Archery:
                     if self.init_cnt != 2:
                         self.ctrl_status = 'archery_action'
                     else:
-                        # self.archery_action_ready = True
+                        self.archery_action_ready = True
                         self.ctrl_status = 'wait_shoot'
                 
 
