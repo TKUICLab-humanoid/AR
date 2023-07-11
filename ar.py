@@ -12,9 +12,9 @@ import math
 HORIZON_HEAD = 3048
 HEAD_CHECK = 2080
 VERTICAL_HEAD = 2048
-X_BENCHMARK = 255   #改大射左
-Y_BENCHMARK = 135   #改大射高
-SHOOT_DELAY = 0.6   #改大變快  不同週期須測試 0.3sOK 0.2~sOK
+X_BENCHMARK = 230   #改大射左
+Y_BENCHMARK = 129   #改大射高
+SHOOT_DELAY = 0.7   #改大變快  不同週期須測試 0.3sOK 0.2~sOK
 
 #motion sector
 PREPARE = 123   #預備動作
@@ -64,6 +64,7 @@ class Archery:
         self.lowest_y = 0
         self.turn_right = 0
         self.turn_left = 0
+        self.turn_value = 0
         self.hand_move_cnt = 0
         self.leg_move_cnt = 0
         self.start_time = 0
@@ -88,6 +89,7 @@ class Archery:
         self.lowest_y = 0
         self.turn_right = 0
         self.turn_left = 0
+        self.turn_value = 0
         self.hand_move_cnt = 0
         self.leg_move_cnt = 0
         self.start_time = 0
@@ -105,7 +107,8 @@ class Archery:
     def shoot(self, event):
         rospy.logerr("###### in SHOOT func #####")
         if self.archery_action_ready:
-            time.sleep(self.period - SHOOT_DELAY + self.waist_delay)
+            time.sleep(int(self.period - SHOOT_DELAY + self.waist_delay))
+            rospy.loginfo(f"shoot delay = {int(self.period - SHOOT_DELAY + self.waist_delay)}")
             rospy.logerr("!!!!!! SHOOT !!!!!!!")
             send.sendBodySector(SHOOT)
             send.drawImageFunction(6, 1, self.lowest_x-1, self.lowest_x+1, self.lowest_y-1, self.lowest_y+1, 255, 0, 255)
@@ -120,13 +123,12 @@ class Archery:
 
             if self.init_cnt == 1:
                 self.initial()
-                # send.data_check = False
                 send.sendHeadMotor(2,2078,50)
                 time.sleep(0.2)
                 send.sendHeadMotor(2,2048,50)
                 time.sleep(1)
                 self.init_cnt = 0
-            # send.data_check = False
+                
             self.archery_target.find()
 
             if self.ctrl_status == 'find_period':
@@ -153,9 +155,10 @@ class Archery:
                             rospy.loginfo(f'low_y = :{self.lowest_y}')
                             rospy.loginfo(f'low_x = :{self.lowest_x}')
                 
-                            if int(self.period) < 2.1:
+                            if int(self.period) > 4.5:
                                 self.waist_delay = 0.1
                             self.ctrl_status = 'wait_lowest_point'
+
                     else:
                         self.start_time = time.time()
                         rospy.loginfo(f'starttime = {self.start_time}')
@@ -173,24 +176,26 @@ class Archery:
                 #turn waist
                 if self.lowest_x - X_BENCHMARK > 0:
                     self.turn_right = X_BENCHMARK - self.lowest_x
-                    send.sendSingleMotor(9,int(2.8*self.turn_right),15)
+                    send.sendSingleMotor(9,int(2.8*self.turn_right),20)
                     rospy.loginfo('turn right')
                     rospy.loginfo(f'turn angle:{self.turn_right}')
                     self.turn_right_cnt = 1
                     # self.waist_delay = 0.3
-                    time.sleep(3)
+                    time.sleep(2)
 
                 else:
                     self.turn_left = X_BENCHMARK - self.lowest_x
-                    if self.turn_left > 130:
-                        send.sendSingleMotor(9,int(2.4*self.turn_left),15)
+                    if self.turn_left > 110 or self.turn_left < 30:
+                        self.turn_value = 2.25
                     else:
-                        send.sendSingleMotor(9,int(2.32*self.turn_left),15)
-                    rospy.loginfo('turn left')
-                    rospy.loginfo(f'turn angle:{self.turn_left}')
-                    # self.waist_delay = 0.3
+                        self.turn_value = 2.3
+
+                    send.sendSingleMotor(9,int(self.turn_value*self.turn_left),20)    
+                    rospy.loginfo(f'turn left : {self.turn_left}')
+                    rospy.loginfo(f'turn value :{self.turn_value}')
+                    rospy.loginfo(f'turn angle :{self.turn_value*self.turn_left}')
                     self.turn_left_cnt = 1
-                    time.sleep(3)
+                    time.sleep(2)
 
                 #hand move
                 if self.lowest_y - Y_BENCHMARK > 0:
@@ -200,7 +205,7 @@ class Archery:
                     while self.leg_move_cnt != 0:
                         send.sendBodySector(LEG_DOWN)
                         self.leg_move_cnt -= 1
-                        time.sleep(0.5)
+                        time.sleep(0.3)
                     
                 else:
                     self.hand_move_cnt = abs(int((self.lowest_y - Y_BENCHMARK) / 2))
@@ -211,8 +216,7 @@ class Archery:
                         send.sendBodySector(HAND_UP)
                         rospy.loginfo(f'HAND_UP_cnt:{self.hand_move_cnt}')
                         self.hand_move_cnt -= 1
-                        time.sleep(0.5)
-
+                        time.sleep(0.3)
 
                 self.archery_action_ready = True
                 self.ctrl_status = 'wait_shoot' 
@@ -227,27 +231,34 @@ class Archery:
                 time.sleep(0.5)
                 send.sendHeadMotor(1, HORIZON_HEAD, 80)
                 time.sleep(0.5)
-                send.sendBodySector(PREPARE)
+                # send.sendBodySector(PREPARE)
                 time.sleep(2.8)
                 rospy.logerr('not start')
                 self.stand = 1
+
             if self.back_flag:
                 if self.turn_right_cnt != 0:
                     send.sendSingleMotor(9,int(-(2.8*self.turn_right)),15)
+                    rospy.loginfo(f'turn angle :{self.turn_value*self.turn_left}')
                     time.sleep(2)
+
                 elif self.turn_left_cnt != 0:
-                    send.sendSingleMotor(9,int(-(2.32*self.turn_left)),15)
+                    send.sendSingleMotor(9,int(-(self.turn_value*self.turn_left)),15)
+                    rospy.loginfo(f'turn angle :{self.turn_value*self.turn_left}')
                     time.sleep(2)
+
                 for i in range(0, self.hand_back_cnt):
                     send.sendBodySector(HAND_BACK)
                     rospy.loginfo(f'HAND_back_cnt:{self.hand_back_cnt}')
                     self.hand_back_cnt -= 1
                     time.sleep(0.5)
+
                 for i in range(0, self.leg_back_cnt):
                     send.sendBodySector(LEG_BACK)
                     rospy.loginfo(f'LEG_back_cnt:{self.leg_back_cnt}')
                     self.hand_back_cnt -= 1
                     time.sleep(0.5)
+
                 self.back_flag = False
                 rospy.logerr('not start')
    
