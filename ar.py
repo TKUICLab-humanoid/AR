@@ -13,8 +13,8 @@ HAND_BACK = 222
 LEG_BACK = 1812
 VERTICAL_HEAD = 2048
 X_BENCHMARK = 195    #改大射左
-Y_BENCHMARK = 145   #改大射高
-SHOOT_DELAY = 0.9   #改大變快
+Y_BENCHMARK = 155   #改大射高
+SHOOT_DELAY = 0.8   #改大變快
 
 #motion sector
 PREPARE = 123   #預備動作
@@ -77,7 +77,6 @@ class Archery:
         self.init_cnt = 0
         self.archery_action_ready = False
         self.waist_delay = 0
-        self.trail_num = 0
         self.circle_diameter = 0
         self.timer = 0
         self.back_flag = False
@@ -97,26 +96,21 @@ class Archery:
         self.datum_mark_y = 0
         self.lowest_x = 0
         self.lowest_y = 0
-        self.turn_right = 0
-        self.turn_left = 0
         self.hand_move_cnt = 0
         self.start_time = 0
         self.end_time = 0
         self.archery_action_ready = False
         self.waist_delay = 0
-        self.trail_num = 0
-        self.circle_diameter = 0
         self.timer = 0
         self.back_flag = False
-        self.turn_left_cnt = 0
-        self.turn_right_cnt = 0
-        self.hand_back_cnt = 0
-        self.leg_back_cnt = 0
         self.waist_delay = 0
 
     def shoot(self, event):
         rospy.logerr("###### in SHOOT func #####")
         if self.archery_action_ready:
+            print(event.current_expected)
+            print(event.current_real)
+            print('=================', event.current_real - event.current_expected, '==================')
             time.sleep(self.end_time - self.start_time - SHOOT_DELAY)# + self.waist_delay)
             rospy.logerr("!!!!!! SHOOT !!!!!!!")
             send.sendBodySector(SHOOT)
@@ -179,7 +173,12 @@ class Archery:
                     self.timer = rospy.Timer(rospy.Duration(self.end_time - self.start_time), self.shoot)
                     send.drawImageFunction(6, 1, self.lowest_x-2, self.lowest_x+2, self.lowest_y-2, self.lowest_y+2, 0, 0, 255)
                     rospy.loginfo("at lowest y")
-                    self.ctrl_status = 'archery_action'
+                    if self.init_cnt != 2:
+                        self.ctrl_status = 'archery_action'
+                    else:
+                        self.archery_action_ready = True
+                        self.ctrl_status = 'wait_shoot'
+                
 
             elif self.ctrl_status == 'archery_action':
                 # archery_action call sector
@@ -227,11 +226,13 @@ class Archery:
                         rospy.loginfo(f'HAND_UP_cnt:{self.hand_move_cnt}')
                         self.hand_move_cnt -= 1
                         time.sleep(0.5)
+                self.timer.shutdown()
+                time.sleep(0.1)
+                self.initial()
+                time.sleep(0.05)
+                self.init_cnt = 2
+                self.ctrl_status = 'find_period'
 
-
-                self.archery_action_ready = True
-                self.ctrl_status = 'wait_shoot' 
-            
             elif self.ctrl_status == 'wait_shoot':
                 time.sleep(1)
                 rospy.loginfo('wait shoot')
@@ -247,11 +248,17 @@ class Archery:
                 self.stand = 1
                 rospy.loginfo('預備動作執行完畢')
             if self.back_flag:
+                print('aaa')
+                rospy.loginfo(f'self.turn_right_cnt:{self.turn_right_cnt}')
+                rospy.loginfo(f'self.turn_left_cnt:{self.turn_left_cnt}')
+                print(int(-(2.5*self.turn_left)))
                 if self.turn_right_cnt != 0:
-                    send.sendSingleMotor(9,int(-(RIGHT_TURN*self.turn_right)),15)
+                    send.sendSingleMotor(9,int(-(2.4*self.turn_right)),15)
+                    rospy.loginfo(f'waist_back')
                     time.sleep(2)
                 elif self.turn_left_cnt != 0:
-                    send.sendSingleMotor(9,int(-(LEFT_TURN*self.turn_left)),15)
+                    send.sendSingleMotor(9,int(-(2.5*self.turn_left)),15)
+                    rospy.loginfo(f'waist_back')
                     time.sleep(2)
                 for i in range(0, self.hand_back_cnt):
                     send.sendBodySector(HAND_BACK)
