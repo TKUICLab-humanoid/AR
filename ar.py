@@ -12,14 +12,9 @@ HEAD_CHECK = 2080
 HAND_BACK = 222
 LEG_BACK = 1812
 VERTICAL_HEAD = 2048
-<<<<<<< HEAD
-X_BENCHMARK = 205    #改大射左
-Y_BENCHMARK = 125   #改大射高
-=======
-X_BENCHMARK = 195    #改大射左
-Y_BENCHMARK = 155   #改大射高
->>>>>>> update
-SHOOT_DELAY = 0.8   #改大變快
+X_BENCHMARK = 210    #改大射左
+Y_BENCHMARK = 100   #改大射高
+SHOOT_DELAY = 0.75   #改大變快
 
 #motion sector
 PREPARE = 123   #預備動作
@@ -174,7 +169,7 @@ class Archery:
 
             elif self.ctrl_status == 'wait_lowest_point':
                 dis = ((self.archery_target.red_x-self.lowest_x)**2 + (self.archery_target.red_y-self.lowest_y)**2)**0.5
-                if dis <= 1:
+                if dis <= 1.5:
                     self.timer = rospy.Timer(rospy.Duration(self.end_time - self.start_time), self.shoot)
                     send.drawImageFunction(6, 1, self.lowest_x-2, self.lowest_x+2, self.lowest_y-2, self.lowest_y+2, 0, 0, 255)
                     rospy.loginfo("at lowest y")
@@ -248,7 +243,7 @@ class Archery:
                 time.sleep(0.5)
                 send.sendHeadMotor(1, HORIZON_HEAD, 80)
                 time.sleep(0.5)
-                send.sendBodySector(PREPARE)
+                # send.sendBodySector(PREPARE)
                 time.sleep(2.8)
                 self.stand = 1
                 rospy.loginfo('預備動作執行完畢')
