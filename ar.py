@@ -12,9 +12,9 @@ import math
 HORIZON_HEAD = 3048
 HEAD_CHECK = 2080
 VERTICAL_HEAD = 2048
-X_BENCHMARK = 255   #改大射左
-Y_BENCHMARK = 150   #改大射高
-SHOOT_DELAY = 0.25   #改大變快  不同週期須測試 0.3sOK 0.2~sOK
+X_BENCHMARK = 240   #改大射左
+Y_BENCHMARK = 155   #改大射高
+SHOOT_DELAY = 0.4   #改大變快  不同週期須測試 0.3sOK 0.2~sOK
 
 #motion sector
 PREPARE = 123   #預備動作
