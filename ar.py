@@ -8,13 +8,13 @@ import timeit
 import math
 
 HORIZON_HEAD = 3048
-HEAD_CHECK = 2080
+HEAD_CHECK = 3000
 HAND_BACK = 222
 LEG_BACK = 1812
 VERTICAL_HEAD = 2048
-X_BENCHMARK = 210    #改大射左
-Y_BENCHMARK = 100   #改大射高
-SHOOT_DELAY = 0.75   #改大變快
+X_BENCHMARK = 211 #改大射左
+Y_BENCHMARK = 110 #改大射高
+SHOOT_DELAY = 0.68 #改大變快
 
 #motion sector
 PREPARE = 123   #預備動作
@@ -117,6 +117,7 @@ class Archery:
             send.drawImageFunction(6, 1, self.lowest_x-1, self.lowest_x+1, self.lowest_y-1, self.lowest_y+1, 255, 0, 255)
             time.sleep(2)
             send.sendBodySector(999)    #手部退回
+            time.sleep(1)
             self.timer.shutdown()
             self.archery_action_ready = False
             self.back_flag = True
@@ -134,9 +135,9 @@ class Archery:
                 self.initial()
                 self.init_cnt = 0
                 send.sendHeadMotor(2, HEAD_CHECK, 80)
-                time.sleep(0.05)
+                time.sleep(0.1)
                 send.sendHeadMotor(2, VERTICAL_HEAD, 80)
-                time.sleep(0.7)
+                time.sleep(2)
             # print(send.color_mask_subject_size)
             self.archery_target.find()
 
@@ -243,7 +244,7 @@ class Archery:
                 time.sleep(0.5)
                 send.sendHeadMotor(1, HORIZON_HEAD, 80)
                 time.sleep(0.5)
-                # send.sendBodySector(PREPARE)
+                send.sendBodySector(PREPARE)
                 time.sleep(2.8)
                 self.stand = 1
                 rospy.loginfo('預備動作執行完畢')
@@ -254,10 +255,12 @@ class Archery:
                 print(int(-(2.5*self.turn_left)))
                 if self.turn_right_cnt != 0:
                     send.sendSingleMotor(9,int(-(2.4*self.turn_right)),15)
+                    time.sleep(0.5)
                     rospy.loginfo(f'waist_back')
                     time.sleep(2)
                 elif self.turn_left_cnt != 0:
                     send.sendSingleMotor(9,int(-(2.5*self.turn_left)),15)
+                    time.sleep(0.5)
                     rospy.loginfo(f'waist_back')
                     time.sleep(2)
                 for i in range(0, self.hand_back_cnt):
