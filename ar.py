@@ -12,9 +12,9 @@ HEAD_CHECK = 3000
 HAND_BACK = 222
 LEG_BACK = 1812
 VERTICAL_HEAD = 2048
-X_BENCHMARK = 211 #改大射左
-Y_BENCHMARK = 110 #改大射高
-SHOOT_DELAY = 0.68 #改大變快
+X_BENCHMARK = 200 #改大射左
+Y_BENCHMARK = 105 #改大射高
+SHOOT_DELAY = 0.6 #改大變快
 
 #motion sector
 PREPARE = 123   #預備動作
@@ -25,7 +25,7 @@ LEG_DOWN = 1218   #蹲腳
 
 #========================================================
 RIGHT_TURN = 2.4
-LEFT_TURN = 2.5
+LEFT_TURN = 2.4
 #========================================================
 
 send = Sendmessage()
