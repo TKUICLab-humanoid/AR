@@ -14,7 +14,7 @@ HEAD_CHECK = 2080
 VERTICAL_HEAD = 2048
 X_BENCHMARK = 290   #改大射左
 Y_BENCHMARK = 155   #改大射高
-SHOOT_DELAY = 0.5   #改大變快  不同週期須測試 0.3sOK 0.2~sOK
+SHOOT_DELAY = 0.5   #改大變快  不同週期須測試 0.3sOK 0.2~sOK   0.5
 
 #motion sector
 PREPARE = 123   #預備動作
