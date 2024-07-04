@@ -8,12 +8,12 @@ import timeit
 import math
 
 HORIZON_HEAD = 3048
-HEAD_CHECK = 3000
+HEAD_CHECK = 2080
 HAND_BACK = 222
 LEG_BACK = 1812
 VERTICAL_HEAD = 2048
-X_BENCHMARK = [218, 221, 229, 227, 225] #改大射左 #[最左,中左,中間,中右,最右]
-Y_BENCHMARK =130 #改大射高
+X_BENCHMARK = [228, 232, 233, 235, 235] #改大射左 #[最左,中左,中間,中右,最右]
+Y_BENCHMARK =135 #改大射高
 SHOOT_DELAY = 0.68 #改大變快
 
 #motion sector
@@ -138,7 +138,13 @@ class Archery:
                 self.initial() #初始化數值
                 self.init_cnt = 0 #避免進來第二次
                 send.sendHeadMotor(2, HEAD_CHECK, 80)
-                time.sleep(0.1)
+                time.sleep(0.05)
+                send.sendHeadMotor(2, HEAD_CHECK, 80)
+                time.sleep(0.05)
+                send.sendHeadMotor(2, HEAD_CHECK, 80)
+                time.sleep(0.05)
+                send.sendHeadMotor(2, VERTICAL_HEAD, 80)
+                time.sleep(0.05)
                 send.sendHeadMotor(2, VERTICAL_HEAD, 80)
                 time.sleep(2)
             # print(send.color_mask_subject_size)
@@ -166,21 +172,6 @@ class Archery:
                             rospy.loginfo(f"period = {self.end_time - self.start_time}")
                             rospy.loginfo(f'low_y = :{self.lowest_y}')
                             rospy.loginfo(f'low_x = :{self.lowest_x}')
-                            if 0 < self.lowest_x <= 80: #最右
-                                self.x_benchmark_type = 4#改大射左
-                                print("444444444444444444444")
-                            elif 80 < self.lowest_x <= 125: #中右
-                                self.x_benchmark_type = 3
-                                print("333333333333333333333")
-                            elif self.lowest_x >= 170: #最左
-                                self.x_benchmark_type = 0
-                                print("00000000000000000000")
-                            elif 170 > self.lowest_x >= 145: #中左
-                                self.x_benchmark_type = 1
-                                print("1111111111111111111")
-                            else:
-                                self.x_benchmark_type = 2 #中間
-                                print("22222222222222222222")
                             self.ctrl_status = 'wait_lowest_point'
                     else:
                         self.start_time = time.time()
@@ -202,8 +193,24 @@ class Archery:
             elif self.ctrl_status == 'archery_action': #轉腰+蹲
                 # archery_action call sector
                 #turn waist
+                if 0 < self.lowest_x <= 90: #最右
+                    self.x_benchmark_type = 4#改大射左
+                    print("444444444444444444444")
+                elif 90 < self.lowest_x <= 125: #中右
+                    self.x_benchmark_type = 3
+                    print("333333333333333333333")
+                elif self.lowest_x >= 175: #最左
+                    self.x_benchmark_type = 0
+                    print("00000000000000000000")
+                elif 175 > self.lowest_x >= 160: #中左
+                    self.x_benchmark_type = 1
+                    print("1111111111111111111")
+                else:
+                    self.x_benchmark_type = 2 #中間
+                    print("22222222222222222222")
+                rospy.loginfo(f'X_BENCHMARK:{X_BENCHMARK[self.x_benchmark_type]}')
                 if self.lowest_x - X_BENCHMARK[self.x_benchmark_type] > 0:#站在左邊
-                    self.turn_right = X_BENCHMARK[self.x_benchmark_type] + self.turn - self.lowest_x
+                    self.turn_right = X_BENCHMARK[self.x_benchmark_type] - self.lowest_x
                     send.sendSingleMotor(9,int(RIGHT_TURN*self.turn_right),15)#轉腰
                     right = RIGHT_TURN*self.turn_right
                     rospy.loginfo('turn right')
@@ -214,7 +221,7 @@ class Archery:
                     time.sleep(3)
 
                 else:#站在右邊
-                    self.turn_left = X_BENCHMARK[self.x_benchmark_type] + self.turn - self.lowest_x
+                    self.turn_left = X_BENCHMARK[self.x_benchmark_type] - self.lowest_x
                     send.sendSingleMotor(9,int(LEFT_TURN*self.turn_left),15)
                     left = LEFT_TURN*self.turn_left
                     rospy.loginfo('turn left')
@@ -271,14 +278,15 @@ class Archery:
                 print('aaa')
                 rospy.loginfo(f'self.turn_right_cnt:{self.turn_right_cnt}')
                 rospy.loginfo(f'self.turn_left_cnt:{self.turn_left_cnt}')
-                print(int(-(2.5*self.turn_left)))
+                print(int(-(LEFT_TURN*self.turn_left)))
+                print(int(-(RIGHT_TURN*self.turn_right)))
                 if self.turn_right_cnt != 0:
-                    send.sendSingleMotor(9,int(-(2.4*self.turn_right)),15)
+                    send.sendSingleMotor(9,int(-(RIGHT_TURN*self.turn_right)),15)
                     time.sleep(0.5)
                     rospy.loginfo(f'waist_back')
                     time.sleep(2)
                 elif self.turn_left_cnt != 0:
-                    send.sendSingleMotor(9,int(-(2.5*self.turn_left)),15)
+                    send.sendSingleMotor(9,int(-(LEFT_TURN*self.turn_left)),15)
                     time.sleep(0.5)
                     rospy.loginfo(f'waist_back')
                     time.sleep(2)
