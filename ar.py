@@ -12,8 +12,8 @@ HEAD_CHECK = 2080
 HAND_BACK = 222
 LEG_BACK = 1812
 VERTICAL_HEAD = 2048
-X_BENCHMARK = [228, 232, 233, 235, 235] #改大射左 #[最左,中左,中間,中右,最右]
-Y_BENCHMARK =135 #改大射高
+X_BENCHMARK = [228, 231, 230, 235, 234] #改大射左 #[最左,中左,中間,中右,最右]
+Y_BENCHMARK =143 #改大射高
 SHOOT_DELAY = 0.68 #改大變快
 
 #motion sector
@@ -120,7 +120,7 @@ class Archery:
             send.drawImageFunction(6, 1, self.lowest_x-1, self.lowest_x+1, self.lowest_y-1, self.lowest_y+1, 255, 0, 255) #十字線
             time.sleep(2)
             send.sendBodySector(999)    #手部退回
-            time.sleep(1)
+            time.sleep(2)
             self.timer.shutdown()
             self.archery_action_ready = False
             self.back_flag = True
@@ -193,10 +193,10 @@ class Archery:
             elif self.ctrl_status == 'archery_action': #轉腰+蹲
                 # archery_action call sector
                 #turn waist
-                if 0 < self.lowest_x <= 90: #最右
+                if 0 < self.lowest_x <= 85: #最右
                     self.x_benchmark_type = 4#改大射左
                     print("444444444444444444444")
-                elif 90 < self.lowest_x <= 125: #中右
+                elif 90 < self.lowest_x <= 120: #中右
                     self.x_benchmark_type = 3
                     print("333333333333333333333")
                 elif self.lowest_x >= 175: #最左
