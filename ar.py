@@ -12,9 +12,9 @@ HEAD_CHECK = 2080
 HAND_BACK = 222
 LEG_BACK = 1812
 VERTICAL_HEAD = 2048
-X_BENCHMARK = [223, 224, 227, 224, 223] #改大射左 #[最左,中左,中間,中右,最右]
-Y_BENCHMARK =133 #改大射高
-SHOOT_DELAY = 0.68 #改大變快
+X_BENCHMARK = [213, 216, 218, 222, 219] #改大射左 #[最左,中左,中間,中右,最右]
+Y_BENCHMARK =128 #改大射高
+SHOOT_DELAY = 0.68 #改大變快s
 
 #motion sector
 PREPARE = 123   #預備動作
@@ -193,16 +193,16 @@ class Archery:
             elif self.ctrl_status == 'archery_action': #轉腰+蹲
                 # archery_action call sector
                 #turn waist
-                if 0 < self.lowest_x <= 85: #最右
+                if 0 < self.lowest_x <= 90: #最右
                     self.x_benchmark_type = 4#改大射左
                     print("444444444444444444444")
-                elif 85 < self.lowest_x <= 105: #中右  
+                elif 90 < self.lowest_x <= 120: #中右  
                     self.x_benchmark_type = 3
                     print("333333333333333333333")
-                elif self.lowest_x >= 180: #最左
+                elif self.lowest_x >= 190: #最左
                     self.x_benchmark_type = 0
                     print("00000000000000000000")
-                elif 180 > self.lowest_x >= 160: #中左
+                elif 190 > self.lowest_x >= 155: #中左
                     self.x_benchmark_type = 1
                     print("1111111111111111111")
                 else:
