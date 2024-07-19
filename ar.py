@@ -12,9 +12,9 @@ HEAD_CHECK = 2080
 HAND_BACK = 222
 LEG_BACK = 1812
 VERTICAL_HEAD = 2048
-X_BENCHMARK = [213, 216, 218, 222, 219] #改大射左 #[最左,中左,中間,中右,最右]
-Y_BENCHMARK =128 #改大射高
-SHOOT_DELAY = 0.68 #改大變快s
+X_BENCHMARK = [208, 208, 208, 206, 206] #改大射左 #[最左,中左,中間,中右,最右]
+Y_BENCHMARK =137 #改大射高
+SHOOT_DELAY = 0.7 #改大變快s
 
 #motion sector
 PREPARE = 123   #預備動作
@@ -255,7 +255,7 @@ class Archery:
                 self.timer.shutdown()
                 time.sleep(0.1)
                 self.initial()
-                time.sleep(0.05)
+                time.sleep(0.1)
                 self.init_cnt = 2
                 self.ctrl_status = 'find_period'
 
