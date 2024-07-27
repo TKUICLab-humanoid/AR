@@ -12,8 +12,8 @@ HEAD_CHECK = 2080
 HAND_BACK = 222
 LEG_BACK = 1812
 VERTICAL_HEAD = 2048
-X_BENCHMARK = [208, 208, 208, 206, 206] #改大射左 #[最左,中左,中間,中右,最右]
-Y_BENCHMARK =137 #改大射高
+X_BENCHMARK = [206, 210, 205, 205, 209] #改大射左 #[最左,中左,中間,中右,最右]
+Y_BENCHMARK =135 #改大射高
 SHOOT_DELAY = 0.7 #改大變快s
 
 #motion sector
