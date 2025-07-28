@@ -14,7 +14,7 @@ LEG_BACK = 1812
 VERTICAL_HEAD = 2048
 X_BENCHMARK = [200, 203, 203, 203, 203] #改大射左 #[最左,中左,中間,中右,最右]
 Y_BENCHMARK = 155 #改大射高
-SHOOT_DELAY = 0.64 #改大變快 速度中0.64,速度快可能0.65
+SHOOT_DELAY = 0.64 #改大變快 0.65距離拉遠時比較好,0.64只適合線上
 
 #motion sector
 PREPARE = 123   #預備動作
